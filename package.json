@@ -1,0 +1,44 @@
+{
+  "name": "@katalyst-interactive/turbo-modal",
+  "version": "0.1.0",
+  "description": "Stimulus controllers for TurboModal Gem",
+  "module": "app/javascript/turbo_modal/index.js",
+  "main": "app/javascript/turbo_modal/index.js",
+  "files": [
+    "app/javascript/turbo_modal"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@hotwired/turbo": "^7.0.1",
+    "stimulus": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katalyst/turbo_modal.git"
+  },
+  "keywords": [
+    "turbo",
+    "stimulus",
+    "modal",
+    "rails",
+    "js"
+  ],
+  "author": "Katalyst Interactive, Pty Ltd",
+  "contributors": [
+    {
+      "name": "Alan Cornthwiate",
+      "email": "alan.cornthwaite@katalyst.com.au"
+    },
+    {
+      "name": "Matt Redmond",
+      "email": "matt.redmond@katalyst.com.au"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/katalyst/turbo_modal/issues"
+  },
+  "homepage": "https://github.com/katalyst/turbo_modal#readme"
+}
