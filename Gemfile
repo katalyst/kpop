@@ -6,5 +6,11 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+gem "hotwire-rails"
+gem "redis"
 
-gem "jsbundling-rails", "~> 0.1.9"
+group :development, :test do
+  gem "sqlite3"
+  gem "jsbundling-rails", "~> 0.1.9"
+  gem "cssbundling-rails"
+end

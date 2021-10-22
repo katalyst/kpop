@@ -6,11 +6,13 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag 'application', "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= yield :head %>
   </head>
 
-  <body>
+  <body data-controller="scrim modal" data-modal-type-value="" data-action="hide-scrim@window->scrim#hide show-scrim@window->scrim#show">
+    <%= modal_tag %>
     <%= yield %>
   </body>
 </html>

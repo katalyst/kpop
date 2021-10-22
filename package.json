@@ -1,18 +1,25 @@
 {
   "name": "@katalyst-interactive/turbo-modal",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Stimulus controllers for TurboModal Gem",
   "module": "app/javascript/turbo_modal/index.js",
   "main": "app/javascript/turbo_modal/index.js",
+  "style": "app/assets/dist/turbo_modal.css",
   "files": [
-    "app/javascript/turbo_modal"
+    "app/javascript/turbo_modal",
+    "app/assets/stylesheets/turbo_modal",
+    "app/assets/dist"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "sass ./app/assets/stylesheets/turbo_modal.scss ./app/assets/dist/turbo_modal.css --no-source-map --load-path=node_modules"
   },
   "dependencies": {
     "@hotwired/turbo": "^7.0.1",
     "stimulus": "^2.0.0"
+  },
+  "devDependencies": {
+    "sass": "^1.43.3"
   },
   "repository": {
     "type": "git",

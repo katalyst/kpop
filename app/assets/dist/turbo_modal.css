@@ -1,0 +1,131 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 11;
+  background: white;
+  border-radius: 4px;
+  padding: 2rem;
+  --animation-in: slide-in;
+  --animation-out: slide-out;
+  --mobile-breakpoint: 45rem;
+}
+@media screen and (max-width: var(--mobile-breakpoint)) {
+  .fullscreen .modal {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
+}
+.bottom-sheet .modal {
+  top: unset;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 40vh;
+  --animation-in: slide-up;
+  --animation-out: slide-down;
+}
+@media screen and (max-width: var(--mobile-breakpoint)) {
+  .bottom-sheet .modal {
+    min-height: 65vh;
+  }
+}
+
+.animate-in {
+  animation: var(--animation-in);
+  animation-duration: 0.25s;
+  animation-fill-mode: forwards;
+}
+@media screen and (max-width: var(--mobile-breakpoint)) {
+  .fullscreen .animate-in {
+    --animation-in: slide-in-left;
+  }
+}
+
+.animate-out {
+  animation: var(--animation-out);
+  animation-duration: 0.25s;
+  animation-fill-mode: forwards;
+}
+@media screen and (max-width: var(--mobile-breakpoint)) {
+  .fullscreen .animate-out {
+    --animation-out: slide-out-right;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -35%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -35%);
+  }
+}
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slide-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+.scrim {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 11;
+}
+
+.scrim[hidden] {
+  display: none;
+}

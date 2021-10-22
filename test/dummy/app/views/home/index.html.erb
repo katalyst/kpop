@@ -1,0 +1,7 @@
+<h1>Hello world!</h1>
+
+<%= modal_link "OPen Modal", modals_path %>
+
+<%= turbo_frame_tag "modal", src: modals_path do %>
+    <div></div>
+<% end %>
