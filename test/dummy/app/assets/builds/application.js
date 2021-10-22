@@ -5909,8 +5909,10 @@
       setTimeout(() => {
         modal_element.remove();
         this.turboFrameTarget.src = null;
-        this.turboFrameTarget.classList.remove(this.typeValue);
-        this.typeValue = "";
+        if (this.typeValue !== "") {
+          this.turboFrameTarget.classList.remove(this.typeValue);
+          this.typeValue = "";
+        }
         window.dispatchEvent(new Event("hide-scrim", { bubbles: true }));
       }, 250);
     }
@@ -5931,15 +5933,11 @@
 
   // node_modules/@katalyst-interactive/turbo-modal/app/javascript/turbo_modal/scrim_controller.js
   var ScrimController = class extends Controller {
-    toggle(event) {
-      event.preventDefault();
-      const hide = this.scrimTarget.toggleAttribute("hidden");
-    }
     show(event) {
-      const hide = this.scrimTarget.removeAttribute("hidden");
+      delete this.scrimTarget.dataset.hidden;
     }
     hide(event) {
-      this.scrimTarget.setAttribute("hidden", "hidden");
+      this.scrimTarget.dataset.hidden = "hidden";
       window.dispatchEvent(new Event("scrim-hide", { bubbles: true }));
     }
   };
@@ -5947,6 +5945,6 @@
   var scrim_controller_default = ScrimController;
 
   // app/javascript/controllers/index.js
-  application.register("test", scrim_controller_default);
+  application.register("scrim", scrim_controller_default);
   application.register("modal", ModalController);
 })();

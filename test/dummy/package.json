@@ -2,7 +2,7 @@
   "name": "app",
   "private": "true",
   "dependencies": {
-    "@katalyst-interactive/turbo-modal": "^0.1.2",
+    "@katalyst-interactive/turbo-modal": "^0.1.4",
     "@hotwired/turbo-rails": "^7.0.1",
     "sass": "^1.43.3",
     "esbuild": "^0.13.6"

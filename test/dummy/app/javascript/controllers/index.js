@@ -6,5 +6,5 @@ import { application } from "./application"
 import { ScrimController } from "@katalyst-interactive/turbo-modal";
 import { ModalController } from "@katalyst-interactive/turbo-modal";
 
-application.register("test", ScrimController)
+application.register("scrim", ScrimController)
 application.register("modal", ModalController)

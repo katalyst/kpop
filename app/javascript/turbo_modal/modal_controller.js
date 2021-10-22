@@ -21,8 +21,11 @@ export default class ModalController extends Controller {
     setTimeout(() => {
       modal_element.remove();
       this.turboFrameTarget.src = null;
-      this.turboFrameTarget.classList.remove(this.typeValue);
-      this.typeValue = "";
+
+      if (this.typeValue !== "") {
+        this.turboFrameTarget.classList.remove(this.typeValue);
+        this.typeValue = "";
+      }
       window.dispatchEvent(new Event("hide-scrim", { bubbles: true }))
     }, 250);
   }

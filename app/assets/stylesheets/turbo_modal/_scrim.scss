@@ -8,6 +8,6 @@
   z-index: 11;
 }
 
-.scrim[hidden] {
+.scrim[data-hidden] {
   display: none;
 }

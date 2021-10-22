@@ -15,10 +15,10 @@
   resolved "https://registry.npmjs.org/@hotwired/turbo/-/turbo-7.0.1.tgz"
   integrity sha512-awqraytYXbHV2NT0WAOnDDDGJeHHnFtnztdXvRuIqgsStUtPKM8B9H7ISm77SwbHemEjxEOB8Ku4RfNbEEXsPQ==
 
-"@katalyst-interactive/turbo-modal@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@katalyst-interactive/turbo-modal/-/turbo-modal-0.1.2.tgz#52907c91ac06634c96a9eca649a10d3bf83d145d"
-  integrity sha512-0lSGcsV2qKjb6ipcChjnn3CL52ScsNoWXRotdGvZxKfXzhFSXLSDu+hQOBv6vHkOQrhUeNssqwWM3IUPeZh9AA==
+"@katalyst-interactive/turbo-modal@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@katalyst-interactive/turbo-modal/-/turbo-modal-0.1.4.tgz#668d5972bd68507363d23b82703b486413b92e43"
+  integrity sha512-TeCbL/ZoXRcpR2F4BFga5bz5GSONXfDizG9fumIU9OYw8DpXg4aiYpTJn2JB1ND9QSns6mq3xg1zP3WFiOPL1Q==
   dependencies:
     "@hotwired/turbo" "^7.0.1"
     stimulus "^2.0.0"
