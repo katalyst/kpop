@@ -12,7 +12,7 @@ def stimulus_installed?
 end
 
 def switch_on_stimulus
-  system "yarn add stimulus@2.0.0"
+  Rake::Task["webpacker:install:stimulus"].invoke
 end
 
 def switch_on_turbo
