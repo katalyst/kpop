@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   spec.add_dependency "rails", "~> 6.1.3", ">= 6.1.3.1"
-  spec.add_runtime_dependency "hotwire-rails", "~> 0.1.3"
+  spec.add_dependency "turbo-rails", "~> 7.1.1"
 end

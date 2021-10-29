@@ -6,7 +6,7 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
-gem "hotwire-rails"
+gem "turbo-rails"
 gem "redis"
 
 group :development, :test do
