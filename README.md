@@ -2,28 +2,24 @@
 Turbo Frame driven modal 
 
 ## Usage
-Add the following to the body tag to link controllers required to trigger scrim + modal transitions
-```html
- <body data-controller="scrim modal" data-action="hide-scrim@window->scrim#hide show-scrim@window->show"></body>
-```
 
 Turbo modal provides helpers to add a basic scrim and modal target frame. These should be placed inside the body:
 ```html
- <body data-controller="scrim modal" data-action="hide-scrim@window->scrim#hide show-scrim@window->show">
+ <body>
     <%= scrim_tag %>
     <%= modal_tag %>
  </body>
 ```
 
-###Import tubo_modal styles
+### Import turbo_modal styles
 ```css
-/* application.css */
+/* application.scss */
 
-@import "~@katalyst-interactive/turbo_modal";
+@import "~@katalyst-interactive/turbo-modal";
 ```
 
 To get a modal displaying you will need 2 things:
-1. A `modal_link`
+1. A `modal_link` (or programmatic trigger)
 2. Some `modal_content`
 
 `modal_link`'s are similar to a `link_to` in rails but it will point the path of the link to target the modal turbo frame.

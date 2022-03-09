@@ -1,6 +1,10 @@
 import { Controller } from "stimulus";
+import { hideScrim, showScrim } from "./scrim_controller";
 
-export default class ModalController extends Controller {
+/**
+ * Shows a Turbo modal when triggered by a `modal_link` click or a call to `openModal`.
+ */
+class ModalController extends Controller {
   static targets = ["turboFrame"];
 
   static values = {
@@ -12,7 +16,13 @@ export default class ModalController extends Controller {
     this.turboFrameTarget.classList.add(value);
   }
 
-  close() {
+  open(e) {
+    this.turboFrameTarget.src = e.detail.url;
+    this.typeValue = e.detail.type;
+    showScrim();
+  }
+
+  close(e) {
     if (this.turboFrameTarget.src === null) return;
 
     const modal_element = this.turboFrameTarget.querySelector(".modal")
@@ -26,17 +36,34 @@ export default class ModalController extends Controller {
         this.turboFrameTarget.classList.remove(this.typeValue);
         this.typeValue = "";
       }
-      window.dispatchEvent(new Event("hide-scrim", { bubbles: true }))
+      hideScrim();
     }, 250);
   }
 
   keyup(event) {
-    if (event.key === 'Escape') this.close();
+    if (event.key === "Escape") {
+      closeModal();
+    }
   }
 
-  showModal(e) {
+  onLinkClick(e) {
     const modal_link = e.target.closest("a[data-modal-type]")
-    this.typeValue = modal_link.dataset.modalType
-    window.dispatchEvent(new Event("show-scrim", { bubbles: true }))
+    openModal(modal_link.href, modal_link.dataset.modalType);
   }
 }
+
+/**
+ * Show a modal, requires a url for a page that renders a turbo-frame with id `modal`.
+ */
+function openModal(url, type = "") {
+  window.dispatchEvent(new CustomEvent("modal:open", { detail: { url: url, type: type }}));
+}
+
+/**
+ * Hide the current modal (if any).
+ */
+function closeModal() {
+  window.dispatchEvent(new Event("modal:close"));
+}
+
+export { ModalController as default, openModal, closeModal }
