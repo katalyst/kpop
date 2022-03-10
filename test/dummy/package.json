@@ -2,13 +2,13 @@
   "name": "app",
   "private": "true",
   "dependencies": {
-    "@katalyst-interactive/turbo-modal": "^0.1.4",
-    "@hotwired/turbo-rails": "^7.0.1",
-    "sass": "^1.43.3",
-    "esbuild": "^0.13.6"
+    "@hotwired/turbo-rails": ">= 7.0.1",
+    "@katalyst-interactive/turbo-modal": ">= 0.1.4",
+    "esbuild": ">= 0.13.6",
+    "sass": ">= 1.49.9"
   },
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds",
-    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+    "build": "node_modules/.bin/esbuild app/javascript/*.* --bundle --outdir=app/assets/builds",
+    "build:css": "node_modules/.bin/sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }
