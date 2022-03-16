@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ModalHelper
-  MODAL_ID        = "modal"
+  MODAL_ID     = "modal"
   LINK_OPTIONS = { data: { turbo_frame: MODAL_ID, action: "modal#onLinkClick", modal_type: "" } }.freeze
 
   def modal_tag(modal_id = MODAL_ID)
@@ -20,7 +20,7 @@ module ModalHelper
   end
 
   def modal_link(text = nil, path = nil, options = {}, &block)
-    options = DEFAULT_OPTIONS.deep_merge(options)
+    options = LINK_OPTIONS.deep_merge(options)
     if block
       link_to text || path, options, &block
     else
