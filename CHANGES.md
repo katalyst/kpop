@@ -1,3 +1,12 @@
+# Unreleased
+
+ * Added `modal-link` controller – supports modal links without requiring a global controller.
+ * Add definitions export for easier controller registration:
+    ```js
+    import TurboModal from "@katalyst-interactive/turbo-modal"
+    application.load(TurboModal)
+    ```
+
 # 0.2.0
 
  * Body data attributes are no longer required, these are now provided by the helpers instead.

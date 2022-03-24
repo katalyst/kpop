@@ -2,7 +2,7 @@ import { Controller } from "stimulus";
 import { hideScrim, showScrim } from "./scrim_controller";
 
 /**
- * Shows a Turbo modal when triggered by a `modal_link` click or a call to `openModal`.
+ * Shows a Turbo modal when triggered by a `modal:open` event (e.g. `openModal`).
  */
 class ModalController extends Controller {
   static targets = ["turboFrame"];
@@ -44,11 +44,6 @@ class ModalController extends Controller {
     if (event.key === "Escape") {
       closeModal();
     }
-  }
-
-  onLinkClick(e) {
-    const modal_link = e.target.closest("a[data-modal-type]")
-    openModal(modal_link.href, modal_link.dataset.modalType);
   }
 }
 
