@@ -15,15 +15,25 @@ class ScrimController extends Controller {
 
   show(event) {
     delete this.scrimTarget.dataset.hidden;
+    document.body.style.height = "100vh";
+    document.body.style.overflow = "hidden";
   }
 
   hide(event) {
     this.scrimTarget.dataset.hidden = "";
+    unclipScreen();
   }
 
   onClick(event) {
     window.dispatchEvent(new Event("scrim:hide"));
   }
+
+  disconnect() {
+    this.scrimTarget.dataset.hidden = "";
+    unclipScreen();
+    super.disconnect();
+  }
+
 }
 
 /**
@@ -38,6 +48,14 @@ function showScrim() {
  */
 function hideScrim() {
   window.dispatchEvent(new Event("scrim:hide"));
+}
+
+/**
+ * Unclips body to viewport size
+ */
+function unclipScreen() {
+  document.body.style.height = "unset";
+  document.body.style.overflow = "unset";
 }
 
 export { ScrimController as default, showScrim, hideScrim }
