@@ -1,3 +1,7 @@
+# 0.3.2
+
+ * Allow modals to be non-dismissable
+
 # 0.3.1
 
  * Added `modal-link` controller – supports modal links without requiring a global controller.
