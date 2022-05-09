@@ -19,7 +19,7 @@ class ModalController extends Controller {
   open(e) {
     this.turboFrameTarget.src = e.detail.url;
     this.typeValue = e.detail.type;
-    showScrim();
+    showScrim(e.detail.dismiss);
   }
 
   close(e) {
@@ -50,8 +50,8 @@ class ModalController extends Controller {
 /**
  * Show a modal, requires a url for a page that renders a turbo-frame with id `modal`.
  */
-function openModal(url, type = "") {
-  window.dispatchEvent(new CustomEvent("modal:open", { detail: { url: url, type: type }}));
+function openModal(url, type = "", dismiss = true) {
+  window.dispatchEvent(new CustomEvent("modal:open", { detail: { url: url, type: type, dismiss: dismiss }}));
 }
 
 /**
