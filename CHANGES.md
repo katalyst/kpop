@@ -1,4 +1,4 @@
-# Unreleased
+# 0.3.1
 
  * Added `modal-link` controller – supports modal links without requiring a global controller.
  * Add definitions export for easier controller registration:
@@ -6,6 +6,9 @@
     import TurboModal from "@katalyst-interactive/turbo-modal"
     application.load(TurboModal)
     ```
+ * Bug fixes
+   * Clipping issue on short devices
+   * Prevent scrolling background content while modal is present
 
 # 0.2.0
 
