@@ -30,14 +30,16 @@ module ModalHelper
   def modal_content(options = {}, &block)
     modal_id = options.fetch(:modal_id, MODAL_ID)
     turbo_frame_tag modal_id, data: { hidden: "" } do
-      tag.div(class: "modal animate-in #{options.delete(:modal_classes)}",
-              data: {
-                action: <<~ACTIONS
-                  keyup@window->modal#keyup
-                  scrim:hide@window->modal#close
-                ACTIONS
-              }) do
-        yield if block
+      tag.div(class: "modal-wrapper") do
+        tag.div(class: "modal animate-in #{options.delete(:modal_classes)}",
+                data:  {
+                  action: <<~ACTIONS
+                    keyup@window->modal#keyup
+                    scrim:hide@window->modal#close
+                  ACTIONS
+                }) do
+          yield if block
+        end
       end
     end
   end
