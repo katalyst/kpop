@@ -20,6 +20,5 @@ say "Install Turbo Modal"
 say "Turbo Modal #{TurboModal::VERSION} requires Stimulus@2.0.0", :yellow
 run "yarn add @katalyst-interactive/turbo-modal"
 
-append_to_file "app/javascript/controllers/index.js", %(\nimport { ScrimController, ModalController } from "@katalyst-interactive/turbo-modal"\n)
-append_to_file "app/javascript/controllers/index.js", %(application.register("scrim", ScrimController)\n)
-append_to_file "app/javascript/controllers/index.js", %(application.register("modal", ModalController)\n)
+append_to_file "app/javascript/controllers/index.js", %(\nimport TurboModal from "@katalyst-interactive/turbo-modal"\n)
+append_to_file "app/javascript/controllers/index.js", %(application.load(TurboModal)\n)

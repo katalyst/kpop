@@ -3,8 +3,5 @@
 
 import { application } from "./application"
 
-import { ScrimController } from "@katalyst-interactive/turbo-modal";
-import { ModalController } from "@katalyst-interactive/turbo-modal";
-
-application.register("scrim", ScrimController)
-application.register("modal", ModalController)
+import TurboModal from "@katalyst-interactive/turbo-modal"
+application.load(TurboModal)

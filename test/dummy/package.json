@@ -2,8 +2,8 @@
   "name": "app",
   "private": "true",
   "dependencies": {
-    "@hotwired/turbo-rails": ">= 7.0.1",
-    "@katalyst-interactive/turbo-modal": ">= 0.1.4",
+    "@hotwired/turbo-rails": "^7.1.1",
+    "@katalyst-interactive/turbo-modal": "^0.2.2",
     "esbuild": ">= 0.13.6",
     "sass": ">= 1.49.9"
   },

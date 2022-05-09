@@ -18,6 +18,15 @@ Turbo modal provides helpers to add a basic scrim and modal target frame. These 
 @import "~@katalyst-interactive/turbo-modal";
 ```
 
+### Import turbo_modal stimulus controllers
+```js
+/* application.js */
+import TurboModal from "@katalyst-interactive/turbo-modal"
+application.load(TurboModal)
+```
+
+### Show a modal
+
 To get a modal displaying you will need 2 things:
 1. A `modal_link` (or programmatic trigger)
 2. Some `modal_content`
