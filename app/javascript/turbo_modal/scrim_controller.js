@@ -17,6 +17,10 @@ class ScrimController extends Controller {
     delete this.scrimTarget.dataset.hidden;
     document.body.style.height = "100vh";
     document.body.style.overflow = "hidden";
+
+    if (!event.detail.dismiss) {
+      this.scrimTarget.style.pointerEvents = "none";
+    }
   }
 
   hide(event) {
@@ -39,8 +43,8 @@ class ScrimController extends Controller {
 /**
  * Show the scrim element
  */
-function showScrim() {
-  window.dispatchEvent(new Event("scrim:show"));
+function showScrim(dismiss = true) {
+  window.dispatchEvent(new CustomEvent("scrim:show", { detail: { dismiss: dismiss }}));
 }
 
 /**
