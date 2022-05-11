@@ -1,3 +1,7 @@
+# 0.3.3
+
+ * Build missing css file
+
 # 0.3.2
 
  * Allow modals to be non-dismissable
