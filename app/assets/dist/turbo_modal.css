@@ -1,29 +1,57 @@
-.modal {
+.modal-wrapper {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+.bottom-sheet .modal-wrapper {
+  align-items: flex-end;
+}
+
+.modal {
+  min-width: 40rem;
+  max-height: 100%;
+  display: flex;
+  position: relative;
+  top: unset;
+  left: unset;
   background: white;
   border-radius: 4px;
-  padding: 2rem;
+  padding: 0;
   --animation-in: slide-in;
   --animation-out: slide-out;
+  pointer-events: auto;
+  margin: 2rem;
+}
+@media screen and (max-width: 45rem) {
+  .modal {
+    min-width: 100%;
+  }
+}
+.modal .modal-content {
+  overflow-y: scroll;
+  padding: 2rem;
 }
 @media screen and (max-width: 45rem) {
   .fullscreen .modal {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    margin: 0;
     border-radius: 0;
+    height: 100%;
+    flex-grow: 1;
   }
 }
 .bottom-sheet .modal {
   top: unset;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  margin: 0;
   min-height: 40vh;
+  transform: unset;
   --animation-in: slide-up;
   --animation-out: slide-down;
 }
@@ -36,7 +64,6 @@
 .animate-in {
   animation: var(--animation-in);
   animation-duration: 0.25s;
-  animation-fill-mode: forwards;
 }
 @media screen and (max-width: 45rem) {
   .fullscreen .animate-in {
@@ -58,21 +85,21 @@
 @keyframes slide-in {
   from {
     opacity: 0;
-    transform: translate(-50%, -35%);
+    transform: translateY(35%);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translateY(0%);
   }
 }
 @keyframes slide-out {
   from {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translateY(0%);
   }
   to {
     opacity: 0;
-    transform: translate(-50%, -35%);
+    transform: translateY(35%);
   }
 }
 @keyframes slide-in-left {
