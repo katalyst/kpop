@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    turbo_modal (0.3.3)
+    turbo_modal (0.3.4)
       rails
       turbo-rails
 

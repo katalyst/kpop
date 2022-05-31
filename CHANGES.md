@@ -1,6 +1,11 @@
+# 0.3.4
+
+* Fixes bug with non-dismmissable modals, scrim passed through click events allowing
+  interaction with underlying application.
+
 # 0.3.3
 
- * Build missing css file
+* Build missing css file
 
 # 0.3.2
 
