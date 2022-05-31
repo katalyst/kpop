@@ -14,37 +14,36 @@ class ScrimController extends Controller {
   static targets = ["scrim"];
 
   show(event) {
+    clipScreen(this);
     delete this.scrimTarget.dataset.hidden;
-    document.body.style.height = "100vh";
-    document.body.style.overflow = "hidden";
-
-    if (!event.detail.dismiss) {
-      this.scrimTarget.style.pointerEvents = "none";
+    if (event.detail.dismissable) {
+      this.scrimTarget.dataset.dismissable = "";
     }
   }
 
-  hide(event) {
+  hide(event = null) {
+    delete this.scrimTarget.dataset.dismissable;
     this.scrimTarget.dataset.hidden = "";
-    unclipScreen();
+    unclipScreen(this);
   }
 
   onClick(event) {
-    window.dispatchEvent(new Event("scrim:hide"));
+    if (this.scrimTarget.dataset.dismissable) {
+      window.dispatchEvent(new Event("scrim:hide"));
+    }
   }
 
   disconnect() {
-    this.scrimTarget.dataset.hidden = "";
-    unclipScreen();
+    this.hide();
     super.disconnect();
   }
-
 }
 
 /**
  * Show the scrim element
  */
 function showScrim(dismiss = true) {
-  window.dispatchEvent(new CustomEvent("scrim:show", { detail: { dismiss: dismiss }}));
+  window.dispatchEvent(new CustomEvent("scrim:show", { detail: { dismissable: dismiss } }));
 }
 
 /**
@@ -55,11 +54,21 @@ function hideScrim() {
 }
 
 /**
+ * Clips body to viewport size
+ */
+function clipScreen(controller) {
+  controller.previousHeight = document.body.style.height || "unset";
+  controller.previousOverflow = document.body.style.overflow || "unset";
+  document.body.style.height = "100vh";
+  document.body.style.overflow = "hidden";
+}
+
+/**
  * Unclips body to viewport size
  */
-function unclipScreen() {
-  document.body.style.height = "unset";
-  document.body.style.overflow = "unset";
+function unclipScreen(controller) {
+  document.body.style.height = controller.previousHeight;
+  document.body.style.overflow = controller.previousOverflow;
 }
 
 export { ScrimController as default, showScrim, hideScrim }
