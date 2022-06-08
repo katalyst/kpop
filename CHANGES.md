@@ -1,4 +1,4 @@
-# Unreleased
+# 0.3.5
 
 * Fixes bug allowing the user to `esc` out of a static modal
 * Fixes bug to let users `esc` and click to dismiss modals that aren't static
