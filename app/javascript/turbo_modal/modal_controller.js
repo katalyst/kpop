@@ -19,6 +19,9 @@ class ModalController extends Controller {
   open(e) {
     this.turboFrameTarget.src = e.detail.url;
     this.typeValue = e.detail.type;
+    if (event.detail.dismissable) {
+      this.turboFrameTarget.dataset.dismissable = "";
+    }
     showScrim(e.detail.dismiss);
   }
 
@@ -31,6 +34,7 @@ class ModalController extends Controller {
     setTimeout(() => {
       modal_element.remove();
       this.turboFrameTarget.src = null;
+      delete this.turboFrameTarget.dataset.dismissable;
 
       if (this.typeValue !== "") {
         this.turboFrameTarget.classList.remove(this.typeValue);
@@ -41,7 +45,7 @@ class ModalController extends Controller {
   }
 
   keyup(event) {
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && this.turboFrameTarget.dataset.dismissable === "") {
       closeModal();
     }
   }

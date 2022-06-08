@@ -28,7 +28,7 @@ class ScrimController extends Controller {
   }
 
   onClick(event) {
-    if (this.scrimTarget.dataset.dismissable) {
+    if (this.scrimTarget.dataset.dismissable === "") {
       window.dispatchEvent(new Event("scrim:hide"));
     }
   }
