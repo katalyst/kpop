@@ -1,3 +1,7 @@
+
+require "importmap-rails" # ensure app.config supports `importmap`
+require "stimulus-rails" # ensure assets are available for import mapping
+
 module TurboModal
   class Engine < ::Rails::Engine
     config.autoload_once_paths = %W(#{root}/app/helpers)
@@ -18,6 +22,11 @@ module TurboModal
       ActiveSupport.on_load(:action_view_base) do
         helper TurboModal::Engine.helpers
       end
+    end
+
+    initializer "turbo_modal.importmap", before: "importmap" do |app|
+      app.config.importmap.paths << root.join("config/importmap.rb")
+      app.config.importmap.cache_sweepers << root.join("app/assets/javascripts")
     end
   end
 end

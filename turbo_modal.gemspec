@@ -18,8 +18,11 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = spec.homepage
 
-  spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  spec.files = Dir["{lib}/**/*", "CHANGELOG.md", "LICENSE.txt", "README.md"]
+  spec.require_paths = ["lib"]
 
   spec.add_dependency "rails"
   spec.add_dependency "turbo-rails"
+  spec.add_dependency "importmap-rails"
+  spec.add_dependency "stimulus-rails"
 end
