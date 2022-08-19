@@ -2,7 +2,9 @@ PATH
   remote: .
   specs:
     turbo_modal (1.0.0)
+      importmap-rails
       rails
+      stimulus-rails
       turbo-rails
 
 GEM
@@ -85,6 +87,9 @@ GEM
       activesupport (>= 5.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    importmap-rails (1.1.5)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     jsbundling-rails (0.1.9)
       railties (>= 6.0.0)
     loofah (2.20.0)
@@ -150,6 +155,8 @@ GEM
       connection_pool
     sqlite3 (1.6.2)
       mini_portile2 (~> 2.8.0)
+    stimulus-rails (1.2.1)
+      railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.3.2)
     turbo-rails (1.4.0)
@@ -171,7 +178,6 @@ DEPENDENCIES
   jsbundling-rails (~> 0.1.9)
   redis
   sqlite3
-  turbo-rails
   turbo_modal!
 
 BUNDLED WITH

@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 /**
  * Scrim controller wraps an element that creates a whole page layer.
