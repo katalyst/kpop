@@ -5,9 +5,12 @@
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 11;
+  z-index: -1;
+  transition: opacity 0.2s ease-in-out, z-index 0.2s step-end;
+  opacity: 0;
 }
 
-.scrim[data-hidden] {
-  display: none;
+.scrim[data-scrim-open-value="true"] {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out, z-index 0.2s step-start;
 }

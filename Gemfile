@@ -1,15 +1,22 @@
-source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+# frozen_string_literal: true
 
-# Specify your gem's dependencies in turbo_modal.gemspec.
+source "https://rubygems.org"
+
 gemspec
 
-# To use a debugger
-# gem 'byebug', group: [:development, :test]
-gem "redis"
+gem "rails"
+gem "rake"
+gem "rubocop-katalyst", require: false
+gem "sqlite3"
+
+gem "dartsass-rails"
+gem "importmap-rails"
+gem "sprockets-rails"
+gem "stimulus-rails"
+gem "turbo-rails"
 
 group :development, :test do
-  gem "sqlite3"
-  gem "jsbundling-rails", "~> 0.1.9"
-  gem "cssbundling-rails"
+  gem "factory_bot_rails"
+  gem "puma"
+  gem "rspec-rails"
 end

@@ -1,0 +1,22 @@
+require:
+  - rubocop-katalyst
+
+# https://raw.githubusercontent.com/thoughtbot/guides/master/style/ruby/.rubocop.yml
+AllCops:
+  TargetRubyVersion: 3.0
+  Exclude:
+    - bin/*
+    - config/**/*
+    - db/**/*
+    - deploy/*
+    - node_modules/**/*
+    - vendor/bundle/**/*
+    # Dummy app
+    - spec/dummy/*
+    - spec/dummy/bin/*
+    - spec/dummy/config/**/*
+    - spec/dummy/db/**/*
+    - spec/dummy/deploy/*
+    - spec/dummy/node_modules/**/*
+    - spec/dummy/vendor/bundle/**/*
+  NewCops: enable
