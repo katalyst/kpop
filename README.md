@@ -98,6 +98,16 @@ frame. The targeted action will need to generate content in a `kpop_frame_tag`, 
 Note that, because kpop modals render in a turbo frame, if you want to navigate the parent frame you will need to use
 `target: "_top"` on your links and forms.
 
+## Development
+
+Releases need to be distributed to rubygems.org and npmjs.org. To do this, you need to have accounts with both providers
+and be added as a collaborator to the kpop gem and npm packages.
+
+1. Update the version in `package.json` and `lib/katalyst/kpop/version.rb`
+2. Ensure that `rake` passes (format and tests)
+3. Tag a release and push to rubygems.org by running `rake release`
+4. Push the new version to npmjs.org by running `yarn publish`
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
