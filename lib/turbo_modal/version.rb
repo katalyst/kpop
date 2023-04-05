@@ -1,3 +1,3 @@
 module TurboModal
-  VERSION = "0.3.5".freeze
+  VERSION = "1.0.0".freeze
 end

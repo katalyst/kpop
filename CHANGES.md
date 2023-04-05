@@ -1,3 +1,7 @@
+# 1.0.0
+
+* Release 1.x branch based on 0.3.5 implementation, in anticipation of v2
+
 # 0.3.5
 
 * Fixes bug allowing the user to `esc` out of a static modal
