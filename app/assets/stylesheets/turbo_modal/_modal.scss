@@ -30,7 +30,7 @@
   pointer-events: auto;
   margin: 2rem;
 
-  @media screen and(max-width: 45rem) {
+  @media screen and (max-width: 45rem) {
     min-width: 100%;
   }
 
@@ -40,7 +40,7 @@
   }
 
   .fullscreen & {
-    @media screen and(max-width: 45rem) {
+    @media screen and (max-width: 45rem) {
       margin: 0;
       border-radius: 0;
       height: 100%;
@@ -57,7 +57,7 @@
     --animation-in : slide-up;
     --animation-out : slide-down;
 
-    @media screen and(max-width: 45rem) {
+    @media screen and (max-width: 45rem) {
       min-height: 65vh;
     }
   }
@@ -68,7 +68,7 @@
   animation-duration: 0.25s;
 
   .fullscreen & {
-    @media screen and(max-width: 45rem) {
+    @media screen and (max-width: 45rem) {
       --animation-in: slide-in-left;
     }
   }
@@ -80,7 +80,7 @@
   animation-fill-mode: forwards;
 
   .fullscreen & {
-    @media screen and(max-width: 45rem) {
+    @media screen and (max-width: 45rem) {
       --animation-out: slide-out-right;
     }
   }
