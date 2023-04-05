@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    turbo_modal (1.0.0)
+    katalyst-kpop (2.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -240,6 +240,7 @@ DEPENDENCIES
   dartsass-rails
   factory_bot_rails
   importmap-rails
+  katalyst-kpop!
   puma
   rails
   rake
@@ -249,7 +250,6 @@ DEPENDENCIES
   sqlite3
   stimulus-rails
   turbo-rails
-  turbo_modal!
 
 BUNDLED WITH
    2.4.10

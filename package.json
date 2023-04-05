@@ -1,12 +1,12 @@
 {
-  "name": "@katalyst-interactive/turbo-modal",
-  "version": "1.0.0",
-  "description": "Stimulus controllers for TurboModal Gem",
-  "module": "app/assets/javascripts/turbo_modal.js",
-  "main": "app/assets/builds/turbo_modal.min.js",
-  "style": "app/assets/builds/turbo_modal.css",
+  "name": "@katalyst-interactive/kpop",
+  "version": "2.0.0",
+  "description": "Stimulus controllers for the katalyst-kpop Ruby Gem",
+  "module": "app/assets/javascripts/katalyst/kpop.js",
+  "main": "app/assets/builds/katalyst/kpop.min.js",
+  "style": "app/assets/builds/katalyst/kpop.css",
   "files": [
-    "app/assets/builds/turbo_modal.min.js"
+    "app/assets/builds/katalyst/kpop.min.js"
   ],
   "scripts": {
     "build": "yarn exec rollup -- -c",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.1",
-    "@hotwired/turbo-rails": "^7.3.0"
+    "@hotwired/turbo": "^7.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/katalyst/turbo_modal.git"
+    "url": "git+https://github.com/katalyst/kpop.git"
   },
   "keywords": [
     "turbo",
@@ -40,7 +40,7 @@
   "author": "Katalyst Interactive, Pty Ltd",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/katalyst/turbo_modal/issues"
+    "url": "https://github.com/katalyst/kpop/issues"
   },
-  "homepage": "https://github.com/katalyst/turbo_modal#readme"
+  "homepage": "https://github.com/katalyst/kpop#readme"
 }

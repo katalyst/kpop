@@ -1,5 +1,5 @@
-import KpopController from "./controllers/kpop_controller";
-import ScrimController from "./controllers/scrim_controller";
+import KpopController from "../controllers/kpop_controller";
+import ScrimController from "../controllers/scrim_controller";
 
 const Definitions = [
   { identifier: "kpop", controllerConstructor: KpopController },

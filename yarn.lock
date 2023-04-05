@@ -3,9 +3,9 @@
 
 
 "@babel/code-frame@^7.10.4":
-  version "7.18.6"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.18.6.tgz#3b25d38c89600baa2dcc219edfa88a74eb2c427a"
-  integrity sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==
+  version "7.21.4"
+  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.21.4.tgz#d0fa9e4413aca81f2b23b9442797bda1826edb39"
+  integrity sha512-LYvhNKfwWSPpocw8GI7gpK2nq3HSDuEPC/uSYaALSJu9xjsalaaYFOq0Pwt5KmVqwEbZlDu81aLXwBOmD/Fv9g==
   dependencies:
     "@babel/highlight" "^7.18.6"
 
@@ -27,14 +27,6 @@
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.2.1.tgz#e3de23623b0c52c247aba4cd5d530d257008676b"
   integrity sha512-HGlzDcf9vv/EQrMJ5ZG6VWNs8Z/xMN+1o2OhV1gKiSG6CqZt5MCBB1gRg5ILiN3U0jEAxuDTNPRfBcnZBDmupQ==
-
-"@hotwired/turbo-rails@^7.3.0":
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.3.0.tgz#422c21752509f3edcd6c7b2725bbe9e157815f51"
-  integrity sha512-fvhO64vp/a2UVQ3jue9WTc2JisMv9XilIC7ViZmXAREVwiQ2S4UC7Go8f9A1j4Xu7DBI6SbFdqILk5ImqVoqyA==
-  dependencies:
-    "@hotwired/turbo" "^7.3.0"
-    "@rails/actioncable" "^7.0"
 
 "@hotwired/turbo@^7.3.0":
   version "7.3.0"
@@ -81,20 +73,15 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@rails/actioncable@^7.0":
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.4.tgz#70a3ca56809f7aaabb80af2f9c01ae51e1a8ed41"
-  integrity sha512-tz4oM+Zn9CYsvtyicsa/AwzKZKL+ITHWkhiu7x+xF77clh2b4Rm+s6xnOgY/sGDWoFWZmtKsE95hxBPkgQQNnQ==
-
 "@rollup/plugin-node-resolve@^15.0.1":
-  version "15.0.1"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.0.1.tgz#72be449b8e06f6367168d5b3cd5e2802e0248971"
-  integrity sha512-ReY88T7JhJjeRVbfCyNj+NXAG3IIsVMsX9b5/9jC98dRP8/yxlZdz7mHZbHk5zHr24wZZICS5AcXsFZAXYUQEg==
+  version "15.0.2"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.0.2.tgz#8183a80c2cbf7b471f5ac86b16747997f3b5d185"
+  integrity sha512-Y35fRGUjC3FaurG722uhUuG8YHOJRJQbI6/CkbRkdPotSpDj9NtIN85z1zrcyDcCQIW4qp5mgG72U+gJ0TAFEg==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     "@types/resolve" "1.20.2"
     deepmerge "^4.2.2"
-    is-builtin-module "^3.2.0"
+    is-builtin-module "^3.2.1"
     is-module "^1.0.0"
     resolve "^1.22.1"
 
@@ -273,7 +260,7 @@ is-binary-path@~2.1.0:
   dependencies:
     binary-extensions "^2.0.0"
 
-is-builtin-module@^3.2.0:
+is-builtin-module@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/is-builtin-module/-/is-builtin-module-3.2.1.tgz#f03271717d8654cfcaf07ab0463faa3571581169"
   integrity sha512-BSLE3HnV2syZ0FK0iMA/yUGplUeMmNz4AW5fnTunbCIqZi4vG3WjJT9FHMy5D69xmAYBHXQhJdALdpwVxV501A==

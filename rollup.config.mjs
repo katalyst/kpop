@@ -25,7 +25,7 @@ export default [
   {
     input: pkg.module,
     output: {
-      file: "app/assets/builds/turbo_modal.min.js",
+      file: "app/assets/builds/katalyst/kpop.min.js",
       format: "esm",
       inlineDynamicImports: true
     },

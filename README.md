@@ -1,8 +1,8 @@
-# TurboModal
+# kpop
 
 Modals driven by `@hotwire/turbo` frame navigation.
 
-Turbo modal requires `@hotwire/turbo` and `@hotwire/stimulus` to be installed and configured correctly to be used.
+kpop requires `@hotwire/turbo` and `@hotwire/stimulus` to be installed and configured correctly to be used.
 
 ## Installation
 
@@ -10,10 +10,10 @@ Install gem
 ```bash
 # Gemfile
 
-$ bundle add "turbo_modal"
+$ bundle add "katalyst-kpop"
 ```
 
-Turbo modal supports installation of javascript dependencies with either import maps or yarn.
+kpop supports installation of javascript dependencies with either import maps or yarn.
 
 ### Stimulus controllers
 
@@ -27,7 +27,7 @@ Import stylesheets through using SASS using asset pipeline:
 ```scss 
 // app/assets/stylesheets/application.scss
 
-@use "turbo_modal";
+@use "katalyst/kpop";
 ```
 
 You can also load a precompiled version from the gem directly:
@@ -35,7 +35,7 @@ You can also load a precompiled version from the gem directly:
 ```erb
 <%# app/views/layouts/application.html.erb #>
 
-<%= stylesheet_link_tag "turbo_modal" %>
+<%= stylesheet_link_tag "katalyst/kpop" %>
 ```
 
 ### Yarn
@@ -43,26 +43,26 @@ You can also load a precompiled version from the gem directly:
 If you are not using import maps, you can add the yarn package to your project:
 
 ```bash
-$ yarn add "@katalyst-interactive/turbo-modal"
+$ yarn add "@katalyst-interactive/kpop"
 ```
 
-### Import turbo_modal styles
+### Import kpop styles
 ```css
 /* application.scss */
 
-@import "~@katalyst-interactive/turbo-modal";
+@import "~@katalyst-interactive/kpop";
 ```
 
-### Import turbo_modal stimulus controllers
+### Import kpop stimulus controllers
 ```js
 /* application.js */
-import TurboModal from "@katalyst-interactive/turbo-modal"
-application.load(TurboModal)
+import kpop from "@katalyst-interactive/kpop"
+application.load(kpop)
 ```
 
 ## Usage
 
-Turbo modal provides helpers to add a basic scrim and modal target frame. These should be placed inside the body:
+kpop provides helpers to add a basic scrim and modal target frame. These should be placed inside the body:
 ```html
  <body>
     <%= scrim_tag %>
@@ -95,5 +95,9 @@ frame. The targeted action will need to generate content in a `kpop_frame_tag`, 
 <% end %>
 ```
 
+Note that, because kpop modals render in a turbo frame, if you want to navigate the parent frame you will need to use
+`target: "_top"` on your links and forms.
+
 ## License
+
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
