@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    katalyst-kpop (2.0.1)
+    katalyst-kpop (2.0.2)
 
 GEM
   remote: https://rubygems.org/
