@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import ScrimController from "./scrim_controller";
+import ScrimController from "controllers/scrim_controller";
 
 export default class KpopController extends Controller {
   static targets = ["content", "closeButton"];

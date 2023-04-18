@@ -2,12 +2,8 @@
   "name": "@katalyst-interactive/kpop",
   "version": "2.0.0",
   "description": "Stimulus controllers for the katalyst-kpop Ruby Gem",
-  "module": "app/assets/javascripts/katalyst/kpop.js",
-  "main": "app/assets/builds/katalyst/kpop.min.js",
   "style": "app/assets/builds/katalyst/kpop.css",
-  "files": [
-    "app/assets/builds/katalyst/kpop.min.js"
-  ],
+  "exports": "app/assets/builds/katalyst/kpop.js",
   "scripts": {
     "build": "yarn exec rollup -- -c",
     "build:css": "yarn exec sass -- app/assets/stylesheets:app/assets/builds --load-path=node_modules --no-source-map",

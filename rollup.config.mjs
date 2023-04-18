@@ -1,17 +1,20 @@
 import resolve from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 import pkg from "./package.json" assert { type: "json" };
+import path from "path";
 
 export default [
   {
-    input: pkg.module,
+    input: "katalyst/kpop.js",
     output: {
-      file: pkg.main,
+      file: "app/assets/builds/katalyst/kpop.js",
       format: "esm",
       inlineDynamicImports: true
     },
     plugins: [
-      resolve(),
+      resolve({
+        modulePaths: [path.join(process.cwd(), 'app/assets/javascripts')],
+      }),
       terser({
         mangle: false,
         compress: false,
@@ -23,14 +26,16 @@ export default [
     ]
   },
   {
-    input: pkg.module,
+    input: "katalyst/kpop.js",
     output: {
       file: "app/assets/builds/katalyst/kpop.min.js",
       format: "esm",
       inlineDynamicImports: true
     },
     plugins: [
-      resolve(),
+      resolve({
+        modulePaths: [path.join(process.cwd(), 'app/assets/javascripts')],
+      }),
       terser({
         mangle: true,
         compress: true
