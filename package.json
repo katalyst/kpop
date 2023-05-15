@@ -8,8 +8,8 @@
     "build": "yarn exec rollup -- -c",
     "build:css": "yarn exec sass -- app/assets/stylesheets:app/assets/builds --load-path=node_modules --no-source-map",
     "clean": "rm -rf app/assets/builds/*",
-    "format": "prettier --write *.json app/assets/{config,javascripts,stylesheets} spec/dummy/app/assets/{config,javascripts,stylesheets}",
-    "lint": "prettier --check *.json app/assets/{config,javascripts,stylesheets} spec/dummy/app/assets/{config,javascripts,stylesheets}"
+    "format": "bash -c 'prettier --write *.json app/assets/{config,javascripts,stylesheets} spec/dummy/app/assets/{config,javascripts,stylesheets}'",
+    "lint": "bash -c 'prettier --check *.json app/assets/{config,javascripts,stylesheets} spec/dummy/app/assets/{config,javascripts,stylesheets}'"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.1",
