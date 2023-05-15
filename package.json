@@ -1,6 +1,6 @@
 {
   "name": "@katalyst-interactive/kpop",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Stimulus controllers for the katalyst-kpop Ruby Gem",
   "main": "app/assets/builds/katalyst/kpop.js",
   "style": "app/assets/builds/katalyst/kpop.css",
