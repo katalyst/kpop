@@ -96,7 +96,7 @@ frame. The targeted action will need to generate content in a `kpop_frame_tag`, 
 ```
 
 Note that, because kpop modals render in a turbo frame, if you want to navigate the parent frame you will need to use
-`target: "_top"` on your links and forms.
+`target: "_top"` on your links and forms, or add `target: "_top"` to the `kpop_frame_tag` call in your body.
 
 ## Development
 

@@ -13,10 +13,13 @@ module KpopHelper
   end
 
   # Render a turbo frame tag that can be targeted for rendering kpop modals.
-  def kpop_frame_tag(&block)
-    turbo_frame_tag "kpop",
-                    class: "kpop-container",
-                    data:  { controller: "kpop", action: "scrim:hide@window->kpop#dismiss" } do
+  def kpop_frame_tag(**html_attributes, &block)
+    html_attributes[:class]             ||= "kpop-container"
+    html_attributes[:data]              ||= {}
+    html_attributes[:data][:controller] = "kpop"
+    html_attributes[:data][:action]     = "scrim:hide@window->kpop#dismiss"
+
+    turbo_frame_tag("kpop", **html_attributes) do
       capture(&block) if block
     end
   end
