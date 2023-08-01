@@ -7,6 +7,7 @@ module ScrimHelper
       keyup@window->scrim#escape
       scrim:request:hide@window->scrim#hide
       scrim:request:show@window->scrim#show
+      turbo:before-cache@document->scrim#hide
     ACTIONS
   end
 end
