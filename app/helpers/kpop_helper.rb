@@ -18,7 +18,6 @@ module KpopHelper
     html_attributes[:data]                   ||= {}
     html_attributes[:data][:controller]      = "kpop"
     html_attributes[:data][:action]          = "scrim:hide@window->kpop#dismiss"
-    html_attributes[:data][:turbo_temporary] = ""
 
     turbo_frame_tag("kpop", **html_attributes) do
       capture(&block) if block
