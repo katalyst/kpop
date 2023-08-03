@@ -7,7 +7,10 @@ export default class KpopController extends Controller {
     open: Boolean,
   };
 
-  contentTargetConnected() {
+  contentTargetConnected(target) {
+    // Set the modal content to temporary to ensure its omitted when caching the page
+    target.setAttribute("data-turbo-temporary", "");
+
     // When switching modals a target may connect while scrim is already open
     if (this.openValue) return;
 
