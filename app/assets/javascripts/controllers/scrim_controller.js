@@ -145,7 +145,7 @@ export default class ScrimController extends Controller {
     resetStyle(this.element, "z-index", null);
     resetStyle(document.body, "position", null);
     resetStyle(document.body, "top", null);
-    window.scrollTo(0, this.scrollY);
+    window.scrollTo({ left: 0, top: this.scrollY, behavior: "instant" });
 
     delete this.scrollY;
     delete this.previousPosition;
