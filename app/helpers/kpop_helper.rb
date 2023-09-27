@@ -49,7 +49,7 @@ module KpopHelper
 
   # Renders a button that will close the current kpop modal, if any.
   def kpop_button_close(content = nil, **options, &block)
-    content = block ? capture(yield) : content
+    content = capture(yield) if block
     tag.button content, data: { action: "click->kpop#dismiss:prevent" }, **options
   end
 end

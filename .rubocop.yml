@@ -1,5 +1,6 @@
 require:
   - rubocop-katalyst
+  - rubocop-factory_bot
 
 # https://raw.githubusercontent.com/thoughtbot/guides/master/style/ruby/.rubocop.yml
 AllCops:
