@@ -17,6 +17,10 @@ class ModalsController < ApplicationController
       close_modal
     when "test"
       redirect_forwards
+    when "anonymous"
+      render turbo_stream: helpers.kpop_redirect_to(anonymous_modal_path, target: "kpop")
+    when "persistent"
+      render turbo_stream: helpers.kpop_redirect_to(persistent_modal_path, target: "kpop")
     else
       @error = true
       render status: :unprocessable_entity

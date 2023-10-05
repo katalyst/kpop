@@ -4,6 +4,12 @@ module Kpop
   class ModalComponent < ViewComponent::Base
     include HasHtmlAttributes
 
+    ACTIONS = %w[
+      popstate@window->kpop--modal#popstate
+      turbo:before-cache@window->kpop--modal#beforeCache
+      turbo:before-visit@window->kpop--modal#beforeVisit
+    ].freeze
+
     renders_one :title, "Kpop::Modal::TitleComponent"
     renders_one :header
     renders_one :footer
@@ -28,6 +34,7 @@ module Kpop
         class: "kpop-modal",
         data:  {
           controller:                    "kpop--modal",
+          action:                        ACTIONS.join(" "),
           "kpop--frame-target":          "modal",
           "kpop--modal-temporary-value": @temporary,
         },

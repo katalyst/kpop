@@ -37,7 +37,7 @@ module Kpop
     def kpop_dismiss(id: "kpop")
       ChainedMatcher.new(ResponseMatcher.new,
                          CapybaraParser,
-                         StreamMatcher.new(id:, action: "update"))
+                         StreamMatcher.new(id:, action: "append"))
     end
   end
 end

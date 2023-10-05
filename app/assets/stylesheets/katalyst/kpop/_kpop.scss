@@ -6,6 +6,8 @@ $min-height: 0 !default;
 $max-height: 80vh !default;
 $default-padding: 1rem 1.5rem !default;
 
+$duration: 0.2s !default;
+
 .kpop-container {
   display: none;
 
@@ -15,7 +17,6 @@ $default-padding: 1rem 1.5rem !default;
   right: 0;
   bottom: 0;
 
-  justify-content: center;
   align-items: center;
   z-index: 1000;
   pointer-events: none;
@@ -23,11 +24,21 @@ $default-padding: 1rem 1.5rem !default;
   > * {
     pointer-events: auto;
   }
+
+  .kpop-modal[data-closing] {
+    animation: var(--closing-animation);
+    animation-duration: $duration;
+    animation-fill-mode: forwards;
+  }
 }
 
 .kpop-modal {
+  --opening-animation: slide-in-up;
+  --closing-animation: slide-out-down;
+
   position: relative;
   overflow: hidden;
+  margin: 0 auto;
 
   display: grid;
   grid-template-areas:
@@ -95,6 +106,12 @@ $default-padding: 1rem 1.5rem !default;
   }
 }
 
+.scrim[data-show-animating] + .kpop-container .kpop-modal {
+  animation: var(--opening-animation);
+  animation-duration: $duration;
+  animation-fill-mode: forwards;
+}
+
 .kpop-modal.iframe {
   .kpop-content {
     overflow: unset;
@@ -129,5 +146,27 @@ $default-padding: 1rem 1.5rem !default;
   .kpop-buttons {
     flex-direction: column-reverse;
     text-align: center;
+  }
+}
+
+@keyframes slide-in-up {
+  0% {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-down {
+  0% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10%);
+    opacity: 0;
   }
 }

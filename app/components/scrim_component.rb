@@ -4,10 +4,9 @@ class ScrimComponent < ViewComponent::Base
   attr_reader :id, :z_index
 
   ACTIONS = %w[
+    animationend->scrim#animationEnd
     click->scrim#dismiss
     keyup@window->scrim#escape
-    scrim:request:hide@window->scrim#hide
-    scrim:request:show@window->scrim#show
     turbo:before-cache@document->scrim#beforeCache
   ].freeze
 

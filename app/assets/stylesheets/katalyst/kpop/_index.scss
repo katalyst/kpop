@@ -1,2 +1,9 @@
-@use "kpop";
-@use "scrim";
+$duration: 0.2s;
+
+@use "kpop" with (
+  $duration: $duration
+);
+@use "side_panel";
+@use "scrim" with (
+  $duration: $duration
+);

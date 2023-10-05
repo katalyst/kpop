@@ -95,7 +95,12 @@ RSpec.describe "Persistent modal" do
       expect(page).to have_current_path(test_path)
       expect(page).not_to have_css(".kpop-modal")
 
-      # Clicking the back button to go back home
+      # Clicking the back button to go back to the modal
+      page.go_back
+
+      expect(page).to have_current_path(persistent_modal_path)
+
+      # Clicking the back button to go back to the root
       page.go_back
 
       expect(page).to have_current_path(root_path)
@@ -132,6 +137,11 @@ RSpec.describe "Persistent modal" do
       expect(page).to have_current_path(test_path)
       expect(page).not_to have_css(".kpop-modal")
 
+      # Clicking the back button to go back to the modal
+      page.go_back
+
+      expect(page).to have_current_path(persistent_modal_path)
+
       # Click the back button to return to root
       page.go_back
 
@@ -163,6 +173,46 @@ RSpec.describe "Persistent modal" do
       expect(page).not_to have_css(".kpop-modal")
 
       # Click the back button to show no extra history was added
+      page.go_back
+
+      expect(page).to have_current_path(nil)
+    end
+
+    it "supports navigation re-opening after submit" do
+      # Fill in the form
+      within(".kpop-modal") do |_kpop|
+        select "home", from: "Next"
+        click_button "Save"
+      end
+
+      expect(page).to have_current_path(root_path)
+      expect(page).not_to have_css(".kpop-modal")
+
+      # Clicking forward re-opens the modal
+      page.go_forward
+
+      expect(page).to have_current_path(persistent_modal_path)
+      within(".kpop-modal") do |kpop|
+        expect(kpop).to have_content("Persistent modal")
+      end
+    end
+
+    it "supports rendering a new modal via form submission" do
+      # Fill in the form
+      within(".kpop-modal") do |_kpop|
+        select "anonymous", from: "Next"
+        click_button "Save"
+      end
+
+      expect(page).to have_current_path(root_path)
+      expect(page).to have_css(".kpop-title", text: "Anonymous modal")
+
+      # Clicking the back button to go back to the root path
+      page.go_back
+
+      expect(page).to have_current_path(root_path)
+
+      # Click the back button again to show no extra history was added
       page.go_back
 
       expect(page).to have_current_path(nil)

@@ -8,6 +8,7 @@ module Kpop
     attr_reader :id
 
     ACTIONS = %w[
+      scrim:dismiss@window->kpop--frame#dismiss
       scrim:hide@window->kpop--frame#dismiss
     ].freeze
 

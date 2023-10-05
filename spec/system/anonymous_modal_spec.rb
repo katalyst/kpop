@@ -10,7 +10,7 @@ RSpec.describe "Anonymous modal" do
     click_link("Anonymous")
 
     # Wait for modal to render
-    find(".kpop-modal")
+    find("[data-kpop--frame-open-value='true'] .kpop-modal")
   end
 
   context "when opening from URL" do
@@ -51,6 +51,8 @@ RSpec.describe "Anonymous modal" do
     end
 
     it "supports scrim closing" do
+      sleep 0.1
+
       # Clicking the scrim closes the modal
       find_by_id("scrim").trigger("click")
 

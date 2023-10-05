@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-const DEBUG = false;
+const DEBUG = true;
 
 export default class Kpop__FrameController extends Controller {
   static outlets = ["scrim"];
@@ -10,7 +10,7 @@ export default class Kpop__FrameController extends Controller {
   };
 
   scrimOutletConnected(scrim) {
-    if (DEBUG) console.debug("scrim connected");
+    if (DEBUG) console.debug("frame:scrim-connected");
 
     // return if already initialized
     if (this.openValue) return;
@@ -22,7 +22,7 @@ export default class Kpop__FrameController extends Controller {
   }
 
   modalOutletConnected(modal) {
-    if (DEBUG) console.debug("modal connected");
+    if (DEBUG) console.debug("frame:modal-connected");
 
     // When switching modals a target may connect while scrim is already open
     if (this.openValue) return;
@@ -34,7 +34,7 @@ export default class Kpop__FrameController extends Controller {
   }
 
   modalOutletDisconnected(_) {
-    if (DEBUG) console.debug("modal disconnect");
+    if (DEBUG) console.debug("frame:modal-disconnect");
 
     // When switching modals there may still be content to show
     if (this.hasModalOutlet) return;
@@ -44,25 +44,31 @@ export default class Kpop__FrameController extends Controller {
   }
 
   openValueChanged(open) {
+    if (DEBUG) console.debug("frame:open-changed");
+
     this.element.style.display = open ? "flex" : "none";
   }
 
-  dismiss() {
-    if (DEBUG) console.debug("dismiss");
+  async dismiss() {
+    if (DEBUG) console.debug("frame:dismiss-start");
 
     if (!this.hasModalTarget || !this.openValue) return;
 
-    this.modalOutlet?.dismiss();
+    return this.modalOutlet?.dismiss();
   }
 
   async #openModal(scrim, modal) {
-    scrim.show(modal.scrimConfig).then(() => (this.openValue = true));
+    if (DEBUG) console.debug("frame:#open-start");
+    await modal.open(scrim);
+    this.openValue = true;
+    if (DEBUG) console.debug("frame:#open-end");
   }
 
   #clear() {
-    if (DEBUG) console.debug("#clear");
+    if (DEBUG) console.debug("frame:#clear");
 
     this.element.removeAttribute("src");
+    this.element.removeAttribute("complete");
     this.element.innerHTML = "";
   }
 
