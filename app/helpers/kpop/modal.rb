@@ -48,19 +48,19 @@ module Kpop
     # Generates sticky header content for the top of the modal. Content is not
     # padded, if you want padding you should provide a padding class.
     def header(...)
-      modal_content(...)
+      modal_content(:header, ...)
     end
 
     # Generates content for the modal. Content is not padded, if you want
     # padding you should provide a padding class.
     def content(...)
-      modal_content(...)
+      modal_content(:content, ...)
     end
 
     # Generates a sticky footer element at the bottom of the modal.
     # Footer is padded and contents are assumed to be buttons.
     def footer(...)
-      modal_content(...)
+      modal_content(:footer, ...)
     end
 
     def close_icon
