@@ -6,11 +6,15 @@
   right: 0;
   background: rgba(0, 0, 0, 0.6);
   z-index: -1;
-  transition: opacity 0.2s ease-in-out, z-index 0.2s step-end;
+  transition:
+    opacity 0.2s ease-in-out,
+    z-index 0.2s step-end;
   opacity: 0;
 }
 
 .scrim[data-scrim-open-value="true"] {
   opacity: 1;
-  transition: opacity 0.2s ease-in-out, z-index 0.2s step-start;
+  transition:
+    opacity 0.2s ease-in-out,
+    z-index 0.2s step-start;
 }

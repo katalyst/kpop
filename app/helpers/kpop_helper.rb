@@ -3,8 +3,8 @@
 module KpopHelper
   # Render a modal dialog. Intended for use inside a kpop turbo frame tag.
   # See builder for options.
-  def render_kpop(options = {}, &block)
-    Kpop::Modal.new(self).render(options, &block)
+  def render_kpop(options = {}, &)
+    Kpop::Modal.new(self).render(options, &)
   end
 
   # Render a turbo stream action that will dismiss any open kpop modals.
@@ -41,16 +41,16 @@ module KpopHelper
 
   # Renders a button that will navigate the kpop turbo frame to the given URL.
   # The URL should render a modal response inside a kpop frame tag.
-  def kpop_button_to(name = nil, options = nil, html_options = nil, &block)
+  def kpop_button_to(name = nil, options = nil, html_options = nil, &)
     default_html_options = {
       form: { data: { turbo: true, turbo_frame: "kpop" } },
     }
-    button_to(name, options, default_html_options.deep_merge(html_options || {}), &block)
+    button_to(name, options, default_html_options.deep_merge(html_options || {}), &)
   end
 
   # Renders a button that will close the current kpop modal, if any.
-  def kpop_button_close(content = nil, **options, &block)
+  def kpop_button_close(content = nil, **, &block)
     content = capture(yield) if block
-    tag.button content, data: { action: "click->kpop#dismiss:prevent" }, **options
+    tag.button(content, data: { action: "click->kpop#dismiss:prevent" }, **)
   end
 end

@@ -89,8 +89,8 @@ module Kpop
       class_names("kpop-#{name}", options.delete(:class))
     end
 
-    def modal_content(name, **options, &block)
-      instance_variable_set("@#{name}", tag.div(class: class_for(name, options), **options, &block))
+    def modal_content(name, **options, &)
+      instance_variable_set("@#{name}", tag.div(class: class_for(name, options), **options, &))
       nil
     end
   end

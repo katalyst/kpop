@@ -1,10 +1,11 @@
 require:
   - rubocop-katalyst
+  - rubocop-capybara
   - rubocop-factory_bot
 
 # https://raw.githubusercontent.com/thoughtbot/guides/master/style/ruby/.rubocop.yml
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
   Exclude:
     - bin/*
     - config/**/*
