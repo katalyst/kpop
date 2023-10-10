@@ -63,18 +63,11 @@ export default class ScrimController extends Controller {
     this.openValue = true;
 
     // notify listeners of pending request
-    const event = this.dispatch("show", { bubbles: true, cancelable: true });
-
-    // if notification was cancelled, update request and abort
-    if (event.defaultPrevented) {
-      this.openValue = false;
-      request.preventDefault();
-      return;
-    }
+    this.dispatch("show", { bubbles: true });
 
     if (DEBUG) console.debug("show scrim");
 
-    // perform show updates
+    // update state, perform style updates
     this.#show(request.detail);
   }
 
@@ -87,14 +80,7 @@ export default class ScrimController extends Controller {
     this.openValue = false;
 
     // notify listeners of pending request
-    const event = this.dispatch("hide", { bubbles: true, cancelable: true });
-
-    // if notification was cancelled, update request and abort
-    if (event.defaultPrevented) {
-      this.openValue = true;
-      request.preventDefault();
-      return;
-    }
+    this.dispatch("hide", { bubbles: true });
 
     if (DEBUG) console.debug("hide scrim");
 
@@ -109,10 +95,6 @@ export default class ScrimController extends Controller {
   escape(event) {
     if (event.key === "Escape" && !this.captiveValue && !event.defaultPrevented)
       this.hide(event);
-  }
-
-  disconnect() {
-    super.disconnect();
   }
 
   /**
