@@ -2,18 +2,38 @@ import { Controller } from "@hotwired/stimulus";
 import ScrimController from "controllers/scrim_controller";
 
 export default class KpopController extends Controller {
+  static outlets = ["scrim"];
   static targets = ["content", "closeButton"];
   static values = {
     open: Boolean,
   };
 
-  contentTargetConnected(target) {
+  scrimOutletConnected(scrim) {
+    // return if already initialized
+    if (this.openValue) return;
+
+    // return if no content to show
+    if (!this.hasContentTarget) return;
+
+    // capture the scrim and then show the content
+    if (ScrimController.showScrim({ dismiss: this.hasCloseButtonTarget })) {
+      this.openValue = true;
+    } else {
+      this.#clear();
+    }
+  }
+
+  contentTargetConnected(content) {
     // Set the modal content to temporary to ensure its omitted when caching the page
-    target.setAttribute("data-turbo-temporary", "");
+    content.setAttribute("data-turbo-temporary", "");
 
     // When switching modals a target may connect while scrim is already open
     if (this.openValue) return;
 
+    // Scrim may not be ready yet
+    if (!this.hasScrimOutlet) return;
+
+    // capture the scrim and then show the content
     if (ScrimController.showScrim({ dismiss: this.hasCloseButtonTarget })) {
       this.openValue = true;
     } else {
