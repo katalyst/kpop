@@ -8,8 +8,7 @@ const DEBUG = false;
  *
  * If the Scrim element receives a click event, it automatically triggers "scrim:hide".
  *
- * You can show and hide the scrim programmatically by sending "scrim:request:show" and "scrim:request:hide" events to
- * the window or by calling the provided methods.
+ * You can show and hide the scrim programmatically by calling show/hide on the controller, e.g. using an outlet.
  *
  * If you need to respond to the scrim showing or hiding you should subscribe to "scrim:show" and "scrim:hide".
  */
@@ -20,41 +19,20 @@ export default class ScrimController extends Controller {
     zIndex: Number,
   };
 
-  /**
-   * Show the scrim element. Returns true if successful.
-   */
-  static showScrim({
-    dismiss = true,
-    zIndex = undefined,
-    top = undefined,
-  } = {}) {
-    return window.dispatchEvent(
-      new CustomEvent("scrim:request:show", {
-        cancelable: true,
-        detail: { captive: !dismiss, zIndex: zIndex, top: top },
-      })
-    );
-  }
-
-  /**
-   * Hide the scrim element. Returns true if successful.
-   */
-  static hideScrim() {
-    return window.dispatchEvent(
-      new CustomEvent("scrim:request:hide", { cancelable: true })
-    );
-  }
-
   connect() {
     this.defaultZIndexValue = this.zIndexValue;
     this.defaultCaptiveValue = this.captiveValue;
   }
 
-  show(request) {
+  async show({
+    captive = this.defaultCaptiveValue,
+    zIndex = this.defaultZIndexValue,
+    top = window.scrollY,
+  } = {}) {
     if (DEBUG) console.debug("request show scrim");
 
     // hide the scrim before opening the new one if it's already open
-    if (this.openValue) this.hide(request);
+    if (this.openValue) await this.hide();
 
     // if the scrim is still open, abort
     if (this.openValue) return;
@@ -68,10 +46,10 @@ export default class ScrimController extends Controller {
     if (DEBUG) console.debug("show scrim");
 
     // update state, perform style updates
-    this.#show(request.detail);
+    return this.#show(captive, zIndex, top);
   }
 
-  hide(request) {
+  async hide() {
     if (!this.openValue) return;
 
     if (DEBUG) console.debug("request hide scrim");
@@ -85,7 +63,7 @@ export default class ScrimController extends Controller {
     if (DEBUG) console.debug("hide scrim");
 
     // update state, perform style updates
-    this.#hide();
+    return this.#hide();
   }
 
   dismiss(event) {
@@ -100,11 +78,7 @@ export default class ScrimController extends Controller {
   /**
    * Clips body to viewport size and sets the z-index
    */
-  #show({
-    captive = this.defaultCaptiveValue,
-    zIndex = this.defaultZIndexValue,
-    top = window.scrollY,
-  }) {
+  async #show(captive, zIndex, top) {
     this.captiveValue = captive;
     this.zIndexValue = zIndex;
     this.scrollY = top;
@@ -120,7 +94,7 @@ export default class ScrimController extends Controller {
   /**
    * Unclips body from viewport size and unsets the z-index
    */
-  #hide() {
+  async #hide() {
     this.captiveValue = this.defaultCaptiveValue;
     this.zIndexValue = this.defaultZIndexValue;
 

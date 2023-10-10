@@ -1,9 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
-import ScrimController from "controllers/scrim_controller";
 
 export default class KpopController extends Controller {
   static outlets = ["scrim"];
-  static targets = ["content", "closeButton"];
+  static targets = ["content"];
   static values = {
     open: Boolean,
   };
@@ -12,14 +11,9 @@ export default class KpopController extends Controller {
     // return if already initialized
     if (this.openValue) return;
 
-    // return if no content to show
-    if (!this.hasContentTarget) return;
-
-    // capture the scrim and then show the content
-    if (ScrimController.showScrim({ dismiss: this.hasCloseButtonTarget })) {
-      this.openValue = true;
-    } else {
-      this.#clear();
+    // Capture the scrim and then show the content
+    if (this.hasContentTarget) {
+      scrim.show().then(() => (this.openValue = true));
     }
   }
 
@@ -30,14 +24,9 @@ export default class KpopController extends Controller {
     // When switching modals a target may connect while scrim is already open
     if (this.openValue) return;
 
-    // Scrim may not be ready yet
-    if (!this.hasScrimOutlet) return;
-
-    // capture the scrim and then show the content
-    if (ScrimController.showScrim({ dismiss: this.hasCloseButtonTarget })) {
-      this.openValue = true;
-    } else {
-      this.#clear();
+    // Capture the scrim and then show the content if the scrim is ready
+    if (this.hasScrimOutlet) {
+      this.scrimOutlet.show().then(() => (this.openValue = true));
     }
   }
 
@@ -46,7 +35,9 @@ export default class KpopController extends Controller {
     if (this.hasContentTarget) return;
 
     this.openValue = false;
-    ScrimController.hideScrim();
+    if (this.hasScrimOutlet) {
+      this.scrimOutlet.hide();
+    }
   }
 
   openValueChanged(open) {
