@@ -1,4 +1,4 @@
 <%# controller layout, for use with turbo responses %>
-<%= kpop_frame_tag do %>
+<%= render Kpop::FrameComponent.new do %>
   <%= yield %>
 <% end %>

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "html_attributes_utils"
 require "view_component"
 
 require "katalyst/kpop/engine"

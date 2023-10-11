@@ -10,6 +10,7 @@ PATH
   remote: .
   specs:
     katalyst-kpop (3.0.0.pre.alpha.1)
+      html-attributes-utils
       view_component
 
 GEM
@@ -144,6 +145,8 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (3.24.4)
+    html-attributes-utils (1.0.2)
+      activesupport (>= 6.1.4.4)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.2.1)

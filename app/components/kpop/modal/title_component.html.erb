@@ -1,0 +1,6 @@
+<%= tag.div(class: "kpop-title-bar", **html_attributes) do %>
+  <span class="kpop-title"><%= title %></span>
+  <% unless captive? %>
+    <button class="kpop-close" data-action="click->kpop--frame#dismiss:prevent">×</button>
+  <% end %>
+<% end %>

@@ -13,8 +13,8 @@
 
   <body>
     <%= yield %>
-    <%= scrim_tag %>
-    <%= kpop_frame_tag do %>
+    <%= render ScrimComponent.new %>
+    <%= render Kpop::FrameComponent.new do %>
       <%= yield :kpop %>
     <% end %>
   </body>

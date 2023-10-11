@@ -35,8 +35,8 @@ Import stylesheets through using SASS using asset pipeline:
 kpop provides helpers to add a basic scrim and modal target frame. These should be placed inside the body:
 ```html
  <body>
-    <%= scrim_tag %>
-    <%= kpop_frame_tag do %>
+    <%= render ScrimComponent.new %>
+    <%= render Kpop::FrameComponent.new do %>
         <%= yield :kpop %>
     <% end %>
  </body>
@@ -51,22 +51,19 @@ To show a modal you need to add content to the kpop turbo frame. You can do this
 You can generate a link that will cause a modal to show using the `kpop_link_to` helper.
 
 `kpop_link_to`'s are similar to a `link_to` in rails, but it will navigate to the given URL within the modal turbo
-frame. The targeted action will need to generate content in a `kpop_frame_tag`, e.g. using `layout "kpop"`.
+frame. The targeted action will need to generate content in a `Kpop::FrameComponent`, e.g. using `layout "kpop"`.
 
 ```html
 <!-- app/views/homepage/index.html.erb -->
-<%= modal_link_to "click to open modal", modal_path("example") %>
+<%= kpop_link_to "click to open modal", modal_path("example") %>
 ```
 
 ```html
 <!-- app/views/modals/show.html.erb -->
-<%= render_kpop(title: "Modal title") do %>
- Modal content
+<%= Kpop::Modal(title: "Modal title") do %>
+  Modal content
 <% end %>
 ```
-
-Note that, because kpop modals render in a turbo frame, if you want to navigate the parent frame you will need to use
-`target: "_top"` on your links and forms, or add `target: "_top"` to the `kpop_frame_tag` call in your body.
 
 ## Development
 

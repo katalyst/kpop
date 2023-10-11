@@ -1,0 +1,8 @@
+<%= tag.div(**html_attributes) do %>
+  <%= title if title? %>
+  <%= header if header? %>
+  <div class="kpop-content">
+    <%= content %>
+  </div>
+  <%= footer if footer? %>
+<% end %>
