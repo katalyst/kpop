@@ -1,42 +1,5 @@
 {
-  "name": "@katalyst-interactive/kpop",
-  "version": "2.0.9",
-  "description": "Stimulus controllers for the katalyst-kpop Ruby Gem",
-  "main": "app/assets/builds/katalyst/kpop.js",
-  "style": "app/assets/builds/katalyst/kpop.css",
-  "scripts": {
-    "build": "yarn exec rollup -- -c",
-    "build:css": "yarn exec sass -- app/assets/stylesheets:app/assets/builds --load-path=node_modules --no-source-map",
-    "clean": "rm -rf app/assets/builds/*",
-    "format": "bash -c 'prettier --write *.json app/assets/{config,javascripts,stylesheets} spec/dummy/app/assets/{config,javascripts,stylesheets}'",
-    "lint": "bash -c 'prettier --check *.json app/assets/{config,javascripts,stylesheets} spec/dummy/app/assets/{config,javascripts,stylesheets}'"
-  },
-  "dependencies": {
-    "@hotwired/stimulus": "^3.2.1",
-    "@hotwired/turbo": "^7.3.0"
-  },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "prettier": "^2.8.7",
-    "rollup": "^3.20.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "sass": "^1.60.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/katalyst/kpop.git"
-  },
-  "keywords": [
-    "turbo",
-    "stimulus",
-    "modal",
-    "rails",
-    "js"
-  ],
-  "author": "Katalyst Interactive, Pty Ltd",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/katalyst/kpop/issues"
-  },
-  "homepage": "https://github.com/katalyst/kpop#readme"
+    "prettier": "^3.0.3"
+  }
 }

@@ -30,36 +30,6 @@ Import stylesheets through using SASS using asset pipeline:
 @use "katalyst/kpop";
 ```
 
-You can also load a precompiled version from the gem directly:
-
-```erb
-<%# app/views/layouts/application.html.erb #>
-
-<%= stylesheet_link_tag "katalyst/kpop" %>
-```
-
-### Yarn
-
-If you are not using import maps, you can add the yarn package to your project:
-
-```bash
-$ yarn add "@katalyst-interactive/kpop"
-```
-
-### Import kpop styles
-```css
-/* application.scss */
-
-@import "~@katalyst-interactive/kpop";
-```
-
-### Import kpop stimulus controllers
-```js
-/* application.js */
-import kpop from "@katalyst-interactive/kpop"
-application.load(kpop)
-```
-
 ## Usage
 
 kpop provides helpers to add a basic scrim and modal target frame. These should be placed inside the body:
@@ -103,10 +73,9 @@ Note that, because kpop modals render in a turbo frame, if you want to navigate 
 Releases need to be distributed to rubygems.org and npmjs.org. To do this, you need to have accounts with both providers
 and be added as a collaborator to the kpop gem and npm packages.
 
-1. Update the version in `package.json` and `lib/katalyst/kpop/version.rb`
+1. Update the version in `lib/katalyst/kpop/version.rb`
 2. Ensure that `rake` passes (format and tests)
 3. Tag a release and push to rubygems.org by running `rake release`
-4. Push the new version to npmjs.org by running `yarn publish`
 
 ## License
 
