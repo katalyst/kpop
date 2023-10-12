@@ -26,6 +26,13 @@ module KpopHelper
     end
   end
 
+  # Renders a kpop redirect controller response that will escape the frame and navigate to the given URL.
+  def kpop_redirect_to(url, id: "kpop")
+    turbo_stream.append(id) do
+      tag.div("", data: { controller: "kpop--redirect", kpop__redirect_path_value: url })
+    end
+  end
+
   # Renders a button that will navigate the kpop turbo frame to the given URL.
   # The URL should render a modal response inside a kpop frame tag.
   def kpop_button_to(name = nil, options = nil, html_attributes = nil, &)
