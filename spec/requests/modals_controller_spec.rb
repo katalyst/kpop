@@ -17,25 +17,39 @@ RSpec.describe ModalsController do
       it { is_expected.to render_kpop_frame }
       it { is_expected.to render_kpop_frame(title: "Anonymous modal") }
     end
-
-    context "with turbo stream request" do
-      let(:action) { get anonymous_modal_path, as: :turbo_stream }
-
-      it { is_expected.to be_successful }
-      it { is_expected.to render_kpop_stream }
-      it { is_expected.to render_kpop_stream(title: /Anonymous/) }
-    end
   end
 
   describe "PATCH /modal" do
-    let(:action) { patch modal_path }
+    context "with home as html" do
+      let(:action) { patch modal_path, params: { next: "home" } }
 
-    it { is_expected.to redirect_to(root_path) }
+      it { is_expected.to redirect_to(root_path) }
+    end
 
-    context "with turbo stream request" do
-      let(:action) { patch modal_path, as: :turbo_stream }
+    context "with test as html" do
+      let(:action) { patch modal_path, params: { next: "test" } }
 
-      it { is_expected.to kpop_redirect_to(root_path) }
+      it { is_expected.to redirect_to(test_path) }
+    end
+
+    context "with home as turbo" do
+      let(:action) { patch modal_path, params: { next: "home" }, as: :turbo_stream }
+
+      it { is_expected.to kpop_dismiss }
+    end
+
+    context "with test as turbo" do
+      let(:action) { patch modal_path, params: { next: "test" }, as: :turbo_stream }
+
+      it { is_expected.to kpop_redirect_to(test_path) }
+    end
+
+    context "with error as turbo" do
+      let(:action) { patch modal_path, params: { next: "error", template: "anonymous" }, as: :turbo_stream }
+
+      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_rendered("modals/update") }
+      it { is_expected.to have_rendered("modals/_form") }
     end
   end
 end

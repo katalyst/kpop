@@ -17,17 +17,20 @@ export default class ScrimController extends Controller {
     open: Boolean,
     captive: Boolean,
     zIndex: Number,
+    temporary: { type: Boolean, default: true },
   };
 
   connect() {
     this.defaultZIndexValue = this.zIndexValue;
     this.defaultCaptiveValue = this.captiveValue;
+    this.defaultTemporaryValue = this.temporaryValue;
   }
 
   async show({
     captive = this.defaultCaptiveValue,
     zIndex = this.defaultZIndexValue,
     top = window.scrollY,
+    temporary = this.defaultTemporaryValue,
   } = {}) {
     if (DEBUG) console.debug("request show scrim");
 
@@ -46,7 +49,7 @@ export default class ScrimController extends Controller {
     if (DEBUG) console.debug("show scrim");
 
     // update state, perform style updates
-    return this.#show(captive, zIndex, top);
+    return this.#show(captive, zIndex, top, temporary);
   }
 
   async hide() {
@@ -66,22 +69,27 @@ export default class ScrimController extends Controller {
     return this.#hide();
   }
 
+  beforeCache() {
+    if (this.temporaryValue) this.hide();
+  }
+
   dismiss(event) {
-    if (!this.captiveValue) this.hide(event);
+    if (!this.captiveValue) this.hide();
   }
 
   escape(event) {
     if (event.key === "Escape" && !this.captiveValue && !event.defaultPrevented)
-      this.hide(event);
+      this.hide();
   }
 
   /**
    * Clips body to viewport size and sets the z-index
    */
-  async #show(captive, zIndex, top) {
+  async #show(captive, zIndex, top, temporary) {
     this.captiveValue = captive;
     this.zIndexValue = zIndex;
     this.scrollY = top;
+    this.temporaryValue = temporary;
 
     this.previousPosition = document.body.style.position;
     this.previousTop = document.body.style.top;
@@ -97,6 +105,7 @@ export default class ScrimController extends Controller {
   async #hide() {
     this.captiveValue = this.defaultCaptiveValue;
     this.zIndexValue = this.defaultZIndexValue;
+    this.temporaryValue = this.defaultTemporaryValue;
 
     resetStyle(this.element, "z-index", null);
     resetStyle(document.body, "position", null);

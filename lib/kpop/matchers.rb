@@ -128,6 +128,7 @@ end
 
 require "kpop/matchers/redirect_to"
 require "kpop/matchers/render_kpop"
+require "kpop/matchers/kpop_dismiss"
 
 RSpec.configure do |config|
   config.include Kpop::Matchers, type: :component

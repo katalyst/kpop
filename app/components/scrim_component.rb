@@ -8,7 +8,7 @@ class ScrimComponent < ViewComponent::Base
     keyup@window->scrim#escape
     scrim:request:hide@window->scrim#hide
     scrim:request:show@window->scrim#show
-    turbo:before-cache@document->scrim#hide
+    turbo:before-cache@document->scrim#beforeCache
   ].freeze
 
   def initialize(id: "scrim", z_index: 40)

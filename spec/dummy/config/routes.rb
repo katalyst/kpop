@@ -6,5 +6,7 @@ Rails.application.routes.draw do
     get :persistent
   end
 
+  get "/test", to: "home#test"
+
   root to: "home#index"
 end

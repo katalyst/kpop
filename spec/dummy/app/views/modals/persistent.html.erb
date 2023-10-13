@@ -1,7 +1,6 @@
-<%= render_kpop(title: "Persistent modal", temporary: false) do %>
+<%= render Kpop::ModalComponent.new(title: "Persistent modal", temporary: false) do %>
   Modal content
   <a href="/">Home</a>
-  <form action="/" method="get">
-    <input type="submit" value="Submit">
-  </form>
+  <a href="/test">Test</a>
+  <%= render "form" %>
 <% end %>

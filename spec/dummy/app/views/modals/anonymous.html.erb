@@ -1,3 +1,6 @@
-<%= render_kpop(title: "Anonymous modal") do %>
+<%= render Kpop::ModalComponent.new(title: "Anonymous modal") do %>
   Modal content
+  <a href="/">Home</a>
+  <a href="/test">Test</a>
+  <%= render "form" %>
 <% end %>

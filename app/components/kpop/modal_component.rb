@@ -8,8 +8,10 @@ module Kpop
     renders_one :header
     renders_one :footer
 
-    def initialize(title:, captive: false, **)
+    def initialize(title:, captive: false, temporary: true, **)
       super
+
+      @temporary = temporary
 
       # Generate a title bar. This can be overridden by calling title_bar again.
       with_title(title:, captive:) if title.present?
@@ -25,8 +27,9 @@ module Kpop
       {
         class: "kpop-modal",
         data:  {
-          controller:           "kpop--modal",
-          "kpop--frame-target": "modal",
+          controller:                    "kpop--modal",
+          "kpop--frame-target":          "modal",
+          "kpop--modal-temporary-value": @temporary,
         },
       }
     end
