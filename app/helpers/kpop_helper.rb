@@ -3,12 +3,6 @@
 module KpopHelper
   using HTMLAttributesUtils
 
-  # Render a modal dialog. Intended for use inside a kpop turbo frame tag.
-  # See builder for options.
-  def render_kpop(options = {}, &)
-    render(Kpop::ModalComponent.new(**options), &)
-  end
-
   # Render a turbo stream action that will dismiss any open kpop modals.
   def kpop_dismiss(id: "kpop")
     turbo_stream.append(id) do

@@ -4,6 +4,7 @@ const DEBUG = true;
 
 export default class Kpop__ModalController extends Controller {
   static values = {
+    dismiss: String,
     temporary: { type: Boolean, default: true },
   };
 
@@ -29,7 +30,10 @@ export default class Kpop__ModalController extends Controller {
   async open(scrim) {
     // Push a new history entry. This will be popped or replaced when the modal is dismissed.
     // Persistent modals push a history entry via Turbo.
-    if (this.temporaryValue) {
+    if (this.dismissValue) {
+      if (DEBUG) console.debug("modal:injected, load without history");
+      scrim.show(this.scrimConfig);
+    } else if (this.temporaryValue) {
       if (DEBUG) console.debug("modal:push-state");
       window.history.pushState(window.history.state, "", window.location);
       scrim.show(this.scrimConfig);
@@ -66,9 +70,15 @@ export default class Kpop__ModalController extends Controller {
         () => {
           if (DEBUG) console.debug("modal:dismiss-end");
 
-          const event = this.temporaryValue ? "popstate" : "turbo:render";
-          window.addEventListener(event, () => resolve(), { once: true });
-          window.history.back();
+          if (this.dismissValue) {
+            this.element.remove();
+            Turbo.visit(this.dismissValue, { action: "replace" });
+            resolve();
+          } else {
+            const event = this.temporaryValue ? "popstate" : "turbo:render";
+            window.addEventListener(event, () => resolve(), { once: true });
+            window.history.back();
+          }
         },
         {
           once: true,
