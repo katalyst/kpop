@@ -8,7 +8,10 @@ class ModalsController < ApplicationController
   end
 
   def persistent
-    redirect_to root_path, status: :see_other unless request.headers["Turbo-Frame"] == "kpop"
+    unless request.headers["Turbo-Frame"] == "kpop"
+      @dismiss = root_path
+      render "home/index", layout: "application", locals: { kpop: "modals/persistent" }
+    end
   end
 
   def update

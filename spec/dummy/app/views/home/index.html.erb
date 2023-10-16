@@ -4,3 +4,9 @@
   <li><%= kpop_link_to "Anonymous Modal", anonymous_modal_path %></li>
   <li><%= kpop_link_to "Persistent Modal", persistent_modal_path, data: { turbo_action: "advance" } %></li>
 </ul>
+
+<% if local_assigns[:kpop] %>
+  <% content_for(:kpop) do %>
+    <%= render template: kpop %>
+  <% end %>
+<% end %>

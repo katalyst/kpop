@@ -12,10 +12,15 @@ export default class Kpop__FrameController extends Controller {
   scrimOutletConnected(scrim) {
     if (DEBUG) console.debug("frame:scrim-connected");
 
+    this.scrimConnected = true;
+
     // return if already initialized
     if (this.openValue) return;
 
-    // Capture the scrim and then show the content
+    // modal controller may not have loaded yet (lazy loading)
+    if (!this.modalConnected) return;
+
+    // Capture the scrim and then show the content, if present
     if (this.hasModalOutlet) {
       this.#openModal(scrim, this.modalOutlet);
     }
@@ -24,13 +29,16 @@ export default class Kpop__FrameController extends Controller {
   modalOutletConnected(modal) {
     if (DEBUG) console.debug("frame:modal-connected");
 
+    this.modalConnected = true;
+
     // When switching modals a target may connect while scrim is already open
     if (this.openValue) return;
 
+    // scrim controller may not have loaded yet (lazy loading)
+    if (!this.scrimConnected) return;
+
     // Capture the scrim and then show the content if the scrim is ready
-    if (this.hasScrimOutlet) {
-      this.#openModal(this.scrimOutlet, modal);
-    }
+    this.#openModal(this.scrimOutlet, modal);
   }
 
   modalOutletDisconnected(_) {

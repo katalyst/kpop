@@ -14,9 +14,10 @@ module Kpop
     renders_one :header
     renders_one :footer
 
-    def initialize(title:, captive: false, temporary: true, **)
+    def initialize(title:, captive: false, temporary: true, dismiss: nil, **)
       super
 
+      @dismiss   = dismiss
       @temporary = temporary
 
       # Generate a title bar. This can be overridden by calling title_bar again.
@@ -36,6 +37,7 @@ module Kpop
           controller:                    "kpop--modal",
           action:                        ACTIONS.join(" "),
           "kpop--frame-target":          "modal",
+          "kpop--modal-dismiss-value":   @dismiss,
           "kpop--modal-temporary-value": @temporary,
         },
       }

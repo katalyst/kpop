@@ -3,17 +3,17 @@
 require "rails_helper"
 
 RSpec.describe "Persistent modal" do
-  before do
-    visit root_path
-
-    # Open modal
-    click_link("Persistent")
-
-    # Wait for modal to render
-    find("[data-kpop--frame-open-value='true']")
-  end
-
   context "when opening from URL" do
+    before do
+      visit root_path
+
+      # Open modal
+      click_link("Persistent")
+
+      # Wait for modal to render
+      find("[data-kpop--frame-open-value='true']")
+    end
+
     it "opens successfully" do
       # Modal shows
       within(".kpop-modal") do |kpop|
@@ -213,6 +213,32 @@ RSpec.describe "Persistent modal" do
       expect(page).to have_current_path(root_path)
 
       # Click the back button again to show no extra history was added
+      page.go_back
+
+      expect(page).to have_current_path(nil)
+    end
+  end
+
+  context "when navigating to modal URL" do
+    before do
+      visit persistent_modal_path
+
+      # Wait for modal to render
+      find("[data-kpop--frame-open-value='true']")
+    end
+
+    it "supports form errors on form submission" do
+      expect(page).to have_current_path(persistent_modal_path) # url is modal url
+      expect(page).to have_content("Hello world!") # root page is rendered in the background
+
+      # Clicking the close button closes the modal
+      find(".kpop-close").click
+
+      expect(page).to have_current_path(root_path)
+      expect(page).not_to have_css(".kpop-modal")
+
+      # Click the back button leaves the site
+      # Note: this is not ideal, but otherwise would need to know if modal is persistent or not
       page.go_back
 
       expect(page).to have_current_path(nil)
