@@ -1,9 +1,11 @@
-$duration: 0.2s;
+$duration: 0.5s;
 
-@use "kpop" with (
+@use "frame" with (
   $duration: $duration
 );
-@use "side_panel";
 @use "scrim" with (
   $duration: $duration
 );
+
+@use "modal";
+@use "side_panel";

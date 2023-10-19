@@ -8,15 +8,19 @@ module Kpop
     attr_reader :id
 
     ACTIONS = %w[
+      popstate@window->kpop--frame#popstate
       scrim:dismiss@window->kpop--frame#dismiss
       scrim:hide@window->kpop--frame#dismiss
+      turbo:before-frame-render->kpop--frame#beforeFrameRender
+      turbo:before-visit@window->kpop--frame#beforeVisit
+      turbo:frame-load->kpop--frame#frameLoad
     ].freeze
 
     def initialize(id: "kpop", scrim: "#scrim", **)
       super
 
-      @id              = id
-      @scrim           = scrim
+      @id    = id
+      @scrim = scrim
     end
 
     def inspect
@@ -27,11 +31,12 @@ module Kpop
 
     def default_html_attributes
       {
-        class:  "kpop-container",
+        class:  "kpop--frame",
         data:   {
           controller:                 "kpop--frame",
           action:                     ACTIONS.join(" "),
           "kpop--frame-scrim-outlet": @scrim,
+          turbo_action:               "advance",
         },
         target: "_top",
       }

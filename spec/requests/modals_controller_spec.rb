@@ -5,21 +5,29 @@ require "rails_helper"
 RSpec.describe ModalsController do
   subject { action && response }
 
-  describe "GET /modal/anonymous" do
-    let(:action) { get anonymous_modal_path }
+  describe "GET /modal" do
+    let(:action) { get modal_path }
 
-    it { is_expected.to redirect_to(root_path) }
+    it { is_expected.to be_successful }
+    it { is_expected.to have_rendered("home/index") }
+    it { is_expected.to have_rendered("modals/content") }
 
-    context "with kpop frame request" do
-      let(:action) { get anonymous_modal_path, headers: { "Turbo-Frame" => "kpop" } }
+    context "with turbo frame" do
+      let(:action) { get modal_path, headers: { "Turbo-Frame" => "kpop" } }
 
       it { is_expected.to be_successful }
-      it { is_expected.to render_kpop_frame }
-      it { is_expected.to render_kpop_frame(title: "Anonymous modal") }
+      it { is_expected.to have_rendered("layouts/kpop") }
+      it { is_expected.to have_rendered("modals/frame") }
     end
   end
 
   describe "PATCH /modal" do
+    let(:action) { patch modal_path, as: :turbo_stream }
+
+    it { is_expected.to be_successful }
+    it { is_expected.to render_kpop_stream }
+    it { is_expected.to render_kpop_stream(title: "Stream modal") }
+
     context "with home as html" do
       let(:action) { patch modal_path, params: { next: "home" } }
 

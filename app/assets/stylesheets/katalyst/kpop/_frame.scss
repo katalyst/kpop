@@ -1,0 +1,100 @@
+$min-width: 35rem !default;
+$max-width: 52rem !default;
+$min-height: 30vh !default;
+$max-height: 80vh !default;
+
+$duration: 0.2s !default;
+
+.kpop--container {
+  display: none;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  align-items: center;
+  z-index: 100;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+.kpop--frame {
+  --opening-animation: slide-in-up;
+  --closing-animation: slide-out-down;
+
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  margin: 0 auto;
+
+  min-width: $min-width;
+  max-width: $max-width;
+  min-height: $min-height;
+  max-height: $max-height;
+}
+
+.scrim[data-scrim-open-value="false"] + .kpop--container .kpop--frame {
+  display: none;
+}
+
+.scrim[data-hide-animating] + .kpop--container .kpop--frame[data-kpop--frame-open-value="true"] {
+  animation: var(--closing-animation);
+  animation-duration: $duration;
+  animation-fill-mode: forwards;
+}
+
+.scrim[data-show-animating] + .kpop--container .kpop--frame {
+  animation: var(--opening-animation);
+  animation-duration: $duration;
+  animation-fill-mode: forwards;
+}
+
+.kpop-modal.iframe {
+  .kpop-content {
+    overflow: unset;
+  }
+
+  iframe {
+    height: $max-height;
+    width: $max-width;
+    flex-grow: 1;
+    overflow: scroll;
+  }
+}
+
+@media (max-width: 600px), (max-height: 400px) {
+  .kpop--frame {
+    max-width: unset;
+    min-width: unset;
+    width: 100%;
+    height: 50%;
+    max-height: 100vh;
+  }
+}
+
+@keyframes slide-in-up {
+  0% {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-down {
+  0% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+}

@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class ModalsController < ApplicationController
-  layout "kpop"
-
-  def anonymous
-    redirect_to root_path, status: :see_other unless request.headers["Turbo-Frame"] == "kpop"
+  def show
+    if request.headers["Turbo-Frame"] == "kpop"
+      render "modals/frame", layout: "kpop"
+    else
+      render "home/index", layout: "application", locals: { kpop: "modals/content" }
+    end
   end
 
   def persistent
@@ -20,13 +22,15 @@ class ModalsController < ApplicationController
       close_modal
     when "test"
       redirect_forwards
-    when "anonymous"
-      render turbo_stream: helpers.kpop_redirect_to(anonymous_modal_path, target: "kpop")
-    when "persistent"
-      render turbo_stream: helpers.kpop_redirect_to(persistent_modal_path, target: "kpop")
-    else
+    when "error"
       @error = true
       render status: :unprocessable_entity
+    when "frame"
+      render turbo_stream: helpers.kpop_redirect_to(modal_path, target: "kpop")
+    when "content"
+      render turbo_stream: helpers.kpop_redirect_to(modal_path)
+    else
+      render turbo_stream: turbo_stream.action(:kpop_open, "kpop", template: "modals/stream")
     end
   end
 

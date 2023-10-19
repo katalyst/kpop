@@ -1,4 +1,4 @@
-.kpop-modal.kpop-side-panel {
+.kpop--frame.side-panel {
   --opening-animation: slide-in-right;
   --closing-animation: slide-out-right;
   width: 50%;
@@ -10,8 +10,8 @@
   border: 0;
 }
 
-@media (max-width: 600px), (max-height: 600px) {
-  .kpop-modal.kpop-side-panel {
+@media (max-width: 600px), (max-height: 400px) {
+  .kpop--frame.side-panel {
     --opening-animation: slide-in-bottom;
     --closing-animation: slide-out-bottom;
     max-width: unset;

@@ -15,12 +15,16 @@ $duration: 0.2s !default;
     animation-duration: $duration;
     animation-fill-mode: forwards;
   }
+
+  &[data-show-animating] {
+    animation: fade-in;
+    animation-duration: $duration;
+    animation-fill-mode: forwards;
+  }
 }
 
 .scrim[data-scrim-open-value="true"] {
-  animation: fade-in;
-  animation-duration: $duration;
-  animation-fill-mode: forwards;
+  opacity: 1;
 }
 
 @keyframes fade-in {

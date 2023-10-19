@@ -7,7 +7,7 @@ module Kpop
     # @api private
     class ModalMatcher < CapybaraMatcher
       def initialize
-        super("[data-kpop--frame-target='modal']")
+        super("[data-controller*='kpop--modal']")
       end
 
       def description
@@ -48,9 +48,10 @@ module Kpop
     #  * title - modal title
     #
     # @example Matching turbo stream response with a Shopping Cart modal
-    #   expect(response).to render_kpop(title: "Shopping Cart")
+    #   expect(response).to render_kpop_stream(title: "Shopping Cart")
     def render_kpop_stream(id: "kpop", title: nil)
-      matcher = ChainedMatcher.new(ResponseMatcher, CapybaraParser, StreamMatcher.new(id:), ModalMatcher)
+      matcher = ChainedMatcher.new(ResponseMatcher, CapybaraParser, StreamMatcher.new(id:, action: "kpop_open"),
+                                   ModalMatcher)
       matcher << TitleFinder << TitleMatcher.new(title) if title.present?
       matcher
     end
@@ -62,7 +63,7 @@ module Kpop
     #  * title - modal title
     #
     # @example Matching turbo stream response with a Shopping Cart modal
-    #   expect(response).to render_kpop(title: "Shopping Cart")
+    #   expect(response).to render_kpop_frame(title: "Shopping Cart")
     def render_kpop_frame(id: "kpop", title: nil)
       matcher = ChainedMatcher.new(ResponseMatcher.new, CapybaraParser, FrameMatcher.new(id:), ModalMatcher)
       matcher << TitleFinder << TitleMatcher.new(title) if title.present?

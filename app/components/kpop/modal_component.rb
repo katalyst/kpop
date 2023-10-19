@@ -4,21 +4,15 @@ module Kpop
   class ModalComponent < ViewComponent::Base
     include HasHtmlAttributes
 
-    ACTIONS = %w[
-      popstate@window->kpop--modal#popstate
-      turbo:before-cache@window->kpop--modal#beforeCache
-      turbo:before-visit@window->kpop--modal#beforeVisit
-    ].freeze
-
     renders_one :title, "Kpop::Modal::TitleComponent"
     renders_one :header
     renders_one :footer
 
-    def initialize(title:, captive: false, temporary: true, dismiss: nil, **)
+    def initialize(title:, captive: false, fallback_location: nil, layout: nil, **)
       super
 
-      @dismiss   = dismiss
-      @temporary = temporary
+      @fallback_location = fallback_location
+      @layout            = layout
 
       # Generate a title bar. This can be overridden by calling title_bar again.
       with_title(title:, captive:) if title.present?
@@ -33,12 +27,10 @@ module Kpop
     def default_html_attributes
       {
         class: "kpop-modal",
-        data:  {
-          controller:                    "kpop--modal",
-          action:                        ACTIONS.join(" "),
-          "kpop--frame-target":          "modal",
-          "kpop--modal-dismiss-value":   @dismiss,
-          "kpop--modal-temporary-value": @temporary,
+        data: {
+          controller:                            "kpop--modal",
+          "kpop--modal-fallback-location-value": @fallback_location,
+          "kpop--modal-layout-value":            @layout&.to_s&.dasherize,
         },
       }
     end

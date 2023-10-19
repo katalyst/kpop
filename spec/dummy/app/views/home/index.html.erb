@@ -1,8 +1,9 @@
 <h1>Hello world!</h1>
 
 <ul>
-  <li><%= kpop_link_to "Anonymous Modal", anonymous_modal_path %></li>
-  <li><%= kpop_link_to "Persistent Modal", persistent_modal_path, data: { turbo_action: "advance" } %></li>
+  <li><%= button_to "Stream", modal_path, method: :patch %></li>
+  <li><%= kpop_link_to "Frame", modal_path %></li>
+  <li><%= link_to "Page", modal_path, data: { turbo: false } %></li>
 </ul>
 
 <% if local_assigns[:kpop] %>

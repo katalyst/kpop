@@ -1,109 +1,356 @@
 import { Controller } from "@hotwired/stimulus";
+import { Turbo } from "@hotwired/turbo-rails";
 
-const DEBUG = true;
+const DEBUG = false;
+
+class Modal {
+  constructor(id) {
+    this.id = id;
+  }
+
+  async open() {
+    this.debug("open");
+  }
+
+  async dismiss() {
+    this.debug(`dismiss`);
+  }
+
+  beforeVisit(frame, e) {
+    this.debug(`before-visit`, e.detail.url);
+  }
+
+  async pop(event, callback) {
+    this.debug(`pop`);
+
+    const promise = new Promise((resolve) => {
+      window.addEventListener(
+        event,
+        () => {
+          resolve();
+        },
+        { once: true }
+      );
+    });
+
+    callback();
+
+    return promise;
+  }
+
+  get frameElement() {
+    return document.getElementById(this.id);
+  }
+
+  get modalElement() {
+    return this.frameElement?.querySelector("[data-controller*='kpop--modal']");
+  }
+
+  get fallbackLocationValue() {
+    return this.modalElement?.dataset["kpop-ModalFallbackLocationValue"] || "/";
+  }
+
+  get layoutValue() {
+    return this.modalElement?.dataset["kpop-ModalLayoutValue"];
+  }
+
+  get isCurrentLocation() {
+    return window.history.state?.turbo && Turbo.session.location.href === this.src;
+  }
+
+  debug(event, ...args) {
+    if (DEBUG) console.debug(`${this.constructor.name}:${event}`, ...args);
+  }
+}
+
+class StreamModal extends Modal {
+  constructor(id, action) {
+    super(id);
+
+    this.action = action;
+  }
+
+  async open() {
+    await super.open();
+
+    window.history.pushState({ kpop: true, id: this.id }, "", window.location);
+  }
+
+  async dismiss() {
+    await super.dismiss();
+
+    if (this.isCurrentLocation) {
+      await this.pop("popstate", () => window.history.back());
+    }
+
+    this.frameElement.innerHTML = "";
+  }
+
+  beforeVisit(frame, e) {
+    super.beforeVisit(frame, e);
+
+    e.preventDefault();
+
+    frame.dismiss({ animate: false }).then(() => {
+      Turbo.visit(e.detail.url);
+
+      this.debug("before-visit-end");
+    });
+  }
+
+  get isCurrentLocation() {
+    return window.history.state?.kpop && window.history.state?.id === this.id;
+  }
+}
+
+class FrameModal extends Modal {
+  constructor(id, src) {
+    super(id);
+    this.src = src;
+  }
+
+  async dismiss() {
+    await super.dismiss();
+
+    if (!this.isCurrentLocation) {
+      this.debug("skipping dismiss, not current location");
+    }
+
+
+    await this.pop("turbo:load", () => window.history.back());
+
+    // no specific close action required, this is turbo's responsibility
+  }
+
+  beforeVisit(frame, e) {
+    super.beforeVisit(frame, e);
+
+    e.preventDefault();
+
+    frame.dismiss({ animate: false }).then(() => {
+      Turbo.visit(e.detail.url);
+
+      this.debug("before-visit-end");
+    });
+  }
+}
+
+class ContentModal extends Modal {
+  constructor(id, src = Turbo.session.location.href) {
+    super(id);
+
+    this.src = src;
+  }
+
+  async dismiss() {
+    await super.dismiss();
+
+    if (this.visitStarted) {
+      this.debug("skipping dismiss, visit started");
+      return;
+    }
+    if (!this.isCurrentLocation) {
+      this.debug("skipping dismiss, not current location");
+      return;
+    }
+
+    return this.pop("turbo:load", () => {
+      this.debug("turbo-visit", this.fallbackLocationValue)
+      Turbo.visit(this.fallbackLocationValue, { action: "replace" });
+    });
+
+    // no specific close action required, this is turbo's responsibility
+  }
+
+  beforeVisit(frame, e) {
+    super.beforeVisit(frame, e);
+
+    this.visitStarted = true;
+
+    frame.scrimOutlet.hide({ animate: false });
+  }
+}
+
+class StreamRenderer {
+  constructor(frame, action) {
+    this.frame = frame;
+    this.action = action;
+  }
+
+  render() {
+    if (DEBUG) console.debug("stream-renderer:render");
+    this.frame.src = "";
+    this.frame.innerHTML = "";
+    this.frame.append(this.action.templateContent);
+  }
+}
+
+Turbo.StreamActions.kpop_open = function() {
+  const frame = () => { return this.targetElements[0] };
+  const animate = !frame?.kpop?.openValue;
+
+  frame().kpop.dismiss({ animate, reason: "before-turbo-stream" }).then(() => {
+    new StreamRenderer(frame(), this).render();
+    frame().kpop.open(new StreamModal(this.target, this), { animate });
+  });
+};
 
 export default class Kpop__FrameController extends Controller {
   static outlets = ["scrim"];
   static targets = ["modal"];
   static values = {
-    open: Boolean,
+    open: Boolean
   };
 
-  scrimOutletConnected(scrim) {
-    if (DEBUG) console.debug("frame:scrim-connected");
+  connect() {
+    this.debug("connect", this.element.src);
 
-    this.scrimConnected = true;
+    this.element.kpop = this;
 
-    // return if already initialized
-    if (this.openValue) return;
-
-    // modal controller may not have loaded yet (lazy loading)
-    if (!this.modalConnected) return;
-
-    // Capture the scrim and then show the content, if present
-    if (this.hasModalOutlet) {
-      this.#openModal(scrim, this.modalOutlet);
+    // restoration visit
+    if (this.element.src && this.element.complete) {
+      this.debug("new frame modal", this.element.src);
+      this.open(new FrameModal(this.element.id, this.element.src), { animate: false });
+    } else {
+      const element = this.element.querySelector(
+        "[data-controller*='kpop--modal']"
+      );
+      if (element) {
+        this.debug("new content modal", window.location.pathname);
+        this.open(new ContentModal(this.element.id), { animate: false });
+      }
     }
   }
 
-  modalOutletConnected(modal) {
-    if (DEBUG) console.debug("frame:modal-connected");
+  disconnect() {
+    this.debug("disconnect");
 
-    this.modalConnected = true;
-
-    // When switching modals a target may connect while scrim is already open
-    if (this.openValue) return;
-
-    // scrim controller may not have loaded yet (lazy loading)
-    if (!this.scrimConnected) return;
-
-    // Capture the scrim and then show the content if the scrim is ready
-    this.#openModal(this.scrimOutlet, modal);
+    delete this.element.kpop;
+    delete this.modal;
   }
 
-  modalOutletDisconnected(_) {
-    if (DEBUG) console.debug("frame:modal-disconnect");
+  scrimOutletConnected(scrim) {
+    this.debug("scrim-connected");
 
-    // When switching modals there may still be content to show
-    if (this.hasModalOutlet) return;
+    this.scrimConnected = true;
 
-    this.openValue = false;
-    this.scrimOutlet?.hide();
+    if (this.openValue) scrim.show({ animate: false });
   }
 
   openValueChanged(open) {
-    if (DEBUG) console.debug("frame:open-changed");
+    this.debug("open-changed");
 
-    this.element.style.display = open ? "flex" : "none";
+    this.element.parentElement.style.display = open ? "flex" : "none";
   }
 
-  async dismiss() {
-    if (DEBUG) console.debug("frame:dismiss-start");
+  async open(modal, { animate = true } = {}) {
+    if (this.isOpen) {
+      this.debug("skip open as already open")
+      return false;
+    }
 
-    if (!this.hasModalTarget || !this.openValue) return;
+    this.opening ||= this.#nextAnimationFrame(() => {
+      return this.#open(modal, { animate });
+    });
 
-    return this.modalOutlet?.dismiss();
+    return this.opening;
   }
 
-  async #openModal(scrim, modal) {
-    if (DEBUG) console.debug("frame:#open-start");
-    await modal.open(scrim);
+  async dismiss({ animate = true, reason = "" } = {}) {
+    if (!this.isOpen) {
+      this.debug("skip dismiss as already closed")
+      return false;
+    }
+
+    this.dismissing ||= this.#nextAnimationFrame(() => {
+      return new Promise((resolve) => {
+        this.#dismiss({ animate, reason }).then(() => {
+          return this.#nextAnimationFrame(resolve);
+        });
+      });
+    });
+
+    return this.dismissing;
+  }
+
+  // EVENTS
+
+  popstate(event) {
+    this.dismiss({ animate: false, reason: "popstate" });
+  }
+
+  beforeFrameRender(event) {
+    this.debug("before-frame-render", event.detail.newFrame.baseURI);
+
+    event.preventDefault();
+
+    this.dismiss({ animate: true, reason: "before-frame-render" }).then(() => {
+      event.detail.resume();
+    });
+  }
+
+  beforeVisit(e) {
+    this.debug("before-visit", e.detail.url);
+
+    // ignore visits to the current frame, these fire when the frame navigates
+    if (e.detail.url === this.element.src) return;
+
+    // ignore unless we're open
+    if (!this.isOpen) return;
+
+    this.modal.beforeVisit(this, e);
+  }
+
+  frameLoad(event) {
+    this.debug("frame-load");
+
+    return this.open(new FrameModal(this.element.id, this.element.src), { animate: true });
+  }
+
+  get isOpen() {
+    return this.openValue && !this.dismissing;
+  }
+
+  async #open(modal, { animate = true } = {}) {
+    this.debug("open-start", { animate });
+
+    const scrim = this.scrimConnected && this.scrimOutlet;
+
+    this.modal = modal;
     this.openValue = true;
-    if (DEBUG) console.debug("frame:#open-end");
+    this.element.classList.add(modal.layoutValue);
+
+    modal.open({ animate });
+    scrim?.show({ animate });
+
+    delete this.opening;
+
+    this.debug("open-end");
   }
 
-  #clear() {
-    if (DEBUG) console.debug("frame:#clear");
+  async #dismiss({ animate = true, reason = "" } = {}) {
+    this.debug("dismiss-start", { animate, reason });
 
-    this.element.removeAttribute("src");
-    this.element.removeAttribute("complete");
-    this.element.innerHTML = "";
+    await this.scrimOutlet.hide({ animate });
+    await this.modal.dismiss();
+
+    this.element.classList.remove(this.modal?.layoutValue);
+    this.openValue = false;
+    this.modal = null;
+    delete this.dismissing;
+
+    this.debug("dismiss-end");
   }
 
-  // Stimulus 3.2.2 has an issue where outlets do not fire disconnect callbacks
-  // when the element is removed from the DOM. We're using targets to work
-  // around this issue, but could use outlets in the future when this is
-  // resolved.
-  modalOutletFor(element) {
-    return this.application.getControllerForElementAndIdentifier(
-      element,
-      "kpop--modal",
-    );
+  #nextAnimationFrame(callback) {
+    return new Promise((resolve) => {
+      window.requestAnimationFrame(() => {
+        resolve(callback());
+      });
+    });
   }
 
-  get modalOutlet() {
-    return this.modalOutletFor(this.modalTarget);
-  }
-
-  get hasModalOutlet() {
-    return this.hasModalTarget;
-  }
-
-  modalTargetConnected(element) {
-    this.modalOutletConnected(this.modalOutletFor(element));
-  }
-
-  modalTargetDisconnected(element) {
-    this.modalOutletDisconnected(this.modalOutletFor(element));
+  debug(event, ...args) {
+    if (DEBUG) console.debug(`FrameController:${event}`, ...args);
   }
 }
