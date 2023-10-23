@@ -27,7 +27,7 @@ module Kpop
     def default_html_attributes
       {
         class: "kpop-modal",
-        data: {
+        data:  {
           controller:                            "kpop--modal",
           "kpop--modal-fallback-location-value": @fallback_location,
           "kpop--modal-layout-value":            @layout&.to_s&.dasherize,

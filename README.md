@@ -17,8 +17,16 @@ kpop supports installation of javascript dependencies with either import maps or
 
 ### Stimulus controllers
 
-If you are using asset pipeline and import maps then the stimulus controllers
-for modals and scrim will be automatically available without configuration.
+kpop assumes that you are using importmaps to manage javascript dependencies.
+
+Add the following to your Stimulus `controllers/index.js`:
+
+```js
+import kpop from "@katalyst/kpop";
+application.load(kpop);
+```
+
+This will ensure that kpop is loaded and registered with Stimulus.
 
 ### Stylesheets
 

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-const DEBUG = false;
+import DEBUG from "../debug";
 
 export default class Kpop__ModalController extends Controller {
   static values = {

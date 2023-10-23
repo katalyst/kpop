@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-const DEBUG = false;
+import DEBUG from "../debug";
 
 /**
  * Scrim controller wraps an element that creates a whole page layer.
@@ -38,7 +38,7 @@ export default class ScrimController extends Controller {
     captive = this.defaultCaptiveValue,
     zIndex = this.defaultZIndexValue,
     top = window.scrollY,
-    animate = true
+    animate = true,
   } = {}) {
     if (DEBUG) console.debug("scrim:before-show");
 
@@ -64,7 +64,9 @@ export default class ScrimController extends Controller {
       this.element.dataset.showAnimating = "";
 
       await new Promise((resolve) => {
-        this.element.addEventListener("animationend", () => resolve(), { once: true });
+        this.element.addEventListener("animationend", () => resolve(), {
+          once: true,
+        });
       });
 
       delete this.element.dataset.showAnimating;
@@ -89,7 +91,9 @@ export default class ScrimController extends Controller {
       this.element.dataset.hideAnimating = "";
 
       await new Promise((resolve) => {
-        this.element.addEventListener("animationend", () => resolve(), { once: true });
+        this.element.addEventListener("animationend", () => resolve(), {
+          once: true,
+        });
       });
 
       delete this.element.dataset.hideAnimating;

@@ -42,7 +42,9 @@ $duration: 0.2s !default;
   display: none;
 }
 
-.scrim[data-hide-animating] + .kpop--container .kpop--frame[data-kpop--frame-open-value="true"] {
+.scrim[data-hide-animating]
+  + .kpop--container
+  .kpop--frame[data-kpop--frame-open-value="true"] {
   animation: var(--closing-animation);
   animation-duration: $duration;
   animation-fill-mode: forwards;
