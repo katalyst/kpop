@@ -4,6 +4,7 @@
   <li><%= button_to "Stream", modal_path, method: :patch %></li>
   <li><%= kpop_link_to "Frame", modal_path %></li>
   <li><%= link_to "Page", modal_path, data: { turbo: false } %></li>
+  <li><%= link_to "Redirect", redirect_path %></li>
 </ul>
 
 <% if local_assigns[:kpop] %>

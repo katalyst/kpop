@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resource :modal, only: %i[show update]
 
   get "/test", to: "home#test"
+  get "/redirect", to: "home#redirect"
 
   root to: "home#index"
 end

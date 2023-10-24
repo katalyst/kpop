@@ -3,10 +3,10 @@ import { Turbo } from "@hotwired/turbo-rails";
 import { Modal } from "./modal";
 
 export class ContentModal extends Modal {
-  constructor(id, src = Turbo.session.location.href) {
+  constructor(id, src = null) {
     super(id);
 
-    this.src = src;
+    if (src) this.src = src;
   }
 
   async dismiss() {
@@ -35,5 +35,12 @@ export class ContentModal extends Modal {
     this.visitStarted = true;
 
     frame.scrimOutlet.hide({ animate: false });
+  }
+
+  get src() {
+    return new URL(
+      this.currentLocationValue.toString(),
+      document.baseURI
+    ).toString();
   }
 }

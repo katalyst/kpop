@@ -148,7 +148,7 @@ export default class Kpop__FrameController extends Controller {
 
     this.modal = modal;
     this.openValue = true;
-    this.element.classList.add(modal.layoutValue);
+    if (modal.layoutValue) this.element.classList.add(modal.layoutValue);
 
     modal.open({ animate });
     scrim?.show({ animate });
@@ -161,10 +161,16 @@ export default class Kpop__FrameController extends Controller {
   async #dismiss({ animate = true, reason = "" } = {}) {
     this.debug("dismiss-start", { animate, reason });
 
-    await this.scrimOutlet.hide({ animate });
-    await this.modal.dismiss();
+    if (!this.modal) {
+      console.warn("modal missing on dismiss");
+      if (DEBUG) debugger;
+    }
 
-    this.element.classList.remove(this.modal?.layoutValue);
+    await this.scrimOutlet.hide({ animate });
+    await this.modal?.dismiss();
+
+    if (this.modal?.layoutValue)
+      this.element.classList.remove(this.modal?.layoutValue);
     this.openValue = false;
     this.modal = null;
     delete this.dismissing;

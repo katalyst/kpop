@@ -45,12 +45,16 @@ export class Modal {
     return this.frameElement?.querySelector("[data-controller*='kpop--modal']");
   }
 
+  get currentLocationValue() {
+    return this.modalElement?.dataset["kpop-ModalCurrentLocationValue"] || "/";
+  }
+
   get fallbackLocationValue() {
     return this.modalElement?.dataset["kpop-ModalFallbackLocationValue"] || "/";
   }
 
   get layoutValue() {
-    return this.modalElement?.dataset["kpop-ModalLayoutValue"];
+    return this.modalElement?.dataset["kpop-ModalLayoutValue"] || "";
   }
 
   get isCurrentLocation() {

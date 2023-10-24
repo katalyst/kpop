@@ -29,6 +29,7 @@ module Kpop
         class: "kpop-modal",
         data:  {
           controller:                            "kpop--modal",
+          "kpop--modal-current-location-value":  request.path,
           "kpop--modal-fallback-location-value": @fallback_location,
           "kpop--modal-layout-value":            @layout&.to_s&.dasherize,
         },

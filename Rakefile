@@ -28,6 +28,9 @@ namespace :yarn do
   end
 end
 
-task default: %i[lint yarn:build spec] do
+desc "Compile assets"
+task build: "yarn:build"
+
+task default: %i[lint build spec] do
   puts "🎉 build complete! 🎉"
 end

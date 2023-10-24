@@ -1,3 +1,5 @@
+$min-height: 30vh !default;
+
 .kpop--frame.side-panel {
   --opening-animation: slide-in-right;
   --closing-animation: slide-out-right;
@@ -8,6 +10,7 @@
   margin-inline: auto 0;
   border-radius: 0;
   border: 0;
+  grid-template-rows: min(100vh, max($min-height, 100%));
 }
 
 @media (max-width: 600px), (max-height: 400px) {
