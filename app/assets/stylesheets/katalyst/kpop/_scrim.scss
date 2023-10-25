@@ -1,4 +1,4 @@
-$duration: 0.2s !default;
+@use "variables" as *;
 
 .scrim {
   position: fixed;
@@ -6,7 +6,7 @@ $duration: 0.2s !default;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: $scrim-background;
   z-index: -1;
   opacity: 0;
 

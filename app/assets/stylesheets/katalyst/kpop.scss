@@ -1,1 +1,6 @@
-@use "kpop/index";
+@forward "kpop/variables";
+
+@use "kpop/scrim";
+@use "kpop/frame";
+@use "kpop/side_panel";
+@use "kpop/modal";

@@ -1,8 +1,4 @@
-$title-background-color: #344055 !default;
-$title-text-color: white !default;
-$default-padding: 1rem 1.5rem !default;
-$max-width: 52rem !default;
-$max-height: 80vh !default;
+@use "variables" as *;
 
 .kpop-modal {
   display: grid;
@@ -13,9 +9,9 @@ $max-height: 80vh !default;
     "footer";
   grid-template-rows: auto auto 1fr auto;
 
-  border: 1px solid black;
-  border-radius: 0.5rem;
   background-color: white;
+  border: 1px solid black;
+  border-radius: $border-radius;
 }
 
 .kpop-title-bar {
@@ -79,7 +75,7 @@ $max-height: 80vh !default;
   }
 }
 
-@media (max-width: 600px), (max-height: 400px) {
+@include mobile {
   .kpop-modal {
     border-radius: 0;
     border: none;
