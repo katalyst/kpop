@@ -18,5 +18,6 @@ Gem::Specification.new do |spec|
   spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.add_dependency "html-attributes-utils"
+  spec.add_dependency "turbo-rails"
   spec.add_dependency "view_component"
 end

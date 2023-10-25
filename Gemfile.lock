@@ -11,6 +11,7 @@ PATH
   specs:
     katalyst-kpop (3.0.0.pre.alpha.1)
       html-attributes-utils
+      turbo-rails
       view_component
 
 GEM
