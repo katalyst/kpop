@@ -66,7 +66,7 @@ export default class Kpop__FrameController extends Controller {
   }
 
   openValueChanged(open) {
-    this.debug("open-changed");
+    this.debug("open-changed", open);
 
     this.element.parentElement.style.display = open ? "flex" : "none";
   }
@@ -104,7 +104,7 @@ export default class Kpop__FrameController extends Controller {
   // EVENTS
 
   popstate(event) {
-    this.dismiss({ animate: false, reason: "popstate" });
+    this.modal?.popstate(this, event);
   }
 
   beforeFrameRender(event) {

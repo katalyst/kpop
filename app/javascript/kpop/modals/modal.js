@@ -19,6 +19,10 @@ export class Modal {
     this.debug(`before-visit`, e.detail.url);
   }
 
+  popstate(frame, e) {
+    this.debug(`popstate`, e.state);
+  }
+
   async pop(event, callback) {
     this.debug(`pop`);
 

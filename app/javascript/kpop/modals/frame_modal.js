@@ -31,4 +31,11 @@ export class FrameModal extends Modal {
       this.debug("before-visit-end");
     });
   }
+
+  popstate(frame, e) {
+    super.popstate(frame, e);
+
+    // Turbo will restore modal state, but we need to reset the scrim
+    frame.scrimOutlet.hide({ animate: false });
+  }
 }

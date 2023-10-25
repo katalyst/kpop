@@ -32,6 +32,7 @@ RSpec.describe "Frame modal" do
 
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
+    expect(page).not_to have_css("#scrim[data-scrim-open-value='true']")
 
     # Clicking the back button again to reach the end of the history stack
     page.go_back

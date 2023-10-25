@@ -37,6 +37,12 @@ export class StreamModal extends Modal {
     });
   }
 
+  popstate(frame, e) {
+    super.popstate(frame, e);
+
+    frame.dismiss({ animate: true, reason: "popstate" });
+  }
+
   get isCurrentLocation() {
     return window.history.state?.kpop && window.history.state?.id === this.id;
   }
