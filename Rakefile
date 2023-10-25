@@ -29,7 +29,7 @@ namespace :yarn do
 end
 
 desc "Compile assets"
-task build: "yarn:build"
+task build: ["yarn:build", "app:dartsass:build"]
 
 task default: %i[lint build spec] do
   puts "🎉 build complete! 🎉"
