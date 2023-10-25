@@ -8,7 +8,7 @@ Dir[Katalyst::Kpop::Engine.root.join("spec", "support", "**", "*.rb")].each do |
   require f
 end
 
-require "kpop/matchers"
+require "katalyst/kpop/matchers"
 
 module DisableScreenshots
   def take_failed_screenshot
