@@ -57,10 +57,6 @@ export class Modal {
     return this.modalElement?.dataset["kpop-ModalFallbackLocationValue"] || "/";
   }
 
-  get layoutValue() {
-    return this.modalElement?.dataset["kpop-ModalLayoutValue"] || "";
-  }
-
   get isCurrentLocation() {
     return (
       window.history.state?.turbo && Turbo.session.location.href === this.src
