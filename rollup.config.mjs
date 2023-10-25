@@ -1,44 +1,45 @@
-import resolve from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
-import path from "path";
+import resolve from "@rollup/plugin-node-resolve"
+import { terser } from "rollup-plugin-terser"
 
 export default [
   {
-    input: "katalyst/kpop.js",
-    output: {
-      file: "app/assets/builds/katalyst/kpop.js",
-      format: "esm",
-      inlineDynamicImports: true
-    },
+    input: "kpop/application.js",
+    output: [
+      {
+        name: "kpop",
+        file: "app/assets/builds/katalyst/kpop.esm.js",
+        format: "esm",
+      },
+      {
+        file: "app/assets/builds/katalyst/kpop.js",
+        format: "es",
+      },
+    ],
+    context: "window",
     plugins: [
       resolve({
-        modulePaths: [path.join(process.cwd(), 'app/javascript')],
-      }),
-      terser({
-        mangle: false,
-        compress: false,
-        format: {
-          beautify: true,
-          indent_level: 2
-        }
+        modulePaths: ["app/javascript"]
       })
-    ]
+    ],
+    external: ["@hotwired/stimulus", "@hotwired/turbo-rails"]
   },
   {
-    input: "katalyst/kpop.js",
+    input: "kpop/application.js",
     output: {
       file: "app/assets/builds/katalyst/kpop.min.js",
-      format: "esm",
-      inlineDynamicImports: true
+      format: "es",
+      sourcemap: true,
     },
+    context: "window",
     plugins: [
       resolve({
-        modulePaths: [path.join(process.cwd(), 'app/javascript')],
+        modulePaths: ["app/javascript"]
       }),
       terser({
         mangle: true,
         compress: true
       })
-    ]
+    ],
+    external: ["@hotwired/stimulus", "@hotwired/turbo-rails"]
   }
 ]
