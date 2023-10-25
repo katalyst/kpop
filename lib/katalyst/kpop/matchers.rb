@@ -1,137 +1,77 @@
 # frozen_string_literal: true
 
+require "katalyst/kpop/matchers/base"
+require "katalyst/kpop/matchers/capybara_matcher"
+require "katalyst/kpop/matchers/capybara_parser"
+require "katalyst/kpop/matchers/chained_matcher"
+require "katalyst/kpop/matchers/frame_matcher"
+require "katalyst/kpop/matchers/modal_matcher"
+require "katalyst/kpop/matchers/redirect_finder"
+require "katalyst/kpop/matchers/redirect_matcher"
+require "katalyst/kpop/matchers/response_matcher"
+require "katalyst/kpop/matchers/stream_matcher"
+require "katalyst/kpop/matchers/title_finder"
+require "katalyst/kpop/matchers/title_matcher"
+
 module Katalyst
   module Kpop
     module Matchers
-      class BaseMatcher < RSpec::Rails::Matchers::BaseMatcher
-        attr_reader :matched
-
-        def matches?(actual)
-          @matched = super
-          @matched.present?
-        end
+      # @api public
+      # Passes if `response` contains a turbo response with a kpop dismiss action.
+      #
+      # @example
+      #   expect(response).to kpop_dismiss
+      def kpop_dismiss(id: "kpop")
+        ChainedMatcher.new(ResponseMatcher, CapybaraParser, StreamMatcher.new(id:, action: "append"))
       end
 
-      # @api private
-      class CapybaraMatcher < BaseMatcher
-        attr_reader :matched
+      # @api public
+      # Passes if `response` contains a turbo response with a kpop redirect to
+      # the provided `target`.
+      #
+      # @example Matching a path against a turbo response containing a kpop redirect
+      #   expect(response).to kpop_redirect_to("/path/to/resource")
+      def kpop_redirect_to(target, id: "kpop")
+        raise ArgumentError, "Invalid target: nil" unless target
 
-        def matches?(actual)
-          super
-        rescue Capybara::ElementNotFound
-          nil
-        end
-
-        def match(expected, actual)
-          actual.find(expected)
-        end
-
-        def description
-          "match #{expected}"
-        end
-
-        def describe_expected
-          expected.inspect
-        end
-
-        def describe_actual
-          response = actual.native.children.to_html.gsub(/\s+/, " ")
-          response = "#{response[0..120]}..." if response.length > 120
-          response.inspect
-        end
-
-        def failure_message
-          "expected #{describe_expected} but received #{describe_actual} instead"
-        end
-
-        def failure_message_when_negated
-          "expected not to find #{expected}"
-        end
+        ChainedMatcher.new(ResponseMatcher,
+                           CapybaraParser,
+                           StreamMatcher.new(id:, action: "append"),
+                           RedirectFinder,
+                           RedirectMatcher.new(target))
       end
 
-      # @api private
-      class ResponseMatcher < BaseMatcher
-        def match(_, actual)
-          case actual
-          when ::ActionDispatch::Response
-            ::ActionDispatch::TestResponse.from_response(actual)
-          when ::ActionDispatch::TestResponse
-            actual
-          end
-        end
-
-        def description
-          "a response"
-        end
-
-        def failure_message
-          "expected a response but received #{actual.inspect} instead"
-        end
-
-        def failure_message_when_negated
-          "expected not to receive a response"
-        end
+      # @api public
+      # Passes if `response` contains a turbo stream response with a kpop modal.
+      # Supports matching on:
+      #  * id – kpop frame id
+      #  * title - modal title
+      #
+      # @example Matching turbo stream response with a Shopping Cart modal
+      #   expect(response).to render_kpop_stream(title: "Shopping Cart")
+      def render_kpop_stream(id: "kpop", title: nil)
+        matcher = ChainedMatcher.new(ResponseMatcher, CapybaraParser, StreamMatcher.new(id:, action: "kpop_open"),
+                                     ModalMatcher)
+        matcher << TitleFinder << TitleMatcher.new(title) if title.present?
+        matcher
       end
 
-      # @api private
-      class CapybaraParser < BaseMatcher
-        def match(_, actual)
-          @html = Nokogiri::HTML5.parse(actual.body)
-          Capybara::Node::Simple.new(@html)
-        end
-      end
-
-      class ChainedMatcher < RSpec::Rails::Matchers::BaseMatcher
-        Input = Struct.new(:matched)
-
-        delegate :failure_message, :failure_message_when_negated, to: :@matcher
-
-        def initialize(*matchers)
-          super()
-          matchers.each { |m| self << m }
-        end
-
-        def <<(matcher)
-          matcher = matcher.new if matcher.is_a?(Class)
-          (@matchers ||= []) << matcher
-          self
-        end
-
-        def match(_, actual)
-          @matcher = Input.new(actual)
-          @matchers.all? do |matcher|
-            input    = @matcher.matched
-            @matcher = matcher
-            matcher.matches?(input)
-          end
-        end
-
-        def description
-          @matchers.last.description
-        end
-      end
-
-      # @api private
-      class StreamMatcher < CapybaraMatcher
-        def initialize(id: "kpop", action: "update")
-          super("turbo-stream[action='#{action}'][target='#{id}']")
-        end
-      end
-
-      # @api private
-      class FrameMatcher < CapybaraMatcher
-        def initialize(id: "kpop")
-          super("turbo-frame##{id}")
-        end
+      # @api public
+      # Passes if `response` contains a turbo frame with a kpop modal.
+      # Supports matching on:
+      #  * id – turbo frame id
+      #  * title - modal title
+      #
+      # @example Matching turbo stream response with a Shopping Cart modal
+      #   expect(response).to render_kpop_frame(title: "Shopping Cart")
+      def render_kpop_frame(id: "kpop", title: nil)
+        matcher = ChainedMatcher.new(ResponseMatcher, CapybaraParser, FrameMatcher.new(id:), ModalMatcher)
+        matcher << TitleFinder << TitleMatcher.new(title) if title.present?
+        matcher
       end
     end
   end
 end
-
-require "katalyst/kpop/matchers"
-require "katalyst/kpop/matchers/redirect_to"
-require "katalyst/kpop/matchers/render_kpop"
-require "katalyst/kpop/matchers/kpop_dismiss"
 
 RSpec.configure do |config|
   config.include Katalyst::Kpop::Matchers, type: :component
