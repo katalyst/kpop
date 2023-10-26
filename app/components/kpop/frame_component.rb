@@ -12,6 +12,7 @@ module Kpop
       scrim:dismiss@window->kpop--frame#dismiss
       scrim:hide@window->kpop--frame#dismiss
       turbo:before-frame-render->kpop--frame#beforeFrameRender
+      turbo:before-stream-render@window->kpop--frame#beforeStreamRender
       turbo:before-visit@window->kpop--frame#beforeVisit
       turbo:frame-load->kpop--frame#frameLoad
     ].freeze

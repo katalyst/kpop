@@ -77,11 +77,9 @@ export default class Kpop__FrameController extends Controller {
       return false;
     }
 
-    this.opening ||= this.#nextAnimationFrame(() => {
-      return this.#open(modal, { animate });
-    });
-
-    return this.opening;
+    return (this.opening ||= this.#nextFrame(() =>
+      this.#open(modal, { animate })
+    ));
   }
 
   async dismiss({ animate = true, reason = "" } = {}) {
@@ -90,15 +88,9 @@ export default class Kpop__FrameController extends Controller {
       return false;
     }
 
-    this.dismissing ||= this.#nextAnimationFrame(() => {
-      return new Promise((resolve) => {
-        this.#dismiss({ animate, reason }).then(() => {
-          return this.#nextAnimationFrame(resolve);
-        });
-      });
-    });
-
-    return this.dismissing;
+    return (this.dismissing ||= this.#nextFrame(() =>
+      this.#dismiss({ animate, reason })
+    ));
   }
 
   // EVENTS
@@ -113,8 +105,25 @@ export default class Kpop__FrameController extends Controller {
     event.preventDefault();
 
     this.dismiss({ animate: true, reason: "before-frame-render" }).then(() => {
+      this.debug("resume-frame-render", event.detail.newFrame.baseURI);
       event.detail.resume();
     });
+  }
+
+  beforeStreamRender(event) {
+    this.debug("before-stream-render", event.detail);
+
+    const resume = event.detail.render;
+
+    // Defer rendering until dismiss is complete.
+    // Dismiss may change history so we need to wait for it to complete to avoid
+    // losing DOM changes on restoration visits.
+    event.detail.render = (stream) => {
+      (this.dismissing || Promise.resolve()).then(() => {
+        this.debug("stream-render", stream);
+        resume(stream);
+      });
+    };
   }
 
   beforeVisit(e) {
@@ -149,8 +158,8 @@ export default class Kpop__FrameController extends Controller {
     this.modal = modal;
     this.openValue = true;
 
-    modal.open({ animate });
-    scrim?.show({ animate });
+    await modal.open({ animate });
+    await scrim?.show({ animate });
 
     delete this.opening;
 
@@ -175,12 +184,9 @@ export default class Kpop__FrameController extends Controller {
     this.debug("dismiss-end");
   }
 
-  #nextAnimationFrame(callback) {
-    return new Promise((resolve) => {
-      window.requestAnimationFrame(() => {
-        resolve(callback());
-      });
-    });
+  async #nextFrame(callback) {
+    // return Promise.resolve().then(callback);
+    return new Promise(window.requestAnimationFrame).then(callback);
   }
 
   debug(event, ...args) {

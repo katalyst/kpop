@@ -10,5 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_26_055211) do
+  create_table "children", force: :cascade do |t|
+    t.integer "parent_id"
+    t.string "name"
+    t.index ["parent_id"], name: "index_children_on_parent_id"
+  end
+
+  create_table "parents", force: :cascade do |t|
+    t.string "name"
+  end
+
 end

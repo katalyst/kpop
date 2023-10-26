@@ -1,0 +1,5 @@
+<h1>Parent <%= @parent.name %></h1>
+
+<%= render "children/children", children: @parent.children %>
+
+<%= kpop_link_to "New child", new_parent_child_path %>
