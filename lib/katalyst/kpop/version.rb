@@ -2,6 +2,6 @@
 
 module Katalyst
   module Kpop
-    VERSION = "3.0.0-alpha.1"
+    VERSION = "3.0.0.beta.1"
   end
 end
