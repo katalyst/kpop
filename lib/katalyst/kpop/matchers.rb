@@ -6,7 +6,6 @@ require "katalyst/kpop/matchers/capybara_parser"
 require "katalyst/kpop/matchers/chained_matcher"
 require "katalyst/kpop/matchers/frame_matcher"
 require "katalyst/kpop/matchers/modal_matcher"
-require "katalyst/kpop/matchers/redirect_finder"
 require "katalyst/kpop/matchers/redirect_matcher"
 require "katalyst/kpop/matchers/response_matcher"
 require "katalyst/kpop/matchers/stream_matcher"
@@ -22,7 +21,9 @@ module Katalyst
       # @example
       #   expect(response).to kpop_dismiss
       def kpop_dismiss(id: "kpop")
-        ChainedMatcher.new(ResponseMatcher, CapybaraParser, StreamMatcher.new(id:, action: "append"))
+        ChainedMatcher.new(ResponseMatcher,
+                           CapybaraParser,
+                           StreamMatcher.new(id:, action: "kpop_dismiss"))
       end
 
       # @api public
@@ -36,8 +37,7 @@ module Katalyst
 
         ChainedMatcher.new(ResponseMatcher,
                            CapybaraParser,
-                           StreamMatcher.new(id:, action: "append"),
-                           RedirectFinder,
+                           StreamMatcher.new(id:, action: "kpop_redirect_to"),
                            RedirectMatcher.new(target))
       end
 

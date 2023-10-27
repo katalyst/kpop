@@ -1,25 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
-import { Turbo } from "@hotwired/turbo-rails";
 
 import DEBUG from "../debug";
 import { ContentModal } from "../modals/content_modal";
 import { FrameModal } from "../modals/frame_modal";
-import { StreamModal } from "../modals/stream_modal";
-import { StreamRenderer } from "../modals/stream_renderer";
-
-Turbo.StreamActions.kpop_open = function () {
-  const frame = () => {
-    return this.targetElements[0];
-  };
-  const animate = !frame?.kpop?.openValue;
-
-  frame()
-    .kpop.dismiss({ animate, reason: "before-turbo-stream" })
-    .then(() => {
-      new StreamRenderer(frame(), this).render();
-      frame().kpop.open(new StreamModal(this.target, this), { animate });
-    });
-};
 
 export default class Kpop__FrameController extends Controller {
   static outlets = ["scrim"];

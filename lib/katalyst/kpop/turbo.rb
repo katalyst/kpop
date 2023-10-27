@@ -6,7 +6,7 @@ module Katalyst
   module Kpop
     module Turbo
       class TagBuilder
-        delegate :action, :append, :tag, to: :@builder
+        delegate :action, :turbo_stream_action_tag, to: :@builder
 
         def initialize(builder)
           @builder = builder
@@ -24,31 +24,25 @@ module Katalyst
         #     <% end %>
         #   <% end %>
         def open(content = nil, id: "kpop", **, &)
-          @builder.action(:kpop_open, id, content, **, &)
+          action(:kpop_open, id, content, **, &)
         end
 
         # Render a turbo stream action that will dismiss any open kpop modal.
         def dismiss(id: "kpop")
-          append(id) do
-            tag.div("", data: {
-                      controller:                     "kpop--close",
-                      kpop__close_kpop__frame_outlet: "##{id}",
-                      turbo_temporary:                "",
-                    })
-          end
+          turbo_stream_action_tag(:kpop_dismiss, target: id)
         end
 
         # Renders a kpop redirect controller response that will escape the frame and navigate to the given URL.
-        def redirect_to(url, id: "kpop", target: nil)
-          append(id) do
-            tag.div("", data: {
-                      controller:                        "kpop--redirect",
-                      kpop__redirect_kpop__frame_outlet: "##{id}",
-                      kpop__redirect_path_value:         url,
-                      kpop__redirect_target_value:       target,
-                      turbo_temporary:                   "",
-                    })
-          end
+        def redirect_to(href, id: "kpop", action: "replace", target: nil)
+          turbo_stream_action_tag(
+            :kpop_redirect_to,
+            target: id,
+            href:,
+            data:   {
+              turbo_action: action,
+              turbo_frame:  target,
+            },
+          )
         end
       end
     end

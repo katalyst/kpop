@@ -8,7 +8,7 @@ module Katalyst
       # @api private
       class RedirectMatcher < Base
         def match(expected, actual)
-          actual["data-kpop--redirect-path-value"].to_s.match?(expected)
+          actual["href"].to_s.match?(expected)
         end
 
         def description
