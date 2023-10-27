@@ -1,4 +1,4 @@
-<%= form_with(id: "form", url: modal_path, method: :patch, scope: "", data: { turbo_frame: "kpop" }) do |form| %>
+<%= form_with(id: "form", url: modal_path, method: :patch, scope: "") do |form| %>
   <%= "Form is invalid" if @error %>
   <%= form.label :next %>
   <%= form.collection_select :next, %w[home test error stream frame page], :itself, :itself %>
