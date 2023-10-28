@@ -23,7 +23,7 @@ export class ContentModal extends Modal {
 
     return this.pop("turbo:load", () => {
       this.debug("turbo-visit", this.fallbackLocationValue);
-      Turbo.visit(this.fallbackLocationValue, { action: "replace" });
+      Turbo.visit(this.fallbackLocationValue);
     });
 
     // no specific close action required, this is turbo's responsibility

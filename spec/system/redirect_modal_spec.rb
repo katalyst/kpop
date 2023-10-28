@@ -25,10 +25,11 @@ RSpec.describe "Redirect modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the first page (root)
+    # Clicking the back button returns to the modal
     page.go_back
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(modal_path)
+    expect(page).to have_css(".kpop-modal")
   end
 
   it "supports scrim closing" do
@@ -38,10 +39,11 @@ RSpec.describe "Redirect modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the first page (root)
+    # Clicking the back button returns to the modal
     page.go_back
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(modal_path)
+    expect(page).to have_css(".kpop-modal")
   end
 
   it "supports forward navigation" do
@@ -74,10 +76,11 @@ RSpec.describe "Redirect modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the first page (root)
+    # Clicking the back button returns to the modal
     page.go_back
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(modal_path)
+    expect(page).to have_css(".kpop-modal")
   end
 
   it "supports redirect via form submission" do
@@ -115,10 +118,11 @@ RSpec.describe "Redirect modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the first page (root)
+    # Clicking the back button returns to the modal
     page.go_back
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(modal_path)
+    expect(page).to have_css(".kpop-modal")
   end
 
   it "supports navigation re-opening" do
@@ -154,9 +158,10 @@ RSpec.describe "Redirect modal" do
 
     expect(page).to have_current_path(root_path)
 
-    # Clicking the back button returns to the first page (root)
+    # Clicking the back button returns to the modal
     page.go_back
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(modal_path)
+    expect(page).to have_css(".kpop-modal")
   end
 end

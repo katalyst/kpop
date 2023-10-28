@@ -45,7 +45,11 @@ export default class Kpop__FrameController extends Controller {
 
     this.scrimConnected = true;
 
-    if (this.openValue) scrim.show({ animate: false });
+    if (this.openValue) {
+      scrim.show({ animate: false });
+    } else {
+      scrim.hide({ animate: false });
+    }
   }
 
   openValueChanged(open) {
@@ -57,6 +61,7 @@ export default class Kpop__FrameController extends Controller {
   async open(modal, { animate = true } = {}) {
     if (this.isOpen) {
       this.debug("skip open as already open");
+      this.modal ||= modal;
       return false;
     }
 
@@ -152,6 +157,12 @@ export default class Kpop__FrameController extends Controller {
   async #dismiss({ animate = true, reason = "" } = {}) {
     this.debug("dismiss-start", { animate, reason });
 
+    // if this element is detached then we've experienced a turbo navigation
+    if (!this.element.isConnected) {
+      this.debug("skip dismiss, element detached");
+      return;
+    }
+
     if (!this.modal) {
       console.warn("modal missing on dismiss");
       if (DEBUG) debugger;
@@ -168,7 +179,6 @@ export default class Kpop__FrameController extends Controller {
   }
 
   async #nextFrame(callback) {
-    // return Promise.resolve().then(callback);
     return new Promise(window.requestAnimationFrame).then(callback);
   }
 
