@@ -33,6 +33,7 @@ module Katalyst
         end
 
         # Renders a kpop redirect controller response that will escape the frame and navigate to the given URL.
+        # Note: turbo does not currently snapshot page history accurately when using "advance" (Oct 23).
         def redirect_to(href, id: "kpop", action: "replace", target: nil)
           turbo_stream_action_tag(
             :kpop_redirect_to,

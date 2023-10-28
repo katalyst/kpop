@@ -189,7 +189,7 @@ RSpec.describe "Frame modal" do
     end
   end
 
-  it "supports rendering a new modal via form submission" do
+  it "supports rendering a new stream on form submission" do
     # Fill in the form
     within(".kpop-modal") do |_kpop|
       select "stream", from: "Next"
@@ -208,5 +208,45 @@ RSpec.describe "Frame modal" do
     page.go_back
 
     expect(page).to have_current_path(nil)
+  end
+
+  it "supports rendering a new frame on form submission" do
+    # Fill in the form
+    within(".kpop-modal") do |_kpop|
+      select "frame", from: "Next"
+      click_button "Save"
+    end
+
+    expect(page).to have_current_path(new_parent_child_path)
+    expect(page).to have_css(".kpop-title", text: "New child")
+
+    sleep 0.1
+
+    # Clicking the back button to go back to the root path
+    # Note: this happens because we use "replace" for turbo redirect_to
+    page.go_back
+
+    expect(page).to have_current_path(root_path)
+    expect(page).not_to have_css(".kpop-title")
+  end
+
+  it "supports rendering a new page on form submission" do
+    # Fill in the form
+    within(".kpop-modal") do |_kpop|
+      select "content", from: "Next"
+      click_button "Save"
+    end
+
+    expect(page).to have_current_path(new_parent_child_path)
+    expect(page).to have_css(".kpop-title", text: "New child")
+
+    sleep 0.1
+
+    # Clicking the back button to go back to the modal path
+    # Note: this happens because we use "replace" for turbo redirect_to
+    page.go_back
+
+    expect(page).to have_current_path(root_path)
+    expect(page).not_to have_css(".kpop-title")
   end
 end

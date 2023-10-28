@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class ChildrenController < ApplicationController
-  before_action :set_parent
-
-  layout "kpop"
-
+class ChildrenController < ParentsController
   def new
-    render locals: { child: @parent.children.build }
+    if turbo_frame_request?
+      render layout: "kpop", locals: { child: @parent.children.build }
+    else
+      render :show, locals: { child: @parent.children.build }
+    end
   end
 
   def create
@@ -19,10 +19,6 @@ class ChildrenController < ApplicationController
   end
 
   private
-
-  def set_parent
-    @parent = Parent.first
-  end
 
   def child_params
     params.require(:child).permit(:name)

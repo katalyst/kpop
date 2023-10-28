@@ -26,9 +26,9 @@ class ModalsController < ApplicationController
       @error = true
       render status: :unprocessable_entity
     when "frame"
-      render turbo_stream: turbo_stream.kpop.redirect_to(modal_path, target: "kpop")
+      render turbo_stream: turbo_stream.kpop.redirect_to(new_parent_child_path, target: "kpop")
     when "content"
-      render turbo_stream: turbo_stream.kpop.redirect_to(modal_path)
+      render turbo_stream: turbo_stream.kpop.redirect_to(new_parent_child_path)
     else
       render turbo_stream: turbo_stream.kpop.open(template: "modals/stream")
     end

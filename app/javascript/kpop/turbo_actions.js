@@ -1,5 +1,7 @@
 import { Turbo } from "@hotwired/turbo-rails";
 
+import DEBUG from "./debug";
+
 import { StreamModal } from "./modals/stream_modal";
 import { StreamRenderer } from "./utils/stream_renderer";
 
@@ -24,8 +26,16 @@ Turbo.StreamActions.kpop_dismiss = function () {
 
 Turbo.StreamActions.kpop_redirect_to = function () {
   if (this.dataset.turboFrame === this.target) {
-    this.targetElements[0].src = this.getAttribute("href");
+    if (DEBUG)
+      console.debug(
+        `kpop: redirecting ${this.target} to ${this.getAttribute("href")}`
+      );
+    const a = document.createElement("A");
+    a.setAttribute("data-turbo-action", "replace");
+    this.targetElements[0].delegate.navigateFrame(a, this.getAttribute("href"));
   } else {
+    if (DEBUG)
+      console.debug(`kpop: redirecting to ${this.getAttribute("href")}`);
     Turbo.visit(this.getAttribute("href"), {
       action: this.dataset.turboAction,
     });

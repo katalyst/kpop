@@ -13,9 +13,9 @@ export class FrameModal extends Modal {
 
     if (!this.isCurrentLocation) {
       this.debug("skipping dismiss, not current location");
+    } else {
+      await this.pop("turbo:load", () => window.history.back());
     }
-
-    await this.pop("turbo:load", () => window.history.back());
 
     // no specific close action required, this is turbo's responsibility
   }
