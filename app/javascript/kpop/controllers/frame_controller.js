@@ -11,6 +11,11 @@ export default class Kpop__FrameController extends Controller {
     open: Boolean,
   };
 
+  initialize() {
+    this.threshold = 100; // Define the threshold for swipe to dismiss
+    this.initialY = 0;
+  }
+
   connect() {
     this.debug("connect", this.element.src);
 
@@ -31,6 +36,7 @@ export default class Kpop__FrameController extends Controller {
         this.open(new ContentModal(this.element.id), { animate: false });
       }
     }
+
   }
 
   disconnect() {
@@ -146,6 +152,12 @@ export default class Kpop__FrameController extends Controller {
 
     delete this.opening;
 
+    if(this.element.classList.contains("side-panel")) {
+      this.element.addEventListener("touchstart", this.onTouchStart);
+      this.element.addEventListener("touchmove", this.handleSwipe);
+      this.element.addEventListener("touchend", this.onTouchEnd);
+    }
+
     this.debug("open-end");
   }
 
@@ -164,7 +176,37 @@ export default class Kpop__FrameController extends Controller {
     this.modal = null;
     delete this.dismissing;
 
+    this.element.removeEventListener("touchstart", this.onTouchStart);
+    this.element.removeEventListener("touchmove", this.handleSwipe);
+    this.element.removeEventListener("touchend", this.onTouchEnd);
+
     this.debug("dismiss-end");
+  }
+
+  handleSwipe = (event) => {
+    const touchEndY = event.changedTouches[0].clientY;
+    const swipeDistance = touchEndY - this.initialY;
+
+    // Update the panel's position based on swipe distance
+    this.element.style.transform = `translateY(${Math.max(0, swipeDistance)}px)`;
+
+    this.willDismiss = swipeDistance > this.threshold;
+  }
+
+  onTouchStart = (event) => {
+    // event.preventDefault();
+    this.element.style.transition = "";
+    this.initialY = event.touches[0].clientY; // Store initial touch position
+    this.willDismiss = false;
+  }
+
+  onTouchEnd = () => {
+    if (this.willDismiss) {
+      this.dismiss({ animate: true, reason: "swipe-down" })
+    }else{
+      this.element.style.transition = "transform 0.125s linear";
+      this.element.style.transform = "translateY(0px)"; // Reset transform property
+    }
   }
 
   async #nextFrame(callback) {

@@ -132,10 +132,13 @@ export default class ScrimController extends Controller {
 
     this.previousPosition = document.body.style.position;
     this.previousTop = document.body.style.top;
+    this.previousScrollBehavior = document.body.style.overscrollBehavior;
 
     this.element.style.zIndex = this.zIndexValue;
     document.body.style.top = `-${top}px`;
     document.body.style.position = "fixed";
+    document.body.style.overscrollBehavior = "none";
+    document.body.parentElement.style.overscrollBehavior = "none";
   }
 
   /**
@@ -148,12 +151,15 @@ export default class ScrimController extends Controller {
     resetStyle(this.element, "z-index", null);
     resetStyle(document.body, "position", null);
     resetStyle(document.body, "top", null);
+    resetStyle(document.body, "overscroll-behavior", null);
+    resetStyle(document.body.parentElement, "overscroll-behavior", null);
 
     window.scrollTo({ left: 0, top: this.scrollY, behavior: "instant" });
 
     delete this.scrollY;
     delete this.previousPosition;
     delete this.previousTop;
+    delete this.previousScrollBehavior;
   }
 }
 
