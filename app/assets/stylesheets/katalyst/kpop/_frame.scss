@@ -68,19 +68,6 @@
   animation-fill-mode: forwards;
 }
 
-.kpop-modal.iframe {
-  .kpop-content {
-    overflow: unset;
-  }
-
-  iframe {
-    height: $max-height;
-    width: $max-width;
-    flex-grow: 1;
-    overflow: scroll;
-  }
-}
-
 @keyframes slide-in-up {
   0% {
     transform: translateY(10%);

@@ -68,28 +68,9 @@
   }
 
   iframe {
-    height: $max-height;
-    width: $max-width;
+    height: var(--max-height);
+    width: var(--max-width);
     flex-grow: 1;
     overflow: scroll;
-  }
-}
-
-@include mobile {
-  .kpop-modal {
-    border-radius: 0;
-    border: none;
-  }
-
-  .kpop-modal.iframe {
-    iframe {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .kpop-buttons {
-    flex-direction: column-reverse;
-    text-align: center;
   }
 }
