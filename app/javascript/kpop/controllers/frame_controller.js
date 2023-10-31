@@ -15,6 +15,7 @@ export default class Kpop__FrameController extends Controller {
     this.debug("connect", this.element.src);
 
     this.element.kpop = this;
+    installNavigationInterception(this.element);
 
     // restoration visit
     if (this.element.src && this.element.complete) {
@@ -85,6 +86,20 @@ export default class Kpop__FrameController extends Controller {
 
   popstate(event) {
     this.modal?.popstate(this, event);
+  }
+
+  navigateFrame(element, location) {
+    this.debug("navigate-frame", this.element.src, location);
+
+    // Ensure that turbo doesn't cache the frame in a loading state by cancelling
+    // the current request (if any) by clearing the src.
+    // Known issue: this won't work if the frame was previously rendering a useful src.
+    if (this.element.hasAttribute("busy")) {
+      this.element.src = "";
+    }
+
+    // Delay turbo's navigateFrame until next tick to let the src change settle.
+    return Promise.resolve();
   }
 
   beforeFrameRender(event) {
@@ -184,5 +199,30 @@ export default class Kpop__FrameController extends Controller {
 
   debug(event, ...args) {
     if (DEBUG) console.debug(`FrameController:${event}`, ...args);
+  }
+}
+
+/**
+ * Monkey patch for Turbo#FrameController.
+ *
+ * Intercept calls to navigateFrame(element, location) and ensures that src is
+ * cleared if the frame is busy so that we don't restore an in-progress src on
+ * restoration visits.
+ *
+ * See Turbo issue: https://github.com/hotwired/turbo/issues/1055
+ *
+ * @param frameElement turbo-frame element
+ */
+function installNavigationInterception(frameElement) {
+  if (frameElement.delegate._navigateFrame === undefined) {
+    frameElement.delegate._navigateFrame = frameElement.delegate.navigateFrame;
+    frameElement.delegate.navigateFrame = async (element, location) => {
+      await frameElement.kpop?.navigateFrame(element, location);
+      return frameElement.delegate._navigateFrame.call(
+        frameElement.delegate,
+        element,
+        location
+      );
+    };
   }
 }

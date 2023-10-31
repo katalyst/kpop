@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ModalsController < ApplicationController
+  before_action :delay_request
+
   def show
     if request.headers["Turbo-Frame"] == "kpop"
       render "modals/frame", layout: "kpop"
@@ -56,5 +58,9 @@ class ModalsController < ApplicationController
         render turbo_stream: turbo_stream.kpop.dismiss
       end
     end
+  end
+
+  def delay_request
+    sleep(params[:duration].to_f.seconds) if params[:duration].present?
   end
 end

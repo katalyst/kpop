@@ -249,4 +249,26 @@ RSpec.describe "Frame modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-title")
   end
+
+  it "debounces double open requests" do
+    page.go_back
+
+    # Open two modals
+    click_link("Delay 0.5")
+    sleep 0.1
+    click_link("Delay 0.6")
+    sleep 0.1
+
+    expect(page).to have_current_path(modal_path(duration: "0.6"))
+
+    # Wait for modal to render
+    find("[data-kpop--frame-open-value='true']")
+    expect(page).to have_css(".kpop-title", text: "Frame modal")
+
+    page.go_back
+
+    expect(page).to have_current_path(root_path)
+    sleep 1 # wait for animations to settle (0.5 + 0.2)
+    expect(page).not_to have_css("[data-kpop--frame-open-value='true']")
+  end
 end
