@@ -45,6 +45,10 @@ export class Modal {
     return document.getElementById(this.id);
   }
 
+  get controller() {
+    return this.frameElement?.kpop;
+  }
+
   get modalElement() {
     return this.frameElement?.querySelector("[data-controller*='kpop--modal']");
   }
@@ -54,13 +58,17 @@ export class Modal {
   }
 
   get fallbackLocationValue() {
-    return this.modalElement?.dataset["kpop-ModalFallbackLocationValue"] || "/";
+    return this.modalElement?.dataset["kpop-ModalFallbackLocationValue"];
   }
 
   get isCurrentLocation() {
     return (
       window.history.state?.turbo && Turbo.session.location.href === this.src
     );
+  }
+
+  static debug(event, ...args) {
+    if (DEBUG) console.debug(`${this.name}:${event}`, ...args);
   }
 
   debug(event, ...args) {

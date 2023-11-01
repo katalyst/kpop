@@ -15,22 +15,19 @@ export default class Kpop__FrameController extends Controller {
     this.debug("connect", this.element.src);
 
     this.element.kpop = this;
-    installNavigationInterception(this.element, this.element.delegate);
 
-    // restoration visit
+    // allow our code to intercept frame navigation requests before dom changes
+    installNavigationInterception(this);
+
     if (this.element.src && this.element.complete) {
       this.debug("new frame modal", this.element.src);
-      this.open(new FrameModal(this.element.id, this.element.src), {
-        animate: false,
-      });
+      FrameModal.connect(this, this.element);
+    } else if (this.modalElements.length > 0) {
+      this.debug("new content modal", window.location.pathname);
+      ContentModal.connect(this, this.element);
     } else {
-      const element = this.element.querySelector(
-        "[data-controller*='kpop--modal']"
-      );
-      if (element) {
-        this.debug("new content modal", window.location.pathname);
-        this.open(new ContentModal(this.element.id), { animate: false });
-      }
+      this.debug("no modal");
+      this.clear();
     }
   }
 
@@ -66,6 +63,8 @@ export default class Kpop__FrameController extends Controller {
       return false;
     }
 
+    await this.dismissing;
+
     return (this.opening ||= this.#nextFrame(() =>
       this.#open(modal, { animate })
     ));
@@ -77,9 +76,30 @@ export default class Kpop__FrameController extends Controller {
       return false;
     }
 
+    await this.opening;
+
     return (this.dismissing ||= this.#nextFrame(() =>
       this.#dismiss({ animate, reason })
     ));
+  }
+
+  async clear() {
+    // clear the src from the frame (if any)
+    this.element.src = "";
+
+    // remove any open modal(s)
+    this.modalElements.forEach((element) => element.remove());
+
+    // mark the modal as hidden (will hide scrim on connect)
+    this.openValue = false;
+
+    // close the scrim, if connected
+    if (this.scrimConnected) {
+      return this.scrimOutlet.hide({ animate: false });
+    }
+
+    // unset modal
+    this.modal = null;
   }
 
   // EVENTS
@@ -88,35 +108,13 @@ export default class Kpop__FrameController extends Controller {
     this.modal?.popstate(this, event);
   }
 
-  navigateFrame(element, location) {
-    this.debug("navigate-frame", this.element.src, location);
-
-    // Ensure that turbo doesn't cache the frame in a loading state by cancelling
-    // the current request (if any) by clearing the src.
-    // Known issue: this won't work if the frame was previously rendering a useful src.
-    if (this.element.hasAttribute("busy")) {
-      this.debug("clearing src to cancel turbo request");
-      this.element.src = "";
-    }
-
-    if (this.element.src === location) {
-      this.debug("skipping navigate as already on location");
-      return false;
-    }
-
-    if (this.element.src !== window.location.href) {
-      console.warn("kpop: frame src doesn't match window", this.element.src, window.location.href, location);
-      // clear src so that turbo doesn't cache the frame in a loading state
-      this.element.delegate.ignoringChangesToAttribute("src", (() => {
-        this.element.src = "";
-        this.element.delegate.complete = false;
-      }));
-    }
-
-    // Delay turbo's navigateFrame until next tick to let the src change settle.
-    return Promise.resolve(true);
-  }
-
+  /**
+   * Incoming frame render, dismiss the current modal (if any) first.
+   *
+   * We're starting the actual visit
+   *
+   * @param event turbo:before-render
+   */
   beforeFrameRender(event) {
     this.debug("before-frame-render", event.detail.newFrame.baseURI);
 
@@ -159,13 +157,23 @@ export default class Kpop__FrameController extends Controller {
   frameLoad(event) {
     this.debug("frame-load");
 
-    return this.open(new FrameModal(this.element.id, this.element.src), {
-      animate: true,
-    });
+    const modal = new FrameModal(this.element.id, this.element.src);
+
+    window.addEventListener(
+      "turbo:visit",
+      (e) => {
+        this.open(modal, { animate: true });
+      },
+      { once: true }
+    );
   }
 
   get isOpen() {
     return this.openValue && !this.dismissing;
+  }
+
+  get modalElements() {
+    return this.element.querySelectorAll("[data-controller*='kpop--modal']");
   }
 
   async #open(modal, { animate = true } = {}) {
@@ -226,14 +234,24 @@ export default class Kpop__FrameController extends Controller {
  *
  * See Turbo issue: https://github.com/hotwired/turbo/issues/1055
  *
- * @param frameElement turbo-frame element
+ * @param controller FrameController
  */
-function installNavigationInterception(frameElement, controller) {
-  if (controller._navigateFrame === undefined) {
-    controller._navigateFrame = controller.navigateFrame;
-    controller.navigateFrame = async (element, location) => {
-      const navigate = await frameElement.kpop?.navigateFrame(element, location);
-      return navigate && controller._navigateFrame(element, location);
-    };
-  }
+function installNavigationInterception(controller) {
+  const TurboFrameController =
+    controller.element.delegate.constructor.prototype;
+
+  if (TurboFrameController._navigateFrame) return;
+
+  TurboFrameController._navigateFrame = TurboFrameController.navigateFrame;
+  TurboFrameController.navigateFrame = function (element, url, submitter) {
+    const frame = this.findFrameElement(element, submitter);
+
+    if (frame.kpop) {
+      FrameModal.visit(url, frame.kpop, frame, () => {
+        TurboFrameController._navigateFrame.call(this, element, url, submitter);
+      });
+    } else {
+      TurboFrameController._navigateFrame.call(this, element, url, submitter);
+    }
+  };
 }

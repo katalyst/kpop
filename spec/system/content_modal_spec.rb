@@ -24,10 +24,10 @@ RSpec.describe "Content modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the modal
+    # Clicking the back button leaves the site
     page.go_back
 
-    expect(page).to have_current_path(modal_path)
+    expect(page).to have_current_path(nil)
   end
 
   it "supports scrim closing" do
@@ -37,10 +37,10 @@ RSpec.describe "Content modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the modal
+    # Clicking the back button leaves the site
     page.go_back
 
-    expect(page).to have_current_path(modal_path)
+    expect(page).to have_current_path(nil)
   end
 
   it "supports forward navigation" do
@@ -73,10 +73,10 @@ RSpec.describe "Content modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the modal
+    # Clicking the back button leaves the site
     page.go_back
 
-    expect(page).to have_current_path(modal_path)
+    expect(page).to have_current_path(nil)
   end
 
   it "supports redirect via form submission" do
@@ -114,10 +114,10 @@ RSpec.describe "Content modal" do
     expect(page).to have_current_path(root_path)
     expect(page).not_to have_css(".kpop-modal")
 
-    # Clicking the back button returns to the modal
+    # Clicking the back button leaves the site
     page.go_back
 
-    expect(page).to have_current_path(modal_path)
+    expect(page).to have_current_path(nil)
   end
 
   it "supports navigation re-opening" do
@@ -153,9 +153,9 @@ RSpec.describe "Content modal" do
 
     expect(page).to have_current_path(root_path)
 
-    # Clicking the back button returns to the modal
+    # Clicking the back button again leaves the site
     page.go_back
 
-    expect(page).to have_current_path(modal_path)
+    expect(page).to have_current_path(nil)
   end
 end
