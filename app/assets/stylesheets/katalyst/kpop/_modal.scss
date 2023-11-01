@@ -12,6 +12,8 @@
   background-color: white;
   border: 1px solid black;
   border-radius: $border-radius;
+  overflow: hidden;
+  max-height: var(--max-height);
 }
 
 .kpop-title-bar {
