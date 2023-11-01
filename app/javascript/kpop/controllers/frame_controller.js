@@ -15,7 +15,7 @@ export default class Kpop__FrameController extends Controller {
     this.debug("connect", this.element.src);
 
     this.element.kpop = this;
-    installNavigationInterception(this.element);
+    installNavigationInterception(this.element, this.element.delegate);
 
     // restoration visit
     if (this.element.src && this.element.complete) {
@@ -95,11 +95,26 @@ export default class Kpop__FrameController extends Controller {
     // the current request (if any) by clearing the src.
     // Known issue: this won't work if the frame was previously rendering a useful src.
     if (this.element.hasAttribute("busy")) {
+      this.debug("clearing src to cancel turbo request");
       this.element.src = "";
     }
 
+    if (this.element.src === location) {
+      this.debug("skipping navigate as already on location");
+      return false;
+    }
+
+    if (this.element.src !== window.location.href) {
+      console.warn("kpop: frame src doesn't match window", this.element.src, window.location.href, location);
+      // clear src so that turbo doesn't cache the frame in a loading state
+      this.element.delegate.ignoringChangesToAttribute("src", (() => {
+        this.element.src = "";
+        this.element.delegate.complete = false;
+      }));
+    }
+
     // Delay turbo's navigateFrame until next tick to let the src change settle.
-    return Promise.resolve();
+    return Promise.resolve(true);
   }
 
   beforeFrameRender(event) {
@@ -213,16 +228,12 @@ export default class Kpop__FrameController extends Controller {
  *
  * @param frameElement turbo-frame element
  */
-function installNavigationInterception(frameElement) {
-  if (frameElement.delegate._navigateFrame === undefined) {
-    frameElement.delegate._navigateFrame = frameElement.delegate.navigateFrame;
-    frameElement.delegate.navigateFrame = async (element, location) => {
-      await frameElement.kpop?.navigateFrame(element, location);
-      return frameElement.delegate._navigateFrame.call(
-        frameElement.delegate,
-        element,
-        location
-      );
+function installNavigationInterception(frameElement, controller) {
+  if (controller._navigateFrame === undefined) {
+    controller._navigateFrame = controller.navigateFrame;
+    controller.navigateFrame = async (element, location) => {
+      const navigate = await frameElement.kpop?.navigateFrame(element, location);
+      return navigate && controller._navigateFrame(element, location);
     };
   }
 }
