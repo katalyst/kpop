@@ -10,69 +10,76 @@
   grid-template-rows: auto auto 1fr auto;
 
   background-color: white;
-  border: 1px solid black;
   border-radius: $border-radius;
   overflow: hidden;
   max-height: var(--max-height);
-}
+  box-shadow: rgb(0 0 0 / 25%) 0 1px 2px, rgb(0 0 0 / 31%) 0 0 5px;
 
-.kpop-title-bar {
-  grid-area: title-bar;
-  display: flex;
-  background: $title-background-color;
-  color: $title-text-color;
+  .kpop-title-bar {
+    grid-area: title-bar;
+    display: grid;
+    grid-template-areas: "close title empty";
+    grid-template-columns: 3.5rem auto 3.5rem;
+    border-bottom: 1px solid $keyline-color;
+    min-height: 3.5rem;
+    align-items: center;
+  }
+
+  .kpop-header {
+    grid-area: header;
+  }
+
+  .kpop-content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .kpop-footer {
+    grid-area: footer;
+    border-top: 1px solid $keyline-color;
+    padding: $default-padding;
+  }
 
   .kpop-title {
-    padding: $default-padding;
-    flex-grow: 1;
+    grid-area: title;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 3.5rem;
   }
 
   .kpop-close {
+    grid-area: close;
+    text-align: center;
     background: none;
     border: none;
-    color: $title-text-color;
-    cursor: pointer;
     display: block;
     font-size: 2rem;
-    font-weight: bold;
-    padding: 0 0.75rem;
+    font-weight: 300;
     text-decoration: none;
-  }
-}
-
-.kpop-header {
-  grid-area: header;
-}
-
-.kpop-content {
-  grid-area: content;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-}
-
-.kpop-footer {
-  grid-area: footer;
-  background: white;
-  border-top: 1px solid black;
-  padding: $default-padding;
-}
-
-.kpop-buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: space-between;
-}
-
-.kpop-modal.iframe {
-  .kpop-content {
-    overflow: unset;
+    line-height: 3.5rem;
   }
 
-  iframe {
-    height: var(--max-height);
-    width: var(--max-width);
-    flex-grow: 1;
-    overflow: scroll;
+  .button-set {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  &.iframe {
+    .kpop-content {
+      overflow: unset;
+    }
+
+    iframe {
+      height: var(--max-height);
+      width: var(--max-width);
+      flex-grow: 1;
+      overflow: scroll;
+    }
   }
 }
