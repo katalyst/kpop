@@ -2,7 +2,7 @@
 
 module Kpop
   class FrameComponent < ViewComponent::Base
-    include HasHtmlAttributes
+    include Katalyst::HtmlAttributes
     include Turbo::FramesHelper
 
     attr_reader :id

@@ -3,7 +3,7 @@
 module Kpop
   module Modal
     class FooterComponent < ViewComponent::Base
-      include HasHtmlAttributes
+      include Katalyst::HtmlAttributes
 
       def call
         tag.div(content, **html_attributes)

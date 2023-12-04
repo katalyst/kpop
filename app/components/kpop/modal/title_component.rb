@@ -3,7 +3,7 @@
 module Kpop
   module Modal
     class TitleComponent < ViewComponent::Base
-      include HasHtmlAttributes
+      include Katalyst::HtmlAttributes
 
       def initialize(title: nil, captive: false, **)
         super

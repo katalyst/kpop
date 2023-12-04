@@ -2,7 +2,7 @@
 
 module Kpop
   class ModalComponent < ViewComponent::Base
-    include HasHtmlAttributes
+    include Katalyst::HtmlAttributes
 
     renders_one :title, "Kpop::Modal::TitleComponent"
     renders_one :header, "Kpop::Modal::HeaderComponent"

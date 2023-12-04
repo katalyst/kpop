@@ -10,7 +10,7 @@ PATH
   remote: .
   specs:
     katalyst-kpop (3.0.0)
-      html-attributes-utils
+      katalyst-html-attributes
       turbo-rails
       view_component
 
@@ -159,6 +159,9 @@ GEM
       rdoc
       reline (>= 0.3.8)
     json (2.6.3)
+    katalyst-html-attributes (1.0.0)
+      activesupport
+      html-attributes-utils
     language_server-protocol (3.17.0.3)
     loofah (2.21.4)
       crass (~> 1.0.2)
