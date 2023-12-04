@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "lib/katalyst/kpop/version"
-
 Gem::Specification.new do |spec|
   spec.name    = "katalyst-kpop"
-  spec.version = Katalyst::Kpop::VERSION
+  spec.version = "3.0.1"
   spec.authors = ["Katalyst Interactive"]
   spec.email   = ["developers@katalyst.com.au"]
 
