@@ -10,12 +10,6 @@ end
 
 require "katalyst/kpop/matchers"
 
-module DisableScreenshots
-  def take_failed_screenshot
-    # no-op
-  end
-end
-
 RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include ViewComponent::SystemTestHelpers, type: :component
@@ -26,7 +20,4 @@ RSpec.configure do |config|
   config.define_derived_metadata(file_path: %r{spec/components}) do |metadata|
     metadata[:type] ||= :component
   end
-
-  # https://github.com/rspec/rspec-rails/issues/2690
-  config.include DisableScreenshots, type: :system
 end
