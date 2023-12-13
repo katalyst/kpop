@@ -8,11 +8,11 @@ module Katalyst
     class Engine < ::Rails::Engine
       config.autoload_once_paths = %W(#{root}/app/helpers)
 
-      PRECOMPILE_ASSETS = %w(kpop.js kpop.min.js kpop.min.js.map).freeze
-
       initializer "kpop.assets" do
-        if Rails.application.config.respond_to?(:assets)
-          Rails.application.config.assets.precompile += PRECOMPILE_ASSETS
+        config.after_initialize do |app|
+          if app.config.respond_to?(:assets)
+            app.config.assets.precompile += %w(katalyst-kpop.js)
+          end
         end
       end
 
