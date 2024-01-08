@@ -25,7 +25,7 @@ RSpec.describe Kpop::ModalComponent do
     subject(:component) { described_class.new(title: "Test", captive: true) }
 
     it "does not render close" do
-      expect(page).not_to have_css(".kpop-close")
+      expect(page).to have_no_css(".kpop-close")
     end
   end
 

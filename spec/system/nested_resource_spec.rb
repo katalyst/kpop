@@ -7,7 +7,7 @@ RSpec.describe "Nested resource" do
     visit parent_path
 
     # Open modal
-    click_link("New child")
+    click_on("New child")
 
     # Wait for modal to render
     find("[data-kpop--frame-open-value='true']")
@@ -31,8 +31,8 @@ RSpec.describe "Nested resource" do
     page.go_back
 
     expect(page).to have_current_path(parent_path)
-    expect(page).not_to have_css(".kpop-modal")
-    expect(page).not_to have_css("#scrim[data-scrim-open-value='true']")
+    expect(page).to have_no_css(".kpop-modal")
+    expect(page).to have_no_css("#scrim[data-scrim-open-value='true']")
   end
 
   it "supports navigation re-opening" do
@@ -43,7 +43,7 @@ RSpec.describe "Nested resource" do
     page.go_back
 
     expect(page).to have_current_path(parent_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking forward re-opens the modal
     page.go_forward
@@ -56,10 +56,10 @@ RSpec.describe "Nested resource" do
 
   it "supports form saving" do
     fill_in("Name", with: "Child")
-    click_button("Create")
+    click_on("Create")
 
     expect(page).to have_current_path(parent_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
     expect(page).to have_css("li", text: "Child")
 
     # Clicking the back button again to reach the end of the history stack
@@ -69,7 +69,7 @@ RSpec.describe "Nested resource" do
   end
 
   it "supports form errors with abort" do
-    click_button("Create")
+    click_on("Create")
 
     expect(page).to have_current_path(new_parent_child_path)
     within(".kpop-modal") do |kpop|
@@ -83,7 +83,7 @@ RSpec.describe "Nested resource" do
   end
 
   it "supports form errors with submit" do
-    click_button("Create")
+    click_on("Create")
 
     expect(page).to have_current_path(new_parent_child_path)
     within(".kpop-modal") do |kpop|
@@ -91,7 +91,7 @@ RSpec.describe "Nested resource" do
     end
 
     fill_in("Name", with: "Child")
-    click_button("Create")
+    click_on("Create")
 
     expect(page).to have_current_path(parent_path)
 

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Redirect modal" do
   before do
     visit root_path
-    click_link "Redirect"
+    click_on "Redirect"
   end
 
   it "opens successfully" do
@@ -23,7 +23,7 @@ RSpec.describe "Redirect modal" do
     find(".kpop-close").click
 
     expect(page).to have_current_path(root_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking the back button returns to the first page (root)
     page.go_back
@@ -36,7 +36,7 @@ RSpec.describe "Redirect modal" do
     find_by_id("scrim").trigger("click")
 
     expect(page).to have_current_path(root_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking the back button returns to the first page (root)
     page.go_back
@@ -47,11 +47,11 @@ RSpec.describe "Redirect modal" do
   it "supports forward navigation" do
     # Clicking a link to go forward
     within(".kpop-modal") do
-      click_link("Test")
+      click_on("Test")
     end
 
     expect(page).to have_current_path(test_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking the back button to go back to the modal
     page.go_back
@@ -68,11 +68,11 @@ RSpec.describe "Redirect modal" do
     # Fill in the form
     within(".kpop-modal") do |_kpop|
       select "home", from: "Next"
-      click_button "Save"
+      click_on "Save"
     end
 
     expect(page).to have_current_path(root_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking the back button returns to the first page (root)
     page.go_back
@@ -84,11 +84,11 @@ RSpec.describe "Redirect modal" do
     # Fill in the form
     within(".kpop-modal") do |_kpop|
       select "test", from: "Next"
-      click_button "Save"
+      click_on "Save"
     end
 
     expect(page).to have_current_path(test_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking the back button returns to the first page (root)
     page.go_back
@@ -100,7 +100,7 @@ RSpec.describe "Redirect modal" do
     # Fill in the form
     within(".kpop-modal") do |_kpop|
       select "error", from: "Next"
-      click_button "Save"
+      click_on "Save"
     end
 
     expect(page).to have_current_path(modal_path)
@@ -109,11 +109,11 @@ RSpec.describe "Redirect modal" do
     within(".kpop-modal") do |kpop|
       expect(kpop).to have_content("Form is invalid")
       select "home", from: "Next"
-      click_button "Save"
+      click_on "Save"
     end
 
     expect(page).to have_current_path(root_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking the back button returns to the first page (root)
     page.go_back
@@ -124,11 +124,11 @@ RSpec.describe "Redirect modal" do
   it "supports navigation re-opening" do
     # Clicking a link to go forward
     within(".kpop-modal") do
-      click_link("Test")
+      click_on("Test")
     end
 
     expect(page).to have_current_path(test_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
 
     # Clicking back re-opens the modal
     page.go_back
@@ -143,7 +143,7 @@ RSpec.describe "Redirect modal" do
     # Fill in the form
     within(".kpop-modal") do |_kpop|
       select "stream", from: "Next"
-      click_button "Save"
+      click_on "Save"
     end
 
     expect(page).to have_current_path(root_path)
@@ -158,6 +158,6 @@ RSpec.describe "Redirect modal" do
     page.go_back
 
     expect(page).to have_current_path(root_path)
-    expect(page).not_to have_css(".kpop-modal")
+    expect(page).to have_no_css(".kpop-modal")
   end
 end
