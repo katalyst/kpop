@@ -66,7 +66,7 @@ export default class Kpop__FrameController extends Controller {
     await this.dismissing;
 
     return (this.opening ||= this.#nextFrame(() =>
-      this.#open(modal, { animate })
+      this.#open(modal, { animate }),
     ));
   }
 
@@ -79,7 +79,7 @@ export default class Kpop__FrameController extends Controller {
     await this.opening;
 
     return (this.dismissing ||= this.#nextFrame(() =>
-      this.#dismiss({ animate, reason })
+      this.#dismiss({ animate, reason }),
     ));
   }
 
@@ -164,7 +164,7 @@ export default class Kpop__FrameController extends Controller {
       (e) => {
         this.open(modal, { animate: true });
       },
-      { once: true }
+      { once: true },
     );
   }
 

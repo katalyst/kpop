@@ -22,7 +22,7 @@ export class FrameModal extends Modal {
       console.warn(
         "kpop: restored frame src doesn't match window href",
         modal.src,
-        window.location.href
+        window.location.href,
       );
       return frame.clear();
     }
@@ -58,7 +58,7 @@ export class FrameModal extends Modal {
         "kpop: frame src doesn't match window",
         element.src,
         window.location.href,
-        location
+        location,
       );
       frame.clear();
     }

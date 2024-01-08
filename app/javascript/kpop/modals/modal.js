@@ -32,7 +32,7 @@ export class Modal {
         () => {
           resolve();
         },
-        { once: true }
+        { once: true },
       );
     });
 
