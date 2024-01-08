@@ -57,7 +57,7 @@ export class ContentModal extends Modal {
   get src() {
     return new URL(
       this.currentLocationValue.toString(),
-      document.baseURI
+      document.baseURI,
     ).toString();
   }
 }

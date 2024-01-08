@@ -28,7 +28,7 @@ Turbo.StreamActions.kpop_redirect_to = function () {
   if (this.dataset.turboFrame === this.target) {
     if (DEBUG)
       console.debug(
-        `kpop: redirecting ${this.target} to ${this.getAttribute("href")}`
+        `kpop: redirecting ${this.target} to ${this.getAttribute("href")}`,
       );
     const a = document.createElement("A");
     a.setAttribute("data-turbo-action", "replace");
