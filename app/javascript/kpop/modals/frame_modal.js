@@ -5,7 +5,7 @@ import { Modal } from "./modal";
 export class FrameModal extends Modal {
   /**
    * When the FrameController detects a frame element on connect, it runs this
-   * method to santity check the frame src and restore the modal state.
+   * method to sanity check the frame src and restore the modal state.
    *
    * @param frame FrameController
    * @param element TurboFrame element
