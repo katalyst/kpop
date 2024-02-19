@@ -363,7 +363,7 @@ DEPENDENCIES
   shoulda-matchers
   sqlite3
   stimulus-rails
-  turbo-rails
+  turbo-rails (< 2)
 
 BUNDLED WITH
    2.5.5
