@@ -20,7 +20,7 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "sqlite3"
   gem "stimulus-rails"
-  gem "turbo-rails", "< 2"
+  gem "turbo-rails", "< 3"
 end
 
 group :test do
