@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    katalyst-kpop (3.0.1)
+    katalyst-kpop (3.0.2)
       katalyst-html-attributes
-      turbo-rails
+      turbo-rails (< 2)
       view_component
 
 GEM
@@ -363,7 +363,6 @@ DEPENDENCIES
   shoulda-matchers
   sqlite3
   stimulus-rails
-  turbo-rails (< 2)
 
 BUNDLED WITH
    2.5.6
