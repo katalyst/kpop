@@ -250,6 +250,30 @@ RSpec.describe "Frame modal" do
     expect(page).to have_no_css(".kpop-title")
   end
 
+  it "supports closing a modal with kpop.dismiss" do
+    # Fill in the form
+    within(".kpop-modal") do |_kpop|
+      select "content", from: "Next"
+      click_on "Save"
+    end
+
+    expect(page).to have_current_path(new_parent_child_path)
+    expect(page).to have_css(".kpop-title", text: "New child")
+
+    # Create a child
+    within(".kpop-modal") do |_kpop|
+      fill_in "Name", with: "TEST"
+      click_on "Create"
+    end
+
+    sleep 0.1
+
+    # Check that the child was created
+    expect(page).to have_current_path(parent_path)
+    expect(page).to have_no_css(".kpop-title")
+    expect(page).to have_css("li", text: "TEST")
+  end
+
   it "debounces double open requests" do
     page.go_back
 

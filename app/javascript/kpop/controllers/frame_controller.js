@@ -32,7 +32,7 @@ export default class Kpop__FrameController extends Controller {
   }
 
   disconnect() {
-    this.debug("disconnect");
+    this.debug("disconnect", this.element.src);
 
     delete this.element.kpop;
     delete this.modal;
@@ -134,11 +134,12 @@ export default class Kpop__FrameController extends Controller {
     // Defer rendering until dismiss is complete.
     // Dismiss may change history so we need to wait for it to complete to avoid
     // losing DOM changes on restoration visits.
-    event.detail.render = (stream) => {
-      (this.dismissing || Promise.resolve()).then(() => {
-        this.debug("stream-render", stream);
-        resume(stream);
-      });
+    event.detail.render = async (stream) => {
+      await this.dismissing;
+
+      this.debug("stream-render", stream);
+
+      await resume(stream);
     };
   }
 
@@ -190,6 +191,11 @@ export default class Kpop__FrameController extends Controller {
     delete this.opening;
 
     this.debug("open-end");
+
+    // Detect https://github.com/hotwired/turbo-rails/issues/580
+    if (Turbo.session.view.forceReloaded) {
+      console.error("Turbo-Frame response is incompatible with current page");
+    }
   }
 
   async #dismiss({ animate = true, reason = "" } = {}) {
@@ -255,6 +261,7 @@ function installNavigationInterception(controller) {
     }
 
     if (frame.kpop) {
+      frame.kpop.debug("navigate-frame %s => %s", frame.src, location);
       FrameModal.visit(location, frame.kpop, frame, () => {
         TurboFrameController._linkClickIntercepted.call(
           this,
