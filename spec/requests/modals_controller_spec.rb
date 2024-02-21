@@ -16,7 +16,7 @@ RSpec.describe ModalsController do
       let(:action) { get modal_path, headers: { "Turbo-Frame" => "kpop" } }
 
       it { is_expected.to be_successful }
-      it { is_expected.to have_rendered("layouts/kpop") }
+      it { is_expected.to have_rendered("layouts/kpop/frame") }
       it { is_expected.to have_rendered("modals/frame") }
     end
   end

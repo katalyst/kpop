@@ -30,7 +30,7 @@ export class FrameModal extends Modal {
 
   /**
    * When a user clicks a kpop link, turbo intercepts the click and calls
-   * navigateFrame on the turbo frame controller before setting the TurboFrame
+   * #navigateFrame on the turbo frame controller before setting the TurboFrame
    * element's src attribute. KPOP intercepts this call and calls this method
    * first so we cancel problematic navigations that might cache invalid states.
    *

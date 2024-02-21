@@ -228,9 +228,9 @@ export default class Kpop__FrameController extends Controller {
 /**
  * Monkey patch for Turbo#FrameController.
  *
- * Intercept calls to navigateFrame(element, location) and ensures that src is
- * cleared if the frame is busy so that we don't restore an in-progress src on
- * restoration visits.
+ * Intercept calls to linkClickIntercepted(element, location) and ensures
+ * that src is cleared if the frame is busy so that we don't restore an
+ * in-progress src on restoration visits.
  *
  * See Turbo issue: https://github.com/hotwired/turbo/issues/1055
  *
@@ -240,18 +240,30 @@ function installNavigationInterception(controller) {
   const TurboFrameController =
     controller.element.delegate.constructor.prototype;
 
-  if (TurboFrameController._navigateFrame) return;
+  if (TurboFrameController._linkClickIntercepted) return;
 
-  TurboFrameController._navigateFrame = TurboFrameController.navigateFrame;
-  TurboFrameController.navigateFrame = function (element, url, submitter) {
-    const frame = this.findFrameElement(element, submitter);
+  TurboFrameController._linkClickIntercepted =
+    TurboFrameController.linkClickIntercepted;
+  TurboFrameController.linkClickIntercepted = function (element, location) {
+    // #findFrameElement
+    const id =
+      element?.getAttribute("data-turbo-frame") ||
+      this.element.getAttribute("target");
+    let frame = document.getElementById(id);
+    if (!(frame instanceof Turbo.FrameElement)) {
+      frame = this.element;
+    }
 
     if (frame.kpop) {
-      FrameModal.visit(url, frame.kpop, frame, () => {
-        TurboFrameController._navigateFrame.call(this, element, url, submitter);
+      FrameModal.visit(location, frame.kpop, frame, () => {
+        TurboFrameController._linkClickIntercepted.call(
+          this,
+          element,
+          location,
+        );
       });
     } else {
-      TurboFrameController._navigateFrame.call(this, element, url, submitter);
+      TurboFrameController._linkClickIntercepted.call(this, element, location);
     }
   };
 }

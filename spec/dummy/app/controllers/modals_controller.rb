@@ -4,17 +4,17 @@ class ModalsController < ApplicationController
   before_action :delay_request
 
   def show
-    if request.headers["Turbo-Frame"] == "kpop"
-      render "modals/frame", layout: "kpop"
+    if kpop_frame_request?
+      render "modals/frame"
     else
-      render "home/index", layout: "application", locals: { kpop: "modals/content" }
+      render "home/index", locals: { kpop: "modals/content" }
     end
   end
 
   def persistent
-    unless request.headers["Turbo-Frame"] == "kpop"
+    unless kpop_frame_request?
       @dismiss = root_path
-      render "home/index", layout: "application", locals: { kpop: "modals/persistent" }
+      render "home/index", locals: { kpop: "modals/persistent" }
     end
   end
 

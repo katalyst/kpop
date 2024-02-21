@@ -32,7 +32,10 @@ Turbo.StreamActions.kpop_redirect_to = function () {
       );
     const a = document.createElement("A");
     a.setAttribute("data-turbo-action", "replace");
-    this.targetElements[0].delegate.navigateFrame(a, this.getAttribute("href"));
+    this.targetElements[0].delegate.linkClickIntercepted(
+      a,
+      this.getAttribute("href"),
+    );
   } else {
     if (DEBUG)
       console.debug(`kpop: redirecting to ${this.getAttribute("href")}`);

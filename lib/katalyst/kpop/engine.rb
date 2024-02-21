@@ -6,7 +6,13 @@ require "turbo-rails"
 module Katalyst
   module Kpop
     class Engine < ::Rails::Engine
-      config.autoload_once_paths = %W(#{root}/app/helpers)
+      isolate_namespace Katalyst::Kpop
+      config.eager_load_namespaces << Katalyst::Kpop
+      config.autoload_once_paths = %W(
+        #{root}/app/helpers
+        #{root}/app/controllers
+        #{root}/app/controllers/concerns
+      )
 
       initializer "kpop.assets" do
         config.after_initialize do |app|
@@ -22,6 +28,7 @@ module Katalyst
         end
 
         ActiveSupport.on_load(:action_controller_base) do
+          include Katalyst::Kpop::FrameRequest
           helper Katalyst::Kpop::Engine.helpers
         end
       end

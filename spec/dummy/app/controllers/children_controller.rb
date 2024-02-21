@@ -2,8 +2,8 @@
 
 class ChildrenController < ParentsController
   def new
-    if turbo_frame_request?
-      render layout: "kpop", locals: { child: @parent.children.build }
+    if kpop_frame_request?
+      render locals: { child: @parent.children.build }
     else
       render :show, locals: { child: @parent.children.build }
     end

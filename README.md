@@ -54,12 +54,13 @@ kpop provides helpers to add a basic scrim and modal target frame. These should 
 
 To show a modal you need to add content to the kpop turbo frame. You can do this in several ways:
 1. Use `content_for :kpop` in an HTML response to inject content into the kpop frame (see `yield :kpop` above)
-2. Use `layout "kpop"` in your controller to wrap your turbo response in a kpop frame
+2. Respond to a turbo frame request from the kpop frame component.
 
 You can generate a link that will cause a modal to show using the `kpop_link_to` helper.
 
 `kpop_link_to`'s are similar to a `link_to` in rails, but it will navigate to the given URL within the modal turbo
-frame. The targeted action will need to generate content in a `Kpop::FrameComponent`, e.g. using `layout "kpop"`.
+frame. The targeted action will need to generate content in a `Kpop::FrameComponent`, e.g. by responding to a turbo
+frame request with the ID `kpop`.
 
 ```html
 <!-- app/views/homepage/index.html.erb -->
@@ -72,6 +73,31 @@ frame. The targeted action will need to generate content in a `Kpop::FrameCompon
   Modal content
 <% end %>
 ```
+
+### Turbo Frame Layout
+
+Turbo Frame navigation responses use a layout to add a basic document structure. The `turbo-rails` gem provides the
+`turbo_rails/frame` layout, and kpop provides a similar `kpop/frame` layout. If a turbo frame response is requested with
+the `kpop` ID, the `kpop/frame` layout will be used automatically.  You can provide an alternative by setting `layout`
+in your controller, as usual.
+
+Turbo 8 assumes that the frame response will be a complete HTML document, including a `<head>` and `<body>`, and the
+Turbo Visits use the response head to deduce whether the navigation can be snap-shotted or not. This logic lives in
+`@hotwire/turbo` in the `Turbo.Visit` constructor:
+
+```javascript
+this.isSamePage = this.delegate.locationWithActionIsSamePage(this.location, this.action);
+```
+
+If the page is not the same, then the visit is not snap-shotted. Detection looks at turbo-tracked elements in the page
+head to make this decision, and history navigation with frames will not work unless the headers are compatible.
+
+As a consequence of this logic, it's really important that the layout used for kpop frame responses is compatible with
+the application layout. Kpop provides a "sensible default" that includes stylesheets and javascripts, but if your
+application doesn't use the same structure as the Rails default, you'll need to provide your own layout.
+
+If you're experiencing 'strange history behaviour', it's worth putting a breakpoint on the turbo `isSamePage`
+calculation to check that the headers are compatible.
 
 ## Development
 
