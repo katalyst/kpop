@@ -8,5 +8,6 @@ require "katalyst/kpop/turbo"
 
 module Katalyst
   module Kpop
+    extend ActiveSupport::Autoload
   end
 end
