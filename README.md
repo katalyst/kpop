@@ -53,8 +53,27 @@ kpop provides helpers to add a basic scrim and modal target frame. These should 
 ### Show a modal
 
 To show a modal you need to add content to the kpop turbo frame. You can do this in several ways:
-1. Use `content_for :kpop` in an HTML response to inject content into the kpop frame (see `yield :kpop` above)
-2. Respond to a turbo frame request from the kpop frame component.
+1. Injection 
+2. Navigation 
+
+### Injection
+Use `content_for :kpop` in an HTML response to inject content into the kpop frame (see `yield :kpop` above).
+
+This allows you to pre open modals when rendering a page without the need for user interaction.
+
+```html
+<!-- app/views/homepage/index.html.erb -->
+<h1>Site name</h1>
+... more html content that will be rendered behind the scrim ...
+
+<% content_for :kpop do %>
+  <%= render Kpop::ModalComponent.new(title: "Welcome") do %>
+    Thanks for visiting our site!
+  <% end %>
+```
+
+### Navigation
+Respond to a turbo frame request from the kpop frame component.
 
 You can generate a link that will cause a modal to show using the `kpop_link_to` helper.
 
