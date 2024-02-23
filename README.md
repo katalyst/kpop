@@ -69,7 +69,7 @@ frame request with the ID `kpop`.
 
 ```html
 <!-- app/views/modals/show.html.erb -->
-<%= Kpop::Modal(title: "Modal title") do %>
+<%= render Kpop::ModalComponent.new(title: "Modal title") do %>
   Modal content
 <% end %>
 ```
