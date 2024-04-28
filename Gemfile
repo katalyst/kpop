@@ -18,7 +18,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rubocop-katalyst", require: false
   gem "shoulda-matchers"
-  gem "sqlite3"
+  gem "sqlite3", "~> 1.7"
   gem "stimulus-rails"
 end
 
