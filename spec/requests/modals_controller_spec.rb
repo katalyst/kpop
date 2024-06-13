@@ -55,7 +55,7 @@ RSpec.describe ModalsController do
     context "with error as turbo" do
       let(:action) { patch modal_path, params: { next: "error", template: "anonymous" }, as: :turbo_stream }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
       it { is_expected.to have_rendered("modals/update") }
       it { is_expected.to have_rendered("modals/_form") }
     end
