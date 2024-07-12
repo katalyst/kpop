@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rspec/rails/matchers/base_matcher"
+require "rspec/rails"
 
 module Katalyst
   module Kpop

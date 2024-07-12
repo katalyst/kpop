@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "katalyst/kpop/engine"
-
 module Katalyst
   module Kpop
     module Turbo

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "katalyst/kpop/matchers/base"
-
 module Katalyst
   module Kpop
     module Matchers

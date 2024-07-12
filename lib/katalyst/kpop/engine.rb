@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails"
+require "rails/railtie"
 require "turbo-rails"
 
 module Katalyst
@@ -8,11 +8,7 @@ module Katalyst
     class Engine < ::Rails::Engine
       isolate_namespace Katalyst::Kpop
       config.eager_load_namespaces << Katalyst::Kpop
-      config.autoload_once_paths = %W(
-        #{root}/app/helpers
-        #{root}/app/controllers
-        #{root}/app/controllers/concerns
-      )
+      config.paths.add("lib", autoload_once: true)
 
       initializer "kpop.assets" do
         config.after_initialize do |app|
@@ -37,6 +33,15 @@ module Katalyst
         if app.config.respond_to?(:importmap)
           app.config.importmap.paths << root.join("config/importmap.rb")
           app.config.importmap.cache_sweepers << root.join("app/assets/builds")
+        end
+      end
+
+      initializer "kpop.rspec" do
+        next unless defined?(RSpec) && RSpec.respond_to?(:configure)
+
+        RSpec.configure do |config|
+          config.include Katalyst::Kpop::Matchers, type: :component
+          config.include Katalyst::Kpop::Matchers, type: :request
         end
       end
     end

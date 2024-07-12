@@ -3,11 +3,9 @@
 require "katalyst/html_attributes"
 require "view_component"
 
-require "katalyst/kpop/engine"
-require "katalyst/kpop/turbo"
-
 module Katalyst
   module Kpop
-    extend ActiveSupport::Autoload
   end
 end
+
+require "katalyst/kpop/engine"

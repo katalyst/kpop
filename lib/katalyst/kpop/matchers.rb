@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-require "katalyst/kpop/matchers/base"
-require "katalyst/kpop/matchers/capybara_matcher"
-require "katalyst/kpop/matchers/capybara_parser"
-require "katalyst/kpop/matchers/chained_matcher"
-require "katalyst/kpop/matchers/frame_matcher"
-require "katalyst/kpop/matchers/modal_matcher"
-require "katalyst/kpop/matchers/redirect_matcher"
-require "katalyst/kpop/matchers/response_matcher"
-require "katalyst/kpop/matchers/stream_matcher"
-require "katalyst/kpop/matchers/title_finder"
-require "katalyst/kpop/matchers/title_matcher"
-
 module Katalyst
   module Kpop
     module Matchers
@@ -71,9 +59,4 @@ module Katalyst
       end
     end
   end
-end
-
-RSpec.configure do |config|
-  config.include Katalyst::Kpop::Matchers, type: :component
-  config.include Katalyst::Kpop::Matchers, type: :request
 end

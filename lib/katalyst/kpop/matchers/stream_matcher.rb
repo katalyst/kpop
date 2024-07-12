@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "katalyst/kpop/matchers/capybara_matcher"
-
 module Katalyst
   module Kpop
     module Matchers
