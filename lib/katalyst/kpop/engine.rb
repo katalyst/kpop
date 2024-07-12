@@ -8,6 +8,11 @@ module Katalyst
     class Engine < ::Rails::Engine
       isolate_namespace Katalyst::Kpop
       config.eager_load_namespaces << Katalyst::Kpop
+      config.autoload_once_paths = %W(
+        #{root}/app/helpers
+        #{root}/app/controllers
+        #{root}/app/controllers/concerns
+      )
       config.paths.add("lib", autoload_once: true)
 
       initializer "kpop.assets" do
