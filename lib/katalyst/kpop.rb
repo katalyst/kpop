@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "katalyst/html_attributes"
-require "view_component"
+require "active_support"
 
 module Katalyst
   module Kpop
+    extend ActiveSupport::Autoload
   end
 end
 

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require "katalyst/html_attributes"
 require "rails/engine"
 require "turbo-rails"
+require "view_component"
 
 module Katalyst
   module Kpop
