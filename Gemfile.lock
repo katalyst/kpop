@@ -113,7 +113,7 @@ GEM
     cuprite (0.15.1)
       capybara (~> 3.0)
       ferrum (~> 0.15.0)
-    dartsass-rails (0.5.0)
+    dartsass-rails (0.5.1)
       railties (>= 6.0.0)
       sass-embedded (~> 1.63)
     date (3.3.4)
@@ -132,7 +132,7 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    faker (3.4.1)
+    faker (3.4.2)
       i18n (>= 1.8.11, < 2)
     ferrum (0.15)
       addressable (~> 2.5)
@@ -141,7 +141,7 @@ GEM
       websocket-driver (~> 0.7)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (4.27.2)
+    google-protobuf (4.27.3)
       bigdecimal
       rake (>= 13)
     html-attributes-utils (1.0.2)
@@ -157,7 +157,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.7.2)
-    katalyst-html-attributes (1.1.0)
+    katalyst-html-attributes (1.1.1)
       activesupport
       html-attributes-utils
     language_server-protocol (3.17.0.3)
@@ -186,7 +186,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.6)
+    nokogiri (1.16.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.25.1)
@@ -203,7 +203,7 @@ GEM
     public_suffix (6.0.0)
     puma (6.4.2)
       nio4r (~> 2.0)
-    racc (1.8.0)
+    racc (1.8.1)
     rack (3.1.7)
     rack-session (2.0.0)
       rack (>= 3.0.0)
@@ -334,7 +334,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
-    view_component (3.12.1)
+    view_component (3.13.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -344,7 +344,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.16)
+    zeitwerk (2.6.17)
 
 PLATFORMS
   ruby
