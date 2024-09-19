@@ -137,7 +137,7 @@ GEM
       websocket-driver (~> 0.7)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (4.28.1)
+    google-protobuf (4.28.2)
       bigdecimal
       rake (>= 13)
     html-attributes-utils (1.0.2)
