@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name    = "katalyst-kpop"
-  spec.version = "3.2.2"
+  spec.version = "3.2.3"
   spec.authors = ["Katalyst Interactive"]
   spec.email   = ["developers@katalyst.com.au"]
 
