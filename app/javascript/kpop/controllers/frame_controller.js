@@ -118,6 +118,8 @@ export default class Kpop__FrameController extends Controller {
   beforeFrameRender(event) {
     this.debug("before-frame-render", event.detail.newFrame.baseURI);
 
+    if (event.detail.newFrame.id !== this.element.id) return;
+
     event.preventDefault();
 
     this.dismiss({ animate: true, reason: "before-frame-render" }).then(() => {
