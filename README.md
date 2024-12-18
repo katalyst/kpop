@@ -123,9 +123,9 @@ calculation to check that the headers are compatible.
 Releases need to be distributed to rubygems.org and npmjs.org. To do this, you need to have accounts with both providers
 and be added as a collaborator to the kpop gem and npm packages.
 
-1. Update the version in `katalyst-kpop.gemspec`
+1. Update the version in `katalyst-kpop.gemspec` and run `bundle` to update `Gemfile.lock`
 2. Ensure that `rake` passes (format and tests)
-3. Tag a release and push to rubygems.org by running `rake release`
+3. Tag the release and push the tag to github to run CI/CD
 
 ## License
 
