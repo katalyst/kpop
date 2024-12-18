@@ -68,8 +68,9 @@
 
   .button-set {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap, 0.5rem);
     justify-content: flex-end;
+    align-items: baseline;
   }
 
   &.iframe {
