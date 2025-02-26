@@ -130,12 +130,14 @@ export default class ScrimController extends Controller {
     this.zIndexValue = zIndex;
     this.scrollY = top;
 
-    this.previousPosition = document.body.style.position;
-    this.previousTop = document.body.style.top;
-
     this.element.style.zIndex = this.zIndexValue;
     document.body.style.top = `-${top}px`;
     document.body.style.position = "fixed";
+    document.body.style.paddingRight = `-${this.scrollPadding}px`;
+
+    if (document.body.scrollHeight > window.innerHeight) {
+      document.body.style.overflowY = "scroll";
+    }
   }
 
   /**
@@ -145,22 +147,13 @@ export default class ScrimController extends Controller {
     this.captiveValue = this.defaultCaptiveValue;
     this.zIndexValue = this.defaultZIndexValue;
 
-    resetStyle(this.element, "z-index", null);
-    resetStyle(document.body, "position", null);
-    resetStyle(document.body, "top", null);
+    this.element.style.removeProperty("z-index");
+    document.body.style.removeProperty("position");
+    document.body.style.removeProperty("top");
+    document.body.style.removeProperty("overflow-y");
 
     window.scrollTo({ left: 0, top: this.scrollY, behavior: "instant" });
 
     delete this.scrollY;
-    delete this.previousPosition;
-    delete this.previousTop;
-  }
-}
-
-function resetStyle(element, property, previousValue) {
-  if (previousValue) {
-    element.style.setProperty(property, previousValue);
-  } else {
-    element.style.removeProperty(property);
   }
 }
