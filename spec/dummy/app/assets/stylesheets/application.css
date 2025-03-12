@@ -1,0 +1,8 @@
+@import url("global/reset.css");
+@import url("global/fonts.css");
+@import url("global/variables.css");
+@import url("global/global-styles.css");
+@import url("compositions/index.css");
+@import url("blocks/index.css");
+
+@import url("/katalyst/kpop.css");

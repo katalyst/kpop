@@ -1,0 +1,11 @@
+.search-bar {
+  input[type="search"] {
+    width: unset;
+    flex: 1;
+    max-width: 40ch;
+  }
+
+  input[type="submit"] {
+    width: unset;
+  }
+}
