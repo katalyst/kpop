@@ -19,34 +19,26 @@
 }
 
 .kpop--frame {
-  --opening-animation: slide-in-up;
-  --closing-animation: slide-out-down;
+  --opening-animation: kpop-slide-in-up;
+  --closing-animation: kpop-slide-out-down;
+  --animation-duration: 0.2s;
 
   position: relative;
   display: grid;
   margin: 0 auto;
 
-  --min-width: #{$min-width};
-  --max-width: #{$max-width};
-  --min-height: #{$min-height};
-  --max-height: #{$max-height};
+  --min-width: min(35rem, 100vw);
+  --max-width: min(52rem, 100vw);
+  --min-height: min(25rem, 30svh);
+  --max-height: min(calc(100svh - 1.5rem), 80svh);
 
   min-width: var(--min-width);
   max-width: var(--max-width);
   min-height: var(--min-height);
   max-height: var(--max-height);
 
-  grid-template-columns: min(var(--max-width), max(var(--min-width), 100%));
-  grid-template-rows: min(var(--max-height), max(var(--min-height), 100%));
-}
-
-@media (max-width: $mobile-width), (max-height: $mobile-height) {
-  .kpop--frame {
-    --min-width: 100dvw;
-    --max-width: 100dvw;
-    --min-height: 30dvh;
-    --max-height: calc(100dvh - 1.5rem);
-  }
+  grid-template-columns: clamp(var(--min-width), 100%, var(--max-width));
+  grid-template-rows: clamp(var(--min-height), 100%, var(--max-height));
 }
 
 .scrim[data-scrim-open-value="false"] + .kpop--container .kpop--frame {
@@ -57,17 +49,17 @@
   + .kpop--container
   .kpop--frame[data-kpop--frame-open-value="true"] {
   animation: var(--closing-animation);
-  animation-duration: $duration;
+  animation-duration: var(--animation-duration);
   animation-fill-mode: forwards;
 }
 
 .scrim[data-show-animating] + .kpop--container .kpop--frame {
   animation: var(--opening-animation);
-  animation-duration: $duration;
+  animation-duration: var(--animation-duration);
   animation-fill-mode: forwards;
 }
 
-@keyframes slide-in-up {
+@keyframes kpop-slide-in-up {
   0% {
     transform: translateY(10%);
     opacity: 0;
@@ -78,7 +70,7 @@
   }
 }
 
-@keyframes slide-out-down {
+@keyframes kpop-slide-out-down {
   0% {
     transform: translateY(0%);
     opacity: 1;

@@ -1,29 +1,28 @@
-@use "variables" as *;
-
 .kpop--frame.side-panel {
   --opening-animation: slide-in-right;
   --closing-animation: slide-out-right;
   --min-width: 35dvw;
-  --max-width: calc(100dvw - 4rem);
-  --min-height: 100dvh;
-  --max-height: 100dvh;
+  --max-width: calc(100svw - 4rem);
+  --min-height: 100svh;
+  --max-height: 100svh;
 
   margin-inline: auto 0;
   align-self: flex-end;
 
-  @include mobile {
-    & {
-      --opening-animation: slide-in-bottom;
-      --closing-animation: slide-out-bottom;
-      --min-width: 100dvw;
-      --max-width: 100dvw;
-      --min-height: 50dvh;
-      --max-height: calc(100dvh - 1.5rem);
-    }
-  }
-
   .kpop-modal {
     border-radius: 0;
+  }
+}
+
+@media (max-aspect-ratio: 1/1) and (hover: none) {
+  /* touch devices in portrait orientation should slide from bottom */
+  .kpop--frame.side-panel {
+    --opening-animation: slide-in-bottom;
+    --closing-animation: slide-out-bottom;
+    --min-width: 100svw;
+    --max-width: 100svw;
+    --min-height: 50svh;
+    --max-height: calc(100svh - 1.5rem);
   }
 }
 

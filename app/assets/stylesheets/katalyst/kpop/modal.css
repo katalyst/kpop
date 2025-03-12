@@ -1,6 +1,10 @@
 @use "variables" as *;
 
 .kpop-modal {
+  --kpop-border-radius: 0.5rem;
+  --kpop-padding: 1rem 1.5rem;
+  --kpop-keyline-color: #e0e0e0;
+
   display: grid;
   grid-template-areas:
     "title-bar"
@@ -10,7 +14,7 @@
   grid-template-rows: auto auto 1fr auto;
 
   background-color: white;
-  border-radius: $border-radius;
+  border-radius: var(--kpop-border-radius);
   overflow: hidden;
   max-height: var(--max-height);
   box-shadow:
@@ -22,7 +26,7 @@
     display: grid;
     grid-template-areas: "close title empty";
     grid-template-columns: 3.5rem auto 3.5rem;
-    border-bottom: 1px solid $keyline-color;
+    border-bottom: 1px solid var(--kpop-keyline-color);
     min-height: 3.5rem;
     align-items: center;
   }
@@ -40,8 +44,8 @@
 
   .kpop-footer {
     grid-area: footer;
-    border-top: 1px solid $keyline-color;
-    padding: $default-padding;
+    border-top: 1px solid var(--kpop-keyline-color);
+    padding: var(--kpop-padding);
   }
 
   .kpop-title {
