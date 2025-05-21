@@ -9,7 +9,7 @@ class ScrimComponent < ViewComponent::Base
   ].freeze
 
   def initialize(id: "scrim", z_index: 40)
-    super
+    super()
 
     @id      = id
     @z_index = z_index

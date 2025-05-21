@@ -18,7 +18,7 @@ module Kpop
     ].freeze
 
     def initialize(id: "kpop", scrim: "#scrim", **)
-      super
+      super(**)
 
       @id    = id
       @scrim = scrim

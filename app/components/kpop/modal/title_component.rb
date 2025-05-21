@@ -6,7 +6,7 @@ module Kpop
       include Katalyst::HtmlAttributes
 
       def initialize(title: nil, captive: false, **)
-        super
+        super(**)
 
         @title = title
         @captive = captive

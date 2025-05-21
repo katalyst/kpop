@@ -21,6 +21,6 @@ class ChildrenController < ParentsController
   private
 
   def child_params
-    params.require(:child).permit(:name)
+    params.expect(child: [:name])
   end
 end
