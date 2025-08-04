@@ -9,7 +9,7 @@ module Katalyst
           "contain a kpop modal with title #{expected.inspect}"
         end
 
-        def match(expected, actual)
+        def match(expected, actual) # rubocop:disable Naming/PredicateMethod
           expected.match?(actual.text)
         end
 

@@ -5,7 +5,7 @@ module Katalyst
     module Matchers
       # @api private
       class RedirectMatcher < Base
-        def match(expected, actual)
+        def match(expected, actual) # rubocop:disable Naming/PredicateMethod
           actual["href"].to_s.match?(expected)
         end
 

@@ -32,6 +32,7 @@ module Katalyst
 
         ActiveSupport.on_load(:action_controller_base) do
           include Katalyst::Kpop::FrameRequest
+
           helper Katalyst::Kpop::Engine.helpers
         end
       end

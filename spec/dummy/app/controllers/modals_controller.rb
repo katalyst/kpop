@@ -26,7 +26,7 @@ class ModalsController < ApplicationController
       redirect_forwards
     when "error"
       @error = true
-      render status: :unprocessable_entity
+      render status: :unprocessable_content
     when "frame"
       render turbo_stream: turbo_stream.kpop.redirect_to(new_parent_child_path, target: "kpop")
     when "content"

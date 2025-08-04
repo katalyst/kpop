@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name    = "katalyst-kpop"
-  spec.version = "3.2.8"
+  spec.version = "3.3.0"
   spec.authors = ["Katalyst Interactive"]
   spec.email   = ["developers@katalyst.com.au"]
 
@@ -17,5 +17,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "katalyst-html-attributes"
   spec.add_dependency "turbo-rails"
-  spec.add_dependency "view_component"
+  spec.add_dependency "view_component", ">= 4.0.0"
 end
