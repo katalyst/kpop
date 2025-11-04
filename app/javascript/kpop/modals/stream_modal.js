@@ -1,74 +1,23 @@
-import { Turbo } from "@hotwired/turbo-rails";
-
 import { Modal } from "./modal";
 
 export class StreamModal extends Modal {
-  constructor(id, action) {
-    super(id);
-
-    this.action = action;
-  }
-
   /**
-   * When the modal opens, push a state event for the current location so that
-   * the user can dismiss the modal by navigating back.
+   * When a turbo-stream[action=kpop_open] element is rendered, it runs this
+   * method to load the modal template as a StreamModal.
    *
-   * @returns {Promise<void>}
+   * @param {Kpop__FrameController} frame
+   * @param {Turbo.StreamElement} action
    */
-  async open() {
-    await super.open();
+  static async open(frame, action) {
+    const animate = !frame.isOpen;
 
-    window.history.pushState({ kpop: true, id: this.id }, "", window.location);
-  }
+    await frame.dismiss({ animate, reason: "turbo-stream.kpop_open" });
 
-  /**
-   * On dismiss, pop the state event that was pushed when the modal opened,
-   * then clear any modals from the turbo frame element.
-   *
-   * @returns {Promise<void>}
-   */
-  async dismiss() {
-    await super.dismiss();
+    frame.element.append(action.templateContent);
 
-    if (this.isCurrentLocation) {
-      await this.pop("popstate", () => window.history.back());
-    }
+    const dialog = frame.element.querySelector("dialog");
+    const src = dialog.dataset.src;
 
-    this.frameElement.innerHTML = "";
-  }
-
-  /**
-   * On navigation from inside the modal, dismiss the modal first so that the
-   * modal does not appear in the history stack.
-   *
-   * @param frame TurboFrame element
-   * @param e Turbo navigation event
-   */
-  beforeVisit(frame, e) {
-    super.beforeVisit(frame, e);
-
-    e.preventDefault();
-
-    frame.dismiss({ animate: false }).then(() => {
-      Turbo.visit(e.detail.url);
-
-      this.debug("before-visit-end");
-    });
-  }
-
-  /**
-   * If the user pops state, dismiss the modal.
-   *
-   * @param frame FrameController
-   * @param e history event
-   */
-  popstate(frame, e) {
-    super.popstate(frame, e);
-
-    frame.dismiss({ animate: true, reason: "popstate" });
-  }
-
-  get isCurrentLocation() {
-    return window.history.state?.kpop && window.history.state?.id === this.id;
+    await frame.open(new StreamModal(frame, dialog, src), { animate });
   }
 }

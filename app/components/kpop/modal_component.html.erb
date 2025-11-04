@@ -1,6 +1,7 @@
-<%= tag.div(**html_attributes) do %>
-  <%= title if title? %>
-  <%= header if header? %>
-  <%= tag.div(content, **content_attributes) %>
-  <%= footer if footer? %>
-<% end %>
+<dialog aria-label="<%= title %>" class="<%= modal_class %>" closedby="closerequest" data-src="<%= path %>">
+  <header>
+    <h2 id="kpop-title"><%= title %></h2>
+    <button aria-label="close" data-action="click->kpop--frame#dismiss:prevent">×</button>
+  </header>
+  <%= content %>
+</dialog>

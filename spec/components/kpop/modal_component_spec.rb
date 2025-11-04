@@ -3,45 +3,29 @@
 require "rails_helper"
 
 RSpec.describe Kpop::ModalComponent do
-  subject(:component) { described_class.new(title: "Test") }
+  subject(:component) { described_class.new(title: "Test", modal_class: "test-modal") }
 
   before do
     render_inline(component)
   end
 
   it "renders a modal" do
-    expect(page).to have_css(".kpop-modal")
+    expect(page).to have_css("dialog")
+  end
+
+  it "renders label" do
+    expect(page).to have_css("dialog[aria-label='Test']")
   end
 
   it "renders title" do
-    expect(page).to have_css(".kpop-title", text: "Test")
+    expect(page).to have_css("header h2", text: "Test")
   end
 
   it "renders close" do
-    expect(page).to have_css(".kpop-close")
+    expect(page).to have_css("header button[aria-label='close']")
   end
 
-  context "when captive" do
-    subject(:component) { described_class.new(title: "Test", captive: true) }
-
-    it "does not render close" do
-      expect(page).to have_no_css(".kpop-close")
-    end
-  end
-
-  context "with css class" do
-    subject(:component) { described_class.new(title: "Test", class: "extra") }
-
-    it "renders both classes" do
-      expect(page).to have_css(".kpop-modal.extra")
-    end
-  end
-
-  context "with stimulus controller" do
-    subject(:component) { described_class.new(title: "Test", data: { controller: "extra" }) }
-
-    it "renders both controllers" do
-      expect(page).to have_css("[data-controller='kpop--modal extra']")
-    end
+  it "renders class" do
+    expect(page).to have_css("dialog.test-modal")
   end
 end

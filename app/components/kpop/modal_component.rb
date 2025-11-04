@@ -2,28 +2,17 @@
 
 module Kpop
   class ModalComponent < ViewComponent::Base
-    include Katalyst::HtmlAttributes
+    attr_reader :title
 
-    renders_one :title, "Kpop::Modal::TitleComponent"
-    renders_one :header, "Kpop::Modal::HeaderComponent"
-    renders_one :footer, "Kpop::Modal::FooterComponent"
+    def initialize(title:, modal_class:)
+      super()
 
-    define_html_attribute_methods :content_attributes
-
-    def initialize(title:, fallback_location: nil, layout: nil, captive: false, **html_attributes)
-      self.content_attributes = html_attributes.delete(:content) if html_attributes.key?(:content)
-
-      super(**html_attributes)
-
-      @fallback_location = fallback_location
-      @layout            = layout
-
-      # Generate a title bar. This can be overridden by calling title_bar again.
-      with_title(title:, captive:) if title.present?
+      @title       = title
+      @modal_class = modal_class
     end
 
-    def with_footer_buttons(**, &)
-      with_footer(class: "button-set", **, &)
+    def modal_class
+      @modal_class.to_s.dasherize
     end
 
     def inspect
@@ -32,20 +21,8 @@ module Kpop
 
     private
 
-    def default_html_attributes
-      {
-        class: "kpop-modal",
-        data:  {
-          controller:                            "kpop--modal",
-          "kpop--modal-current-location-value":  request.path,
-          "kpop--modal-fallback-location-value": @fallback_location,
-          "kpop--modal-layout-value":            @layout&.to_s&.dasherize,
-        },
-      }
-    end
-
-    def default_content_attributes
-      { class: "kpop-content" }
+    def path
+      request.fullpath
     end
   end
 end

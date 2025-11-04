@@ -1,7 +1,0 @@
-<%= form_with(id: "form", url: modal_path, method: :patch, scope: "") do |form| %>
-  <%= "Form is invalid" if @error %>
-  <%= form.label :next %>
-  <%= form.collection_select :next, %w[home test error stream frame content], :itself, :itself %>
-  <%= form.hidden_field :template, value: "anonymous" %>
-  <%= form.submit %>
-<% end %>

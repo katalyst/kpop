@@ -1,0 +1,25 @@
+<%# locals: (name: params[:name], error: nil) %>
+
+<% content_for(:title, ["Hello", name, "modal!"].compact.join(" ")) %>
+
+Hello from the modal.
+
+<%= "Modal has errors" if error %>
+
+<h2>Navigation links</h2>
+
+<ul>
+  <li><%= link_to "Home", root_path %></li>
+  <li><%= link_to "Page", test_path %></li>
+  <li><%= link_to "Modal", modal_path %></li>
+  <li><%= link_to "Browser", modal_path, data: { turbo: false } %></li>
+</ul>
+
+<h2>Navigation buttons</h2>
+
+<ul>
+  <li><%= button_to "Close", modal_path(next: "close"), method: :patch %></li>
+  <li><%= button_to "Error", modal_path(next: "error"), method: :patch %></li>
+  <li><%= button_to "Page", modal_path(next: "page"), method: :patch %></li>
+  <li><%= button_to "Modal", modal_path(next: "modal", name: "update"), method: :patch %></li>
+</ul>

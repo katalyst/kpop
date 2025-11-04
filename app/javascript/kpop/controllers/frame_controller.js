@@ -1,12 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 
-import DEBUG from "../debug";
 import { ContentModal } from "../modals/content_modal";
 import { FrameModal } from "../modals/frame_modal";
 
+import debug from "../utils/debug";
+
 export default class Kpop__FrameController extends Controller {
-  static outlets = ["scrim"];
-  static targets = ["modal"];
   static values = {
     open: Boolean,
   };
@@ -19,12 +18,14 @@ export default class Kpop__FrameController extends Controller {
     // allow our code to intercept frame navigation requests before dom changes
     installNavigationInterception(this);
 
-    if (this.element.src && this.element.complete) {
+    const dialog = this.element.querySelector("dialog");
+
+    if (this.element.src && dialog) {
       this.debug("new frame modal", this.element.src);
-      FrameModal.connect(this, this.element);
-    } else if (this.modalElements.length > 0) {
-      this.debug("new content modal", window.location.pathname);
-      ContentModal.connect(this, this.element);
+      FrameModal.connect(this, dialog, this.element.src).then(() => {});
+    } else if (dialog) {
+      this.debug("new content modal", dialog);
+      ContentModal.connect(this, dialog);
     } else {
       this.debug("no modal");
       this.clear();
@@ -38,24 +39,18 @@ export default class Kpop__FrameController extends Controller {
     delete this.modal;
   }
 
-  scrimOutletConnected(scrim) {
-    this.debug("scrim-connected");
-
-    this.scrimConnected = true;
-
-    if (this.openValue) {
-      scrim.show({ animate: false });
-    } else {
-      scrim.hide({ animate: false });
-    }
-  }
-
   openValueChanged(open) {
     this.debug("open-changed", open);
-
-    this.element.parentElement.style.display = open ? "flex" : "none";
   }
 
+  /**
+   * Animate an attached modal into the foreground. Returns a promise that
+   * resolves when the animation is complete.
+   *
+   * @param modal
+   * @param animate
+   * @returns {Promise<Boolean>}
+   */
   async open(modal, { animate = true } = {}) {
     if (this.isOpen) {
       this.debug("skip open as already open");
@@ -65,12 +60,25 @@ export default class Kpop__FrameController extends Controller {
 
     await this.dismissing;
 
-    return (this.opening ||= this.#nextFrame(() =>
-      this.#open(modal, { animate }),
-    ));
+    return (this.opening ||= Promise.resolve().then(() => {
+      modal.connect();
+      return this.#open(modal, { animate });
+    }));
   }
 
+  /**
+   * Cause a modal to hide. Returns a promise that will resolve when the
+   * animation (if requested) is finished.
+   *
+   * If the modal is already animating out, returns the existing promise instead.
+   *
+   * @param {Boolean} animate
+   * @param {String} reason
+   * @returns {Promise}
+   */
   async dismiss({ animate = true, reason = "" } = {}) {
+    this.debug("event:dismiss", reason);
+
     if (!this.isOpen) {
       this.debug("skip dismiss as already closed");
       return false;
@@ -78,35 +86,29 @@ export default class Kpop__FrameController extends Controller {
 
     await this.opening;
 
-    return (this.dismissing ||= this.#nextFrame(() =>
-      this.#dismiss({ animate, reason }),
-    ));
+    return (this.dismissing ||= this.#dismiss({ animate, reason }));
   }
 
-  async clear() {
+  /**
+   * Clean up after a modal is finished dismissing.
+   */
+  clear({ reason = "" } = {}) {
+    this.debug("event:clear", reason);
+
     // clear the src from the frame (if any)
     this.element.src = "";
+    this.element.innerHTML = "";
 
-    // remove any open modal(s)
-    this.modalElements.forEach((element) => element.remove());
-
-    // mark the modal as hidden (will hide scrim on connect)
+    // mark the modal as hidden
     this.openValue = false;
 
-    // close the scrim, if connected
-    if (this.scrimConnected) {
-      return this.scrimOutlet.hide({ animate: false });
-    }
-
     // unset modal
-    this.modal = null;
+    if (this.modal) this.modal.disconnect();
+    delete this.modal;
+    delete this.dismissing;
   }
 
   // EVENTS
-
-  popstate(event) {
-    this.modal?.popstate(this, event);
-  }
 
   /**
    * Incoming frame render, dismiss the current modal (if any) first.
@@ -151,53 +153,72 @@ export default class Kpop__FrameController extends Controller {
     // ignore visits to the current frame, these fire when the frame navigates
     if (e.detail.url === this.element.src) return;
 
+    const url = new URL(e.detail.url.toString(), document.baseURI);
+    if (url.pathname === "/resume_historical_location") {
+      e.preventDefault();
+      return this.dismiss();
+    }
+
     // ignore unless we're open
     if (!this.isOpen) return;
 
     this.modal.beforeVisit(this, e);
   }
 
-  frameLoad(event) {
+  frameLoad(e) {
     this.debug("frame-load");
 
-    const modal = new FrameModal(this.element.id, this.element.src);
-
-    window.addEventListener(
-      "turbo:visit",
-      (e) => {
-        this.open(modal, { animate: true });
-      },
-      { once: true },
+    FrameModal.load(this, e.target.firstElementChild, e.target.src).then(
+      () => {},
     );
+  }
+
+  /**
+   * Outgoing fetch request. Capture the initiator so we can return focus if it causes a modal to show.
+   */
+  beforeFetchRequest() {
+    const focusElement = document.activeElement;
+
+    if (focusElement === document.body) {
+      delete this.lastFetchFocusRef;
+    } else {
+      this.lastFetchFocusRef = new WeakRef(focusElement);
+    }
   }
 
   get isOpen() {
     return this.openValue && !this.dismissing;
   }
 
-  get modalElements() {
-    return this.element.querySelectorAll("[data-controller*='kpop--modal']");
-  }
-
   async #open(modal, { animate = true } = {}) {
     this.debug("open-start", { animate });
 
-    const scrim = this.scrimConnected && this.scrimOutlet;
+    this.previousFocusRef =
+      document.activeElement === document.body
+        ? this.lastFetchFocusRef
+        : new WeakRef(document.activeElement);
+    this.debug("capture focus", this.previousFocusRef?.deref());
 
     this.modal = modal;
     this.openValue = true;
 
+    // Set turbo-frame[src] without causing a load event
+    this.element.delegate.sourceURL = this.modal.src;
+
     await modal.open({ animate });
-    await scrim?.show({ animate });
 
     delete this.opening;
 
     this.debug("open-end");
 
+    autofocus(this.modal?.element)?.focus();
+
     // Detect https://github.com/hotwired/turbo-rails/issues/580
     if (Turbo.session.view.forceReloaded) {
       console.error("Turbo-Frame response is incompatible with current page");
     }
+
+    return true;
   }
 
   async #dismiss({ animate = true, reason = "" } = {}) {
@@ -211,15 +232,15 @@ export default class Kpop__FrameController extends Controller {
 
     if (!this.modal) {
       console.warn("modal missing on dismiss");
-      if (DEBUG) debugger;
     }
 
-    await this.scrimOutlet.hide({ animate });
-    await this.modal?.dismiss();
+    await this.modal?.dismiss({ animate });
 
-    this.openValue = false;
-    this.modal = null;
-    delete this.dismissing;
+    this.clear();
+
+    this.previousFocusRef?.deref()?.focus();
+    this.debug("restore focus", this.previousFocusRef?.deref());
+    delete this.previousFocusRef;
 
     this.debug("dismiss-end");
   }
@@ -228,8 +249,8 @@ export default class Kpop__FrameController extends Controller {
     return new Promise(window.requestAnimationFrame).then(callback);
   }
 
-  debug(event, ...args) {
-    if (DEBUG) console.debug(`FrameController:${event}`, ...args);
+  get debug() {
+    return debug("FrameController");
   }
 }
 
@@ -275,4 +296,13 @@ function installNavigationInterception(controller) {
       TurboFrameController._linkClickIntercepted.call(this, element, location);
     }
   };
+}
+
+function autofocus(container) {
+  if (!container) return null;
+
+  return (
+    container.querySelector("[autofocus]") ??
+    container.querySelector("button:not([disabled])")
+  );
 }

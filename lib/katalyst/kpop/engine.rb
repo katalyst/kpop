@@ -11,7 +11,6 @@ module Katalyst
       isolate_namespace Katalyst::Kpop
       config.eager_load_namespaces << Katalyst::Kpop
       config.autoload_once_paths = %W(
-        #{root}/app/helpers
         #{root}/app/controllers
         #{root}/app/controllers/concerns
       )
@@ -25,15 +24,9 @@ module Katalyst
         end
       end
 
-      initializer "kpop.helpers", before: :load_config_initializers do
-        ::Turbo::Streams::TagBuilder.define_method(:kpop) do
-          Katalyst::Kpop::Turbo::TagBuilder.new(self)
-        end
-
+      initializer "kpop.frame", before: :load_config_initializers do
         ActiveSupport.on_load(:action_controller_base) do
           include Katalyst::Kpop::FrameRequest
-
-          helper Katalyst::Kpop::Engine.helpers
         end
       end
 

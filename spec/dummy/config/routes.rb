@@ -8,9 +8,5 @@ Rails.application.routes.draw do
   get "/test", to: "home#test"
   get "/redirect", to: "home#redirect"
 
-  resource :parent, only: :show do
-    resources :children, only: %i[new create]
-  end
-
   root to: "home#index"
 end

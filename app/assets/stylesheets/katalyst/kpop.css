@@ -1,0 +1,69 @@
+.kpop {
+  --opening-animation: kpop--animate--slide-in-up;
+  --closing-animation: kpop--animate--slide-out-down;
+
+  ::backdrop {
+    background: var(--dialog-background, rgba(0, 0, 0, 0.6));
+    backdrop-filter: blur(1px);
+
+    --opening-animation: kpop--animate--fade-in;
+    --closing-animation: kpop--animate--fade-out;
+  }
+
+  dialog[animate],
+  [animate]::backdrop {
+    transition:
+      display var(--animation-duration, 0.2s) allow-discrete,
+      overlay var(--animation-duration, 0.2s) allow-discrete;
+  }
+
+  dialog[animate],
+  [animate]::backdrop {
+    animation: var(--closing-animation) var(--animation-duration, 0.2s) forwards;
+  }
+
+  dialog[animate][open],
+  [animate][open]::backdrop {
+    animation: var(--opening-animation) var(--animation-duration, 0.2s) forwards;
+  }
+}
+
+@keyframes kpop--animate--slide-in-up {
+  from {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes kpop--animate--slide-out-down {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+}
+
+@keyframes kpop--animate--fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kpop--animate--fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

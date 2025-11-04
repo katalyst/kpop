@@ -1,6 +1,5 @@
 /.bundle/
 /app/assets/builds
-/doc/
 /log/*.log
 /pkg/
 /tmp/

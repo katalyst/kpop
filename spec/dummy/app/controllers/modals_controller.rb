@@ -2,63 +2,30 @@
 
 class ModalsController < ApplicationController
   before_action :delay_request
+  expects_kpop { root_path }
 
-  def show
-    if kpop_frame_request?
-      render "modals/frame"
-    else
-      render "home/index", locals: { kpop: "modals/content" }
-    end
-  end
-
-  def persistent
-    unless kpop_frame_request?
-      @dismiss = root_path
-      render "home/index", locals: { kpop: "modals/persistent" }
-    end
-  end
+  def show; end
 
   def update
     case params[:next]
-    when "home"
-      close_modal
-    when "test"
-      redirect_forwards
+    when "close"
+      resume_or_redirect_back_or_to(root_path, status: :see_other)
     when "error"
-      @error = true
-      render status: :unprocessable_content
-    when "frame"
-      render turbo_stream: turbo_stream.kpop.redirect_to(new_parent_child_path, target: "kpop")
-    when "content"
-      render turbo_stream: turbo_stream.kpop.redirect_to(new_parent_child_path)
+      render :show, locals: { name: "error", error: true }, status: :unprocessable_content
+    when "page"
+      redirect_to(test_path, status: :see_other)
+    when "modal"
+      redirect_to(modal_path(name: params.fetch(:name, "update")), status: :see_other)
+    when "stream"
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("dialog h2", "Hello stream update!") }
+      end
     else
-      render turbo_stream: turbo_stream.kpop.open(template: "modals/stream")
+      raise NotImplementedError
     end
   end
 
   private
-
-  def redirect_forwards
-    respond_to do |format|
-      format.html do
-        redirect_to test_path, status: :see_other
-      end
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.kpop.redirect_to(test_path)
-      end
-    end
-  end
-
-  def close_modal
-    respond_to do |format|
-      format.html do
-        redirect_to root_path
-      end
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.kpop.dismiss
-      end
-    end
-  end
 
   def delay_request
     sleep(params[:duration].to_f.seconds) if params[:duration].present?

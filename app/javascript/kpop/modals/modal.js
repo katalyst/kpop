@@ -1,77 +1,124 @@
-import { Turbo } from "@hotwired/turbo-rails";
-
-import DEBUG from "../debug";
+import debug from "../utils/debug";
 
 export class Modal {
-  constructor(id) {
-    this.id = id;
+  constructor(frame, dialog, src = null) {
+    this.frame = frame;
+    this.element = dialog;
+    this.uri = new URL(src || dialog.dataset.src, window.location.origin);
   }
 
-  async open() {
-    this.debug("open");
+  connect() {
+    this.element.addEventListener("cancel", this.cancel);
+    this.element.addEventListener("close", this.close);
+    this.element.addEventListener("mousedown", this.scrim);
   }
 
-  async dismiss() {
-    this.debug(`dismiss`);
+  disconnect() {
+    this.element.removeEventListener("cancel", this.cancel);
+    this.element.removeEventListener("close", this.close);
+    this.element.removeEventListener("mousedown", this.scrim);
   }
 
+  get src() {
+    return this.uri.pathname + this.uri.search + this.uri.hash;
+  }
+
+  cancel = (e) => {
+    this.debug("event:cancel", e);
+
+    e.preventDefault();
+
+    this.frame.dismiss({ animate: true, reason: "dialog:cancel" });
+  };
+
+  close = (e) => {
+    this.debug("event:close", e);
+
+    this.frame.clear({ reason: "dialog:close" });
+  };
+
+  scrim = (e) => {
+    if (e.target.tagName === "DIALOG") {
+      this.debug("event:scrim", e);
+
+      this.frame.dismiss({ animate: true, reason: "dialog:scrim" });
+    }
+  };
+
+  async open({ animate = true } = {}) {
+    this.debug("open-start", animate);
+
+    await animation(this.element, animate, () => this.element.showModal());
+
+    this.debug("open-end");
+  }
+
+  /**
+   * Modals are closed by animating out the modal then removing the modal
+   * element from the wrapping frame.
+   *
+   * @returns {Promise<void>}
+   */
+  async dismiss({ animate = true } = {}) {
+    this.debug("dismiss-start", animate);
+
+    await animation(this.element, animate, () =>
+      this.element.removeAttribute("open"),
+    );
+
+    this.debug("dismiss-end");
+
+    this.element.close();
+  }
+
+  /**
+   * When user navigates from inside a modal, dismiss the modal first so
+   * that the modal does not appear in the history stack.
+   *
+   * @param frame FrameController
+   * @param e Turbo navigation event
+   */
   beforeVisit(frame, e) {
     this.debug(`before-visit`, e.detail.url);
+
+    this.frame.clear();
   }
 
-  popstate(frame, e) {
-    this.debug(`popstate`, e.state);
+  static get debug() {
+    return debug(this.name);
   }
 
-  async pop(event, callback) {
-    this.debug(`pop`);
-
-    const promise = new Promise((resolve) => {
-      window.addEventListener(
-        event,
-        () => {
-          resolve();
-        },
-        { once: true },
-      );
-    });
-
-    callback();
-
-    return promise;
+  get debug() {
+    return debug(this.constructor.name);
   }
+}
 
-  get frameElement() {
-    return document.getElementById(this.id);
-  }
+function animation(el, animate, trigger) {
+  if (!animate) return trigger();
 
-  get controller() {
-    return this.frameElement?.kpop;
-  }
+  const duration = animationDuration(el);
 
-  get modalElement() {
-    return this.frameElement?.querySelector("[data-controller*='kpop--modal']");
-  }
+  return new Promise((resolve) => {
+    const resolver = () => {
+      el.removeEventListener("animationend", resolver, { once: true });
+      clearTimeout(timeout);
+      el.toggleAttribute("animate", false);
+      resolve();
+    };
 
-  get currentLocationValue() {
-    return this.modalElement?.dataset["kpop-ModalCurrentLocationValue"] || "/";
-  }
+    el.addEventListener("animationend", resolver, { once: true });
+    const timeout = setTimeout(resolver, duration);
 
-  get fallbackLocationValue() {
-    return this.modalElement?.dataset["kpop-ModalFallbackLocationValue"];
-  }
+    el.toggleAttribute("animate", animate);
+    trigger();
+  });
+}
 
-  get isCurrentLocation() {
-    return (
-      window.history.state?.turbo && Turbo.session.location.href === this.src
-    );
-  }
-
-  static debug(event, ...args) {
-    if (DEBUG) console.debug(`${this.name}:${event}`, ...args);
-  }
-
-  debug(event, ...args) {
-    if (DEBUG) console.debug(`${this.constructor.name}:${event}`, ...args);
-  }
+function animationDuration(el, defaultValue = "0.2s") {
+  const value =
+    getComputedStyle(el).getPropertyValue("--animation-duration") ||
+    defaultValue;
+  const num = parseFloat(value);
+  if (value.endsWith("ms")) return num;
+  return num * 1000;
 }

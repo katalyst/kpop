@@ -12,14 +12,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_16_044651) do
-  create_table "children", force: :cascade do |t|
-    t.integer "parent_id"
-    t.string "name"
-    t.index ["parent_id"], name: "index_children_on_parent_id"
-  end
-
-  create_table "parents", force: :cascade do |t|
-    t.string "name"
-  end
+ActiveRecord::Schema[8.1].define(version: 2024_09_16_044651) do
+  # none
 end

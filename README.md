@@ -1,127 +1,145 @@
 # kpop
 
-Modals driven by `@hotwire/turbo` frame navigation.
-
-kpop requires `@hotwire/turbo` and `@hotwire/stimulus` to be installed and configured correctly to be used.
+Kpop delivers Turbo-powered modals for Rails applications. Version 4 rebuilds the integration so Turbo frames, Turbo Streams, Stimulus, and Turbo Native all share the same life cycle: focus is restored, history stays clean, and dialogs can reopen automatically after redirects. See `doc/upgrading-to-v4.md` if you are migrating from an earlier release.
 
 ## Installation
 
-Install gem
+### 1. Gem
+
 ```bash
 # Gemfile
-
-$ bundle add "katalyst-kpop"
+bundle add "katalyst-kpop"
 ```
 
-kpop supports installation of javascript dependencies with either import maps or yarn.
+### 2. JavaScript package (Importmap)
 
-### Stimulus controllers
+```ruby
+# config/importmap.rb
+pin "@katalyst/kpop", to: "katalyst/kpop.js", preload: true
+```
 
-kpop assumes that you are using importmaps to manage javascript dependencies.
+## Stimulus setup
 
-Add the following to your Stimulus `controllers/index.js`:
+Register the provided controllers so `<turbo-frame id="kpop">` elements receive the `kpop--frame` behaviour.
 
 ```js
-import kpop from "@katalyst/kpop";
+// app/javascript/controllers/index.js
+import { application } from "./application";
+import { controllers as kpop } from "@katalyst/kpop";
+
 application.load(kpop);
 ```
 
-This will ensure that kpop is loaded and registered with Stimulus.
+## Bootstrap the runtime
 
-### Stylesheets
+The package exports a client runtime that observes links, stamps the `Kpop-Available` header on Turbo fetches, and exposes a `kpop_open` Turbo Stream action. Configure it once during boot:
 
-Import stylesheets through using SASS using asset pipeline:
+```js
+// app/javascript/application.js
+import "@hotwired/turbo-rails";
+import kpop from "@katalyst/kpop";
 
-```scss 
-// app/assets/stylesheets/application.scss
-
-@use "katalyst/kpop";
+kpop
+  .configure({
+    rules: [
+      {
+        patterns: ["^/modal"],
+        properties: { context: "modal" },
+      },
+    ],
+    debug: false,
+  })
+  .start();
 ```
 
-## Usage
+Rules are regex strings matched against `location.pathname`. When `properties.context === "modal"`, the runtime sets `data-turbo-frame="kpop"` on hovered/focused links so Turbo prefetches them into the modal frame.
 
-kpop provides helpers to add a basic scrim and modal target frame. These should be placed inside the body:
-```html
- <body>
-    <%= render ScrimComponent.new %>
-    <%= render Kpop::FrameComponent.new do %>
-        <%= yield :kpop %>
-    <% end %>
- </body>
-```
+## Render the frame
 
-### Show a modal
+Every layout that can host a modal needs the frame near the end of `<body>`:
 
-To show a modal you need to add content to the kpop turbo frame. You can do this in several ways:
-1. Injection 
-2. Navigation 
-
-### Injection
-Use `content_for :kpop` in an HTML response to inject content into the kpop frame (see `yield :kpop` above).
-
-This allows you to pre open modals when rendering a page without the need for user interaction.
-
-```html
-<!-- app/views/homepage/index.html.erb -->
-<h1>Site name</h1>
-... more html content that will be rendered behind the scrim ...
-
-<% content_for :kpop do %>
-  <%= render Kpop::ModalComponent.new(title: "Welcome") do %>
-    Thanks for visiting our site!
+```erb
+<!-- app/views/layouts/application.html.erb -->
+<body>
+  <%= yield %>
+  <%= render Kpop::FrameComponent.new do %>
+    <%= yield :kpop %>
   <% end %>
+</body>
 ```
 
-### Navigation
-Respond to a turbo frame request from the kpop frame component.
+`Kpop::FrameComponent` wires all Turbo life-cycle events into the Stimulus controller and automatically replays `flash[:modal_location]`. Use `content_for :kpop` only when you want to inject a modal during an ordinary page load.
 
-You can generate a link that will cause a modal to show using the `kpop_link_to` helper.
+## Controller integration
 
-`kpop_link_to`'s are similar to a `link_to` in rails, but it will navigate to the given URL within the modal turbo
-frame. The targeted action will need to generate content in a `Kpop::FrameComponent`, e.g. by responding to a turbo
-frame request with the ID `kpop`.
+Include the concern by calling `expects_kpop` in controllers that serve modals:
 
-```html
-<!-- app/views/homepage/index.html.erb -->
-<%= kpop_link_to "click to open modal", modal_path("example") %>
+```ruby
+class InvitationsController < ApplicationController
+  expects_kpop(only: %i[new create]) { root_path }
+
+  def new
+    render layout: "kpop/frame"
+  end
+
+  def create
+    if invitation.save
+      redirect_to(invitation_path(invitation), status: :see_other)
+    else
+      render :new, status: :unprocessable_content
+    end
+  end
+end
 ```
 
-```html
-<!-- app/views/modals/show.html.erb -->
-<%= render Kpop::ModalComponent.new(title: "Modal title") do %>
-  Modal content
+When the JS runtime sets `Kpop-Available: true`, `expects_kpop` will:
+
+- Redirect full-page GET requests back with `flash[:modal_location]` so the modal reopens automatically.
+- Wrap Turbo Stream renders in `turbo_stream.action(:kpop_open, "kpop", ...)`, letting the client swap dialogs without navigating.
+- Override Turbo Native redirects so closing a modal can resume the historical location.
+
+## Triggering modals
+
+Use the helpers so links and forms always target the frame:
+
+```erb
+<%= kpop_link_to "Invite a user", new_invitation_path %>
+<%= kpop_button_to "Launch dialog", new_invitation_path %>
+<%= kpop_button_close "Close" %>
+```
+
+Inside the modal view render the provided component, which outputs a native `<dialog>` with the data attributes the Stimulus controller relies on:
+
+```erb
+<%= render Kpop::ModalComponent.new(title: "Invite a user", modal_class: :invite) do %>
+  <%= render "form", invitation: @invitation %>
 <% end %>
 ```
 
-### Turbo Frame Layout
+## Styling
 
-Turbo Frame navigation responses use a layout to add a basic document structure. The `turbo-rails` gem provides the
-`turbo_rails/frame` layout, and kpop provides a similar `kpop/frame` layout. If a turbo frame response is requested with
-the `kpop` ID, the `kpop/frame` layout will be used automatically.  You can provide an alternative by setting `layout`
-in your controller, as usual.
+Import the stylesheet (or `@use` the Sass entry) to get the default animations, scrim, and CSS custom properties:
 
-Turbo 8 assumes that the frame response will be a complete HTML document, including a `<head>` and `<body>`, and the
-Turbo Visits use the response head to deduce whether the navigation can be snap-shotted or not. This logic lives in
-`@hotwire/turbo` in the `Turbo.Visit` constructor:
+```scss
+// app/assets/stylesheets/application.scss
+@use "katalyst/kpop";
 
-```javascript
-this.isSamePage = this.delegate.locationWithActionIsSamePage(this.location, this.action);
+.kpop {
+  --animation-duration: 0.3s;
+}
 ```
 
-If the page is not the same, then the visit is not snap-shotted. Detection looks at turbo-tracked elements in the page
-head to make this decision, and history navigation with frames will not work unless the headers are compatible.
+Override the custom properties inside `.kpop` to change transitions or backdrop colours without rewriting JavaScript.
 
-As a consequence of this logic, it's really important that the layout used for kpop frame responses is compatible with
-the application layout. Kpop provides a "sensible default" that includes stylesheets and javascripts, but if your
-application doesn't use the same structure as the Rails default, you'll need to provide your own layout.
+## Further reading
 
-If you're experiencing 'strange history behaviour', it's worth putting a breakpoint on the turbo `isSamePage`
-calculation to check that the headers are compatible.
+- `doc/upgrading-to-v4.md` &mdash; highlights everything that changed in the rewrite plus a migration checklist.
+- `app/controllers/concerns/katalyst/kpop/frame_request.rb` &mdash; documents the `expects_kpop` behaviour in code.
+- `spec/system/*` &mdash; demonstrate the UX guarantees (escape closes, history stays clean, redirects, etc.).
 
 ## Development
 
-Releases need to be distributed to rubygems.org and npmjs.org. To do this, you need to have accounts with both providers
-and be added as a collaborator to the kpop gem and npm packages.
+Releases need to be distributed to rubygems.org and npmjs.org. To do this, you need to have accounts with both providers and be added as a collaborator to the kpop gem and npm packages.
 
 1. Update the version in `katalyst-kpop.gemspec` and run `bundle` to update `Gemfile.lock`
 2. Ensure that `rake` passes (format and tests)

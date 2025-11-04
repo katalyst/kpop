@@ -1,1 +1,12 @@
 @use "katalyst/kpop";
+
+.kpop {
+  --animation-duration: 0.5s;
+
+  dialog {
+    min-width: var(--min-width, 35rem);
+    max-width: var(--max-width, 52rem);
+    min-height: var(--min-height, 0);
+    max-height: var(--max-height, 80svh);
+  }
+}

@@ -6,7 +6,7 @@ module Katalyst
       # @api private
       class ModalMatcher < CapybaraMatcher
         def initialize
-          super("[data-controller*='kpop--modal']")
+          super("dialog")
         end
 
         def description

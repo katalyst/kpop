@@ -1,3 +1,4 @@
 import { application } from "controllers/application";
-import kpop from "@katalyst/kpop";
+import { controllers as kpop } from "@katalyst/kpop";
+
 application.load(kpop);

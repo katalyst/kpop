@@ -1,21 +1,23 @@
 <h1>Hello world!</h1>
 
-Different types of modals:
+<h2>Navigation links</h2>
+
 <ul>
-  <li><%= button_to "Stream", modal_path, method: :patch %></li>
-  <li><%= kpop_link_to "Frame", modal_path %></li>
-  <li><%= link_to "Page", modal_path, data: { turbo: false } %></li>
-  <li><%= link_to "Redirect", redirect_path %></li>
+  <li><%= link_to "Home", root_path %></li>
+  <li><%= link_to "Page", test_path %></li>
+  <li><%= link_to "Modal", modal_path %></li>
+  <li><%= link_to "Browser", modal_path, data: { turbo: false } %></li>
+</ul>
+
+<h2>Navigation buttons</h2>
+
+<ul>
+  <li><%= button_to "Page", modal_path(next: "page"), method: :patch %></li>
+  <li><%= button_to "Modal", modal_path(next: "modal", name: "button"), method: :patch %></li>
 </ul>
 
 Test-specific links:
 <ul>
-  <li><%= kpop_link_to "Delay 0.5", modal_path(duration: 0.5) %></li>
-  <li><%= kpop_link_to "Delay 0.6", modal_path(duration: 0.6) %></li>
+  <li><%= link_to "Delay 0.5", modal_path(duration: 0.5) %></li>
+  <li><%= link_to "Delay 0.6", modal_path(duration: 0.6) %></li>
 </ul>
-
-<% if local_assigns[:kpop] %>
-  <% content_for(:kpop) do %>
-    <%= render template: kpop %>
-  <% end %>
-<% end %>

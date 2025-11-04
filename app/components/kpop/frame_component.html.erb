@@ -1,14 +1,3 @@
-<div class="kpop--container">
-  <%= turbo_frame_tag(id, **html_attributes) do %>
-    <%= content %>
-    <% if flash[:kpop] %>
-      <%= tag.div("", data: {
-                    controller:                        "kpop--redirect",
-                    kpop__redirect_kpop__frame_outlet: "##{id}",
-                    kpop__redirect_path_value:         flash[:kpop],
-                    kpop__redirect_target_value:       id,
-                    turbo_temporary:                   "",
-                  }) %>
-    <% end %>
-  <% end %>
-</div>
+<%= turbo_frame_tag(id, **html_attributes) do %>
+  <%= content %>
+<% end %>

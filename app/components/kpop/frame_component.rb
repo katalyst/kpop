@@ -8,20 +8,25 @@ module Kpop
     attr_reader :id
 
     ACTIONS = %w[
-      popstate@window->kpop--frame#popstate
-      scrim:dismiss@window->kpop--frame#dismiss
-      scrim:hide@window->kpop--frame#dismiss
+      turbo:before-fetch-request@window->kpop--frame#beforeFetchRequest
       turbo:before-frame-render->kpop--frame#beforeFrameRender
       turbo:before-stream-render@window->kpop--frame#beforeStreamRender
       turbo:before-visit@window->kpop--frame#beforeVisit
       turbo:frame-load->kpop--frame#frameLoad
     ].freeze
 
-    def initialize(id: "kpop", scrim: "#scrim", **)
+    def initialize(id: "kpop", **)
       super(**)
 
-      @id    = id
-      @scrim = scrim
+      @id = id
+    end
+
+    def modal_flash?
+      request.get? && flash.key?(:modal_location)
+    end
+
+    def modal_location
+      flash[:modal_location] if modal_flash?
     end
 
     def inspect
@@ -32,13 +37,12 @@ module Kpop
 
     def default_html_attributes
       {
-        class:  "kpop--frame",
+        class:  "kpop",
         data:   {
-          controller:                 "kpop--frame",
-          action:                     ACTIONS.join(" "),
-          "kpop--frame-scrim-outlet": @scrim,
-          turbo_action:               "advance",
+          controller: "kpop--frame",
+          action:     ACTIONS.join(" "),
         },
+        src:    modal_location,
         target: "_top",
       }
     end

@@ -11,7 +11,9 @@
 </head>
 <body>
 <%= render Kpop::FrameComponent.new do %>
-  <%= yield %>
+  <%= render(Kpop::ModalComponent.new(title: content_for(:title), modal_class: content_for(:modal_class))) do %>
+    <%= yield %>
+  <% end %>
 <% end %>
 </body>
 </html>
