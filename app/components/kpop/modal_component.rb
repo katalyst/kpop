@@ -11,6 +11,10 @@ module Kpop
       @modal_class = modal_class
     end
 
+    def label
+      sanitize(title)
+    end
+
     def modal_class
       @modal_class.to_s.dasherize
     end
