@@ -96,7 +96,7 @@ export default class Kpop__FrameController extends Controller {
     this.debug("event:clear", reason);
 
     // clear the src from the frame (if any)
-    this.element.src = "";
+    if (this.modal?.src === this.element.src) this.element.src = "";
     this.element.innerHTML = "";
 
     // mark the modal as hidden
