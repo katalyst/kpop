@@ -95,7 +95,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (4.0.1)
-    brakeman (7.1.2)
+    brakeman (8.0.1)
       racc
     builder (3.3.0)
     capybara (3.40.0)
@@ -133,7 +133,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.5.3)
+    faker (3.6.0)
       i18n (>= 1.8.11, < 2)
     ferrum (0.17.1)
       addressable (~> 2.5)
@@ -210,7 +210,7 @@ GEM
       date
       stringio
     public_suffix (7.0.2)
-    puma (7.1.0)
+    puma (7.2.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.4)
