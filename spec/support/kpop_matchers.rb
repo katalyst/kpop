@@ -30,7 +30,7 @@ module KpopMatchers
 
     def initialize(attribute, expected)
       @attribute = attribute
-      @expected = expected
+      @expected  = expected
     end
 
     def describe_node

@@ -29,7 +29,7 @@ RSpec.describe "Modal opened by button" do
 
     # Modal shows
     within(modal) do |kpop|
-      expect(kpop).to have_content("Hello button modal!")
+      expect(kpop).to have_text("Hello button modal!")
     end
 
     # Frame URL changed
@@ -65,7 +65,7 @@ RSpec.describe "Modal opened by button" do
     page.active_element.click
 
     within(modal) do |kpop|
-      expect(kpop).to have_content("Hello button modal!")
+      expect(kpop).to have_text("Hello button modal!")
     end
 
     expect(frame).to have_src(modal_path(name: "button"))
@@ -177,7 +177,7 @@ RSpec.describe "Modal opened by button" do
     expect(frame).to have_src(modal_path(next: "error"))
 
     within(modal) do |kpop|
-      expect(kpop).to have_content("Modal has errors")
+      expect(kpop).to have_text("Modal has errors")
       click_button "Close"
     end
 
@@ -206,7 +206,7 @@ RSpec.describe "Modal opened by button" do
 
     expect(frame).to have_src(modal_path(name: "button"))
     within(modal) do |kpop|
-      expect(kpop).to have_content("Hello button modal!")
+      expect(kpop).to have_text("Hello button modal!")
     end
   end
 

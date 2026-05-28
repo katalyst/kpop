@@ -31,7 +31,7 @@ RSpec.describe "Modal opened from link" do
 
     # Modal shows
     within(modal) do |kpop|
-      expect(kpop).to have_content("Hello modal!")
+      expect(kpop).to have_text("Hello modal!")
     end
 
     # Frame URL changed
@@ -67,7 +67,7 @@ RSpec.describe "Modal opened from link" do
     page.active_element.click
 
     within(modal) do |kpop|
-      expect(kpop).to have_content("Hello modal!")
+      expect(kpop).to have_text("Hello modal!")
     end
 
     expect(frame).to have_src(modal_path)
@@ -179,7 +179,7 @@ RSpec.describe "Modal opened from link" do
     expect(frame).to have_src(modal_path(next: "error"))
 
     within(modal) do |kpop|
-      expect(kpop).to have_content("Modal has errors")
+      expect(kpop).to have_text("Modal has errors")
       click_button "Close"
     end
 
@@ -206,7 +206,7 @@ RSpec.describe "Modal opened from link" do
 
     expect(frame).to have_src(modal_path)
     within(modal) do |kpop|
-      expect(kpop).to have_content("Hello modal!")
+      expect(kpop).to have_text("Hello modal!")
     end
   end
 

@@ -22,7 +22,7 @@ RSpec.describe "Content modal" do
     open_modal
 
     expect(page).to have_current_path(root_path) # opening modal as a normal visit redirects to root url
-    expect(page).to have_content("Hello world!") # root page is rendered in the background
+    expect(page).to have_text("Hello world!") # root page is rendered in the background
 
     # Modal shows
     expect(page).to have_modal("Hello modal!")
@@ -137,7 +137,7 @@ RSpec.describe "Content modal" do
     expect(page).to have_modal
 
     within(modal) do |kpop|
-      expect(kpop).to have_content("Modal has errors")
+      expect(kpop).to have_text("Modal has errors")
       click_button "Close"
     end
 

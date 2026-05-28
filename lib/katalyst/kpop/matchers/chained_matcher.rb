@@ -15,7 +15,7 @@ module Katalyst
         end
 
         def <<(matcher)
-          matcher = matcher.new if matcher.is_a?(Class)
+          matcher      = matcher.new if matcher.is_a?(Class)
           (@matchers ||= []) << matcher
           self
         end
