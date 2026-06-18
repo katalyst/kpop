@@ -23,6 +23,24 @@ RSpec.describe ModalsController do
       end
     end
 
+    context "with browser navigation and an oversized URL" do
+      let(:action) { get modal_path(name:) }
+      let(:name) { "x" * 1050 }
+
+      it { is_expected.to have_http_status(:see_other).and(redirect_to(root_path)) }
+
+      it "does not store the modal location in flash" do
+        action
+        expect(flash[:modal_location]).to be_nil
+      end
+
+      it "does not show the modal after redirect" do
+        action
+        follow_redirect!
+        expect(response.body).to have_css("turbo-frame#kpop:not([src])")
+      end
+    end
+
     context "with kpop frame" do
       let(:action) { get modal_path, headers: { "Turbo-Frame" => "kpop" } }
 
@@ -54,6 +72,24 @@ RSpec.describe ModalsController do
         action
         follow_redirect!(as: :turbo_stream)
         expect(response).to have_kpop_src("/modal")
+      end
+    end
+
+    context "with turbo stream fallback and an oversized URL" do
+      let(:action) { get modal_path(name:), as: :turbo_stream }
+      let(:name) { "x" * 1050 }
+
+      it { is_expected.to have_http_status(:see_other).and(redirect_to(root_path)) }
+
+      it "does not store the modal location in flash" do
+        action
+        expect(flash[:modal_location]).to be_nil
+      end
+
+      it "does not show the modal after redirect" do
+        action
+        follow_redirect!(as: :turbo_stream)
+        expect(response.body).to have_css("turbo-frame#kpop:not([src])")
       end
     end
   end
