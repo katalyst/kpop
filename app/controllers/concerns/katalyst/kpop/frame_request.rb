@@ -13,6 +13,8 @@ module Katalyst
     module FrameRequest
       extend ActiveSupport::Concern
 
+      SUPPORTED_LOCATION_MAX_LENGTH = 1024
+
       class_methods do
         # Sets the expectation that these actions will be wrapped in a modal.
         # Adds custom layouts, rendering, and redirect behaviours to make this
@@ -62,7 +64,11 @@ module Katalyst
 
         return if !request.get? || turbo_frame_request? || kpop_stream_request? || hotwire_native_app?
 
-        redirect_back_or_to(kpop_fallback_location, status: :see_other, modal_location: request.fullpath)
+        kpop_redirect_options = { status: :see_other }.tap do |options|
+          options[:modal_location] = request.fullpath if request.fullpath.bytesize <= SUPPORTED_LOCATION_MAX_LENGTH
+        end
+
+        redirect_back_or_to(kpop_fallback_location, **kpop_redirect_options)
       end
 
       def render(...)
