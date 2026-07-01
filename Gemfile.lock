@@ -109,7 +109,7 @@ GEM
       xpath (~> 3.2)
     concurrent-ruby (1.3.7)
     connection_pool (3.0.2)
-    crass (1.0.6)
+    crass (1.0.7)
     cuprite (0.17)
       capybara (~> 3.0)
       ferrum (~> 0.17.0)
@@ -141,14 +141,14 @@ GEM
       concurrent-ruby (~> 1.1)
       webrick (~> 1.7)
       websocket-driver (~> 0.7)
-    globalid (1.3.0)
+    globalid (1.4.0)
       activesupport (>= 6.1)
     google-protobuf (4.35.1)
       bigdecimal
       rake (~> 13.3)
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
-    i18n (1.15.1)
+    i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.2.3)
       actionpack (>= 6.0.0)
@@ -160,7 +160,7 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.19.9)
+    json (2.20.0)
     katalyst-html-attributes (1.1.2)
       activesupport
       html-attributes-utils
@@ -193,14 +193,14 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.3)
+    nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (2.1.0)
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
-    pp (0.6.3)
+    pp (0.6.4)
       prettyprint
     prettyprint (0.2.0)
     prism (1.9.0)
@@ -208,9 +208,6 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-    psych (5.4.0)
-      date
-      stringio
     public_suffix (7.0.5)
     puma (8.0.2)
       nio4r (~> 2.0)
@@ -259,9 +256,14 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.4.2)
-    rdoc (7.2.0)
+    rbs (4.0.3)
+      logger
+      prism (>= 1.6.0)
+      tsort
+    rdoc (8.0.0)
       erb
-      psych (>= 4.0.0)
+      prism (>= 1.6.0)
+      rbs (>= 4.0.0)
       tsort
     regexp_parser (2.12.0)
     reline (0.6.3)
@@ -297,7 +299,7 @@ GEM
     rubocop-ast (1.49.1)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
-    rubocop-capybara (2.23.0)
+    rubocop-capybara (3.0.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.81)
     rubocop-factory_bot (2.28.0)
@@ -317,7 +319,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
-    rubocop-rails (2.35.4)
+    rubocop-rails (2.35.5)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
@@ -346,7 +348,6 @@ GEM
       mini_portile2 (~> 2.8.0)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
-    stringio (3.2.0)
     thor (1.5.0)
     timeout (0.6.1)
     tsort (0.2.0)
@@ -365,7 +366,7 @@ GEM
       activesupport (>= 7.1.0)
       concurrent-ruby (~> 1)
     webrick (1.9.2)
-    websocket-driver (0.8.1)
+    websocket-driver (0.8.2)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -398,4 +399,4 @@ DEPENDENCIES
   stimulus-rails
 
 BUNDLED WITH
-  4.0.12
+  4.0.15
