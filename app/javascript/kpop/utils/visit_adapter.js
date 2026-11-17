@@ -46,7 +46,8 @@ export default class VisitAdapter {
   }
 
   #visitProposedToLocation(location, options) {
-    const kpop = document.getElementById("kpop")?.kpop;
+    const frame = document.getElementById("kpop");
+    const kpop = frame?.kpop;
 
     // `resume_or_redirect_back_or_to` redirects here to close the modal and
     // stay on the current page, so don't visit it.
@@ -57,6 +58,11 @@ export default class VisitAdapter {
     } else {
       // Close any open modal first so it doesn't appear in the history stack.
       if (kpop?.isOpen) kpop.clear({ reason: "page-visit" });
+
+      // A modal that is still loading isn't open yet. Turbo cancels its request
+      // when the page changes, but caches its src with the page snapshot and
+      // loads it again on restore, so clear the src first.
+      if (frame?.src) frame.src = "";
 
       this.adapter.visitProposedToLocation(location, options);
     }

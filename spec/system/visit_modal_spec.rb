@@ -102,6 +102,23 @@ RSpec.describe "Modal opened by Turbo.visit" do
     expect(page).to have_no_modal
   end
 
+  it "cancels a loading modal when visiting a page" do
+    visit_root
+
+    # Visiting in one script means the modal is still loading
+    page.execute_script(<<~JS)
+      Turbo.visit(#{modal_path.to_json});
+      Turbo.visit(#{test_path.to_json});
+    JS
+    expect(page).to have_current_path(test_path)
+
+    # Restoring the cached root page should not reload the cancelled modal
+    page.go_back
+    expect(page).to have_text("Hello world!")
+    page.driver.browser.network.wait_for_idle
+    expect(page).to have_no_modal
+  end
+
   it "keeps an open modal when a page visit is cancelled" do
     visit_root
     turbo_visit(modal_path)
