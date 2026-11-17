@@ -11,7 +11,6 @@ module Kpop
       turbo:before-fetch-request@window->kpop--frame#beforeFetchRequest
       turbo:before-frame-render->kpop--frame#beforeFrameRender
       turbo:before-stream-render@window->kpop--frame#beforeStreamRender
-      turbo:before-visit@window->kpop--frame#beforeVisit
       turbo:frame-load->kpop--frame#frameLoad
     ].freeze
 

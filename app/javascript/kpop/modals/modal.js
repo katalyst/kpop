@@ -71,19 +71,6 @@ export class Modal {
     this.element.close();
   }
 
-  /**
-   * When user navigates from inside a modal, dismiss the modal first so
-   * that the modal does not appear in the history stack.
-   *
-   * @param frame FrameController
-   * @param e Turbo navigation event
-   */
-  beforeVisit(frame, e) {
-    this.debug(`before-visit`, e.detail.url);
-
-    this.frame.clear();
-  }
-
   static get debug() {
     return debug(this.name);
   }

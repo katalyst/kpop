@@ -75,6 +75,47 @@ RSpec.describe "Modal opened by Turbo.visit" do
     end
   end
 
+  it "replaces an open modal with another modal location" do
+    visit_root
+    turbo_visit(modal_path)
+    expect(page).to have_modal("Hello modal!")
+
+    turbo_visit(modal_path(name: "other"))
+
+    expect(page).to have_modal("Hello other modal!")
+
+    aggregate_failures do
+      expect(page).to have_current_path(root_path)
+      expect(page).to have_css("body[data-marker]")
+      expect(frame).to have_src(modal_path(name: "other"))
+    end
+  end
+
+  it "closes an open modal when visiting a page" do
+    visit_root
+    turbo_visit(modal_path)
+    expect(page).to have_modal("Hello modal!")
+
+    turbo_visit(test_path)
+
+    expect(page).to have_current_path(test_path)
+    expect(page).to have_no_modal
+  end
+
+  it "keeps an open modal when a page visit is cancelled" do
+    visit_root
+    turbo_visit(modal_path)
+    expect(page).to have_modal("Hello modal!")
+
+    page.execute_script(<<~JS)
+      addEventListener("turbo:before-visit", (e) => e.preventDefault(), { once: true });
+    JS
+    turbo_visit(test_path)
+
+    expect(page).to have_current_path(root_path)
+    expect(page).to have_modal("Hello modal!")
+  end
+
   it "refreshes a page that matches a modal rule as a page" do
     visit_root
     page.execute_script(<<~JS)

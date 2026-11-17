@@ -144,24 +144,6 @@ export default class Kpop__FrameController extends Controller {
     };
   }
 
-  beforeVisit(e) {
-    this.debug("before-visit", e.detail.url);
-
-    // ignore visits to the current frame, these fire when the frame navigates
-    if (e.detail.url === this.element.src) return;
-
-    const url = new URL(e.detail.url.toString(), document.baseURI);
-    if (url.pathname === "/resume_historical_location") {
-      e.preventDefault();
-      return this.dismiss();
-    }
-
-    // ignore unless we're open
-    if (!this.isOpen) return;
-
-    this.modal.beforeVisit(this, e);
-  }
-
   frameLoad(e) {
     this.debug("frame-load");
 
