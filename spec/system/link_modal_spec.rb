@@ -11,7 +11,7 @@ RSpec.describe "Modal opened from link" do
 
   def open_modal
     visit root_path
-    page.driver.wait_for_network_idle
+    page.driver.browser.network.wait_for_idle
 
     # Open modal
     click_link("Modal")
@@ -91,7 +91,7 @@ RSpec.describe "Modal opened from link" do
     open_modal
 
     # Clicking the scrim closes the modal
-    page.driver.click(10, 10)
+    page.driver.browser.mouse.click(x: 10, y: 10)
 
     modal_closed_successfully
 
@@ -235,7 +235,7 @@ RSpec.describe "Modal opened from link" do
 
   it "debounces double open requests" do
     visit root_path
-    page.driver.wait_for_network_idle
+    page.driver.browser.network.wait_for_idle
 
     # Open two modals
     click_link("Delay 0.5")

@@ -89,7 +89,7 @@ RSpec.describe "Modal opened by button" do
     open_modal
 
     # Clicking the scrim closes the modal
-    page.driver.click(10, 10)
+    page.driver.browser.mouse.click(x: 10, y: 10)
 
     modal_closed_successfully
 
