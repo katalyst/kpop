@@ -4,6 +4,7 @@ import debug from "./utils/debug";
 import LinkObserver from "./utils/link_observer";
 import Ruleset from "./utils/ruleset";
 import StreamActions from "./utils/stream_actions";
+import VisitAdapter from "./utils/visit_adapter";
 
 export const controllers = [
   { identifier: "kpop--frame", controllerConstructor: FrameController },
@@ -21,11 +22,13 @@ export default class Application {
     this.ruleset = new Ruleset(rules);
     this.linkObserver = new LinkObserver(this, document);
     this.streamActions = new StreamActions();
+    this.visitAdapter = new VisitAdapter(this);
   }
 
   start() {
     this.streamActions.start();
     this.linkObserver.start();
+    this.visitAdapter.start();
 
     window.addEventListener(
       "turbo:before-fetch-request",
@@ -48,11 +51,16 @@ export default class Application {
     document.removeEventListener("focusin", debugFocusIn);
     document.removeEventListener("focusout", debugFocusOut);
 
+    this.visitAdapter.stop();
     this.streamActions.stop();
     this.linkObserver.stop();
   }
 
   isModalLink(link, location) {
+    return this.isModalLocation(location);
+  }
+
+  isModalLocation(location) {
     const properties = this.ruleset.properties(location);
     return properties.context === "modal";
   }

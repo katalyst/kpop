@@ -54,6 +54,17 @@ kpop
 
 Rules are regex strings matched against `location.pathname`. When `properties.context === "modal"`, the runtime sets `data-turbo-frame="kpop"` on hovered/focused links so Turbo prefetches them into the modal frame.
 
+The same rules apply to Turbo visits. The runtime wraps Turbo's adapter so a visit proposed to a matching location, including one started from JavaScript with `Turbo.visit(url)`, opens in the modal frame instead of replacing the page. Callers don't need to pass `{ frame: "kpop" }`; the ruleset decides how the location shows, much like Hotwire Native's path configuration. Visits that already carry a response, such as a form submission that redirects to a matching location, still render as a page, as do refreshes and visits from pages without a kpop frame.
+
+As in Hotwire Native, the rules are authoritative: a link with `data-turbo-frame="_top"` to a matching location still opens in the modal. To show a matching location as a page, add a later rule that overrides it, or use `data-turbo="false"` for a full browser visit:
+
+```js
+rules: [
+  { patterns: ["^/modal"], properties: { context: "modal" } },
+  { patterns: ["^/modal/print"], properties: { context: "page" } },
+],
+```
+
 ## Render the frame
 
 Every layout that can host a modal needs the frame near the end of `<body>`:
