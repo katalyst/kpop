@@ -15,9 +15,6 @@ export default class Kpop__FrameController extends Controller {
 
     this.element.kpop = this;
 
-    // allow our code to intercept frame navigation requests before dom changes
-    installNavigationInterception(this);
-
     const dialog = this.element.querySelector("dialog");
 
     if (this.element.src && dialog) {
@@ -252,50 +249,6 @@ export default class Kpop__FrameController extends Controller {
   get debug() {
     return debug("FrameController");
   }
-}
-
-/**
- * Monkey patch for Turbo#FrameController.
- *
- * Intercept calls to linkClickIntercepted(element, location) and ensures
- * that src is cleared if the frame is busy so that we don't restore an
- * in-progress src on restoration visits.
- *
- * See Turbo issue: https://github.com/hotwired/turbo/issues/1055
- *
- * @param controller FrameController
- */
-function installNavigationInterception(controller) {
-  const TurboFrameController =
-    controller.element.delegate.constructor.prototype;
-
-  if (TurboFrameController._linkClickIntercepted) return;
-
-  TurboFrameController._linkClickIntercepted =
-    TurboFrameController.linkClickIntercepted;
-  TurboFrameController.linkClickIntercepted = function (element, location) {
-    // #findFrameElement
-    const id =
-      element?.getAttribute("data-turbo-frame") ||
-      this.element.getAttribute("target");
-    let frame = document.getElementById(id);
-    if (!(frame instanceof Turbo.FrameElement)) {
-      frame = this.element;
-    }
-
-    if (frame.kpop) {
-      frame.kpop.debug("navigate-frame %s => %s", frame.src, location);
-      FrameModal.visit(location, frame.kpop, frame, () => {
-        TurboFrameController._linkClickIntercepted.call(
-          this,
-          element,
-          location,
-        );
-      });
-    } else {
-      TurboFrameController._linkClickIntercepted.call(this, element, location);
-    }
-  };
 }
 
 function autofocus(container) {
