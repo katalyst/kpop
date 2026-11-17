@@ -27,4 +27,17 @@ export class FrameModal extends Modal {
     this.debug("load", src);
     return frame.open(new FrameModal(frame, dialog, src), { animate: true });
   }
+
+  /**
+   * When the FrameController reloads the open modal's location, it runs this
+   * method to open the new content in place, without animating.
+   *
+   * @param {Kpop__FrameController} frame
+   * @param {HTMLDialogElement} dialog
+   * @param {String} src
+   */
+  static reload(frame, dialog, src) {
+    this.debug("reload", src);
+    return frame.open(new FrameModal(frame, dialog, src), { animate: false });
+  }
 }

@@ -91,6 +91,37 @@ RSpec.describe "Modal opened by Turbo.visit" do
     end
   end
 
+  it "reloads an open modal in place when visiting its location" do
+    visit_root
+    turbo_visit(modal_path)
+    expect(page).to have_modal("Hello modal!")
+
+    page.execute_script(<<~JS)
+      const frame = document.getElementById("kpop");
+      frame.querySelector("dialog").dataset.marker = "";
+      window.kpopEvents = [];
+      new MutationObserver((records) => {
+        for (const { target, attributeName } of records) {
+          if (target.hasAttribute(attributeName)) kpopEvents.push(attributeName);
+        }
+      }).observe(frame, { subtree: true, attributes: true, attributeFilter: ["animate"] });
+      // Sample before each paint, so microtasks between render and open don't count
+      (function check() {
+        if (!frame.querySelector("dialog[open]")) kpopEvents.push("closed");
+        requestAnimationFrame(check);
+      })();
+    JS
+    turbo_visit(modal_path)
+
+    # The dialog is new, so the modal reloaded
+    expect(page).to have_css("dialog[open]:not([data-marker])")
+
+    aggregate_failures do
+      expect(page).to have_modal("Hello modal!")
+      expect(page.evaluate_script("kpopEvents")).to be_empty
+    end
+  end
+
   it "closes an open modal when visiting a page" do
     visit_root
     turbo_visit(modal_path)

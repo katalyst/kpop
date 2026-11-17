@@ -119,6 +119,8 @@ export default class Kpop__FrameController extends Controller {
 
     if (event.detail.newFrame.id !== this.element.id) return;
 
+    if (this.#isReload()) return this.#reload(event);
+
     event.preventDefault();
 
     this.dismiss({ animate: true, reason: "before-frame-render" }).then(() => {
@@ -167,6 +169,47 @@ export default class Kpop__FrameController extends Controller {
 
   get isOpen() {
     return this.openValue && !this.dismissing;
+  }
+
+  /**
+   * The frame is loading the location of the open modal again, e.g. from
+   * `Turbo.visit` or a link in the modal to its own location.
+   */
+  #isReload() {
+    if (!this.isOpen || !this.modal) return false;
+
+    const url = new URL(this.element.src, document.baseURI);
+    const { uri } = this.modal;
+    return url.pathname + url.search === uri.pathname + uri.search;
+  }
+
+  /**
+   * Like a Turbo page reload, swap the content in place: replace the modal
+   * as the frame renders, without animating out and in. Turbo waits for
+   * repaints before frame-load, so opening the new dialog any later would
+   * show a frame without a modal.
+   *
+   * @param event turbo:before-frame-render
+   */
+  #reload(event) {
+    this.debug("reload", this.element.src);
+
+    const render = event.detail.render;
+    event.detail.render = (currentElement, newElement) => {
+      render(currentElement, newElement);
+
+      // Keep the focus target from when the modal first opened
+      const previousFocusRef = this.previousFocusRef;
+      const dialog = this.element.querySelector("dialog");
+
+      this.modal.disconnect();
+      delete this.modal;
+      this.openValue = false;
+
+      FrameModal.reload(this, dialog, this.element.src).then(() => {
+        this.previousFocusRef = previousFocusRef;
+      });
+    };
   }
 
   async #open(modal, { animate = true } = {}) {

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    katalyst-kpop (4.1.0)
+    katalyst-kpop (4.2.0)
       katalyst-html-attributes
       turbo-rails
       view_component (>= 4.0.0)
